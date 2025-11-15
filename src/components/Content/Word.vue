@@ -2,14 +2,14 @@
 import type { IWordDefinition } from '@/composables/words/useWordDefinitions'
 
 import useBackground from '@/composables/useBackground'
+// ✅ добавляем импорт для хранения
+import storage from '@/modules/localStorage'
+
 import { computed, ref, watch } from 'vue'
 
 import Actions from './Actions.vue'
 import Phonetic from './Phonetic.vue'
 import Translation from './Translation.vue'
-
-// ✅ добавляем импорт для хранения
-import storage from '@/modules/localStorage'
 
 const props = defineProps<{
   word: string
@@ -26,17 +26,37 @@ const backgroundClass = computed(() => ({ boxed: shouldModifyUI.value }))
 
 // ✅ флаг из настроек и локальное состояние
 const hideTranslationUnderSpoiler = ref(storage.get('hideTranslationUnderSpoiler') === 'true')
-const showTranslation = ref(false)
+const isSpoilerRevealed = ref(false)
+const spoilerMode = ref<'translation' | 'word'>('translation')
+
+function resetSpoilerState() {
+  isSpoilerRevealed.value = false
+  spoilerMode.value = Math.random() < 0.5 ? 'translation' : 'word'
+}
+
+if (hideTranslationUnderSpoiler.value) {
+  resetSpoilerState()
+}
 
 // ✅ сбрасываем спойлер при смене слова
 watch(() => props.word, () => {
-  showTranslation.value = false
+  if (!hideTranslationUnderSpoiler.value) {
+    return
+  }
+
+  resetSpoilerState()
 })
 
 // ✅ обновляем, если настройки изменятся
 watch(
   () => storage.get('hideTranslationUnderSpoiler'),
-  (val) => (hideTranslationUnderSpoiler.value = val === 'true')
+  (val) => {
+    hideTranslationUnderSpoiler.value = val === 'true'
+
+    if (hideTranslationUnderSpoiler.value) {
+      resetSpoilerState()
+    }
+  },
 )
 </script>
 
@@ -45,34 +65,56 @@ watch(
     <div class="title" :class="backgroundClass">
       <div class="title__word-actions">
         <div class="word-block">
-          <h1 class="word">
-            {{ word }}
-          </h1>
+          <template v-if="hideTranslationUnderSpoiler">
+            <template v-if="spoilerMode === 'word'">
+              <button
+                v-if="!isSpoilerRevealed"
+                class="spoiler-btn"
+                @click="isSpoilerRevealed = true"
+              >
+                Показать слово
+              </button>
+              <h1 v-else class="word">
+                {{ word }}
+              </h1>
 
-          <!-- ✅ Новый блок со спойлером -->
-          <div v-if="hideTranslationUnderSpoiler">
-            <button
-              v-if="!showTranslation"
-              class="spoiler-btn"
-              @click="showTranslation = true"
-            >
-              Показать перевод
-            </button>
+              <Translation
+                v-if="word"
+                :text="word"
+                class="word-translation"
+              />
+            </template>
+
+            <template v-else>
+              <h1 class="word">
+                {{ word }}
+              </h1>
+
+              <button
+                v-if="!isSpoilerRevealed"
+                class="spoiler-btn"
+                @click="isSpoilerRevealed = true"
+              >
+                Показать перевод
+              </button>
+              <Translation
+                v-if="isSpoilerRevealed && word"
+                :text="word"
+                class="word-translation"
+              />
+            </template>
+          </template>
+
+          <template v-else>
+            <h1 class="word">
+              {{ word }}
+            </h1>
             <Translation
-              v-else
               v-if="word"
               :text="word"
               class="word-translation"
             />
-          </div>
-
-          <!-- если спойлер выключен — старое поведение -->
-          <Translation
-            v-else
-            v-if="word"
-            :text="word"
-            class="word-translation"
-          />
+          </template>
         </div>
 
         <Actions
