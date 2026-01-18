@@ -15,12 +15,9 @@
           @click="active = 'smart'"
           aria-pressed="active === 'smart'"
         >
-          Smart Daily Sentences
+          Smart Sentences
         </button>
       </nav>
-      <div class="sidebar-footer">
-        <small class="muted">New Word Tab • Smart sentences</small>
-      </div>
     </aside>
 
     <main class="settings-panel">
@@ -54,36 +51,69 @@ const active = ref<'newword'|'smart'>('newword')
   font-family: inherit; /* подхватит глобальный шрифт */
 }
 
-/* Sidebar */
+/* Sidebar - remove rounded corners, keep only right border */
 .settings-sidebar {
   width: 240px;
   min-width: 200px;
   background: transparent;
-  border: 1px solid rgba(0,0,0,0.04);
-  border-radius: 8px;
+  border: none;
+  border-right: 1px solid hsla(var(--color-raw), 0.04);
+  border-radius: 0; /* убираем закругления */
   padding: 12px;
   box-sizing: border-box;
-  display:flex;
-  flex-direction:column;
-  gap:12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
-/* Menu buttons — выглядят как в других секциях (используют переменные) */
+/* Brand: style consistent with other section subtitles (time-title / preview-subtitle) */
+.brand {
+  margin: 0;
+  color: hsla(var(--color-raw), 0.7);
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.3;
+}
+
+/* Menu buttons — визуально согласованы со стилем .btn (ApiKeyRow.vue) */
 .menu-item {
-  text-align: left;
-  padding: 10px 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  padding: 8px 12px;
   border-radius: 6px;
   background: transparent;
   border: none;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 0.9rem;
+  font-weight: 700;
   color: var(--color, #111);
+  min-height: 36px;
+  transition: background-color 0.13s ease-in-out, box-shadow 0.13s, color 0.13s ease-in-out;
+  line-height: 1;
+  text-align: left;
+  width: 100%;
 }
-.menu-item:hover { background: rgba(0,0,0,0.03); }
+
+/* Hover state like buttons */
+.menu-item:hover:not(.active) {
+  background-color: hsla(var(--color-raw), 0.08);
+}
+
+/* Active state inherits colors from checkbox/checked state:
+   background uses --color (same as checked checkmark), text uses --bg-color */
 .menu-item.active {
-  background: var(--accent, #1f6feb);
-  color: white;
-  font-weight:600;
+  background: var(--color);
+  color: var(--bg-color);
+  font-weight: 700;
+}
+
+/* Disabled look if needed in future */
+.menu-item:disabled,
+.menu-item[aria-disabled='true'] {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 /* Main panel — повторяет поведение других секций (внутри будут .section) */
@@ -99,7 +129,4 @@ const active = ref<'newword'|'smart'>('newword')
   background: transparent;
   padding: 0;
 }
-
-/* Footer */
-.sidebar-footer { margin-top: auto; font-size: 12px; color: var(--muted-color, #666); padding-top:6px; }
 </style>
