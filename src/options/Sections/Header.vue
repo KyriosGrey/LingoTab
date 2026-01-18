@@ -5,7 +5,7 @@ import { version } from '@/../package.json'
 <template>
   <header class="header">
     <h1 class="title">
-      Options
+      New Words Settings
     </h1>
 
     <div class="info">
@@ -16,7 +16,7 @@ import { version } from '@/../package.json'
         NWT v{{ version }}
       </a>
       <small class="copyright">
-        MIT Licensed • Copyright © 2021-PRESENT Sajad Hashemian
+        MIT Licensed • Copyright © 2025-PRESENT Serhii Syvorotkin
       </small>
     </div>
   </header>
@@ -34,7 +34,7 @@ import { version } from '@/../package.json'
 }
 
 .title {
-  font-size: 2rem;
+  font-size: 1.5rem;
   margin: 0;
 }
 
