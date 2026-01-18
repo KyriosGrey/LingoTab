@@ -2,6 +2,12 @@
   <section class="smart-root">
     <Header2 />
 
+    <!-- Enable toggle block (no hints control here anymore) -->
+    <EnableRow v-model="enabled" />
+
+    <!-- New separate section for hints -->
+    <Hints />
+
     <section class="panel">
       <!-- ApiKey row: Test button is colocated here -->
       <ApiKeyRow
@@ -56,6 +62,8 @@
 <script setup lang="ts">
 import { ref, onMounted, computed, watch } from 'vue'
 import Header2 from './Header2.vue'
+import EnableRow from './EnableRow.vue'
+import Hints from './Hints.vue'
 import ApiKeyRow from './ApiKeyRow.vue'
 import LanguageRow from './LanguageRow.vue'
 import CEFRlevel from './CEFRlevel.vue'
@@ -78,6 +86,7 @@ type Settings = {
   grammarFocus?: string[]
   lengthPreset?: string
   frequency?: string | number
+  showHints?: boolean
 }
 
 const storageKey = 'smartDailySettings'
@@ -85,6 +94,7 @@ const storageApiKey = 'smartDailyApiKey'
 const storagePackKey = 'lastSmartPack'
 
 // state
+const enabled = ref(false)
 const apiKey = ref('')
 const targetLang = ref('ru')
 const level = ref('B1')
@@ -123,6 +133,13 @@ const testResult = ref('')    // separate result for test connection
 const previewPack = ref<any | null>(null)
 const previewRaw = ref<any | null>(null)
 const previewWarning = ref('')
+
+// helper: return length range array based on current lengthPreset
+function getLengthRange(): [number, number] {
+  if (lengthPreset.value === 'short') return [4, 7]
+  if (lengthPreset.value === 'mixed') return [3, 16]
+  return [8, 16]
+}
 
 // Compute visual type for testResult using explicit mapping for known messages.
 // Add new exact messages here as needed.
@@ -171,6 +188,7 @@ onMounted(async () => {
   const s = await storage.get([storageKey, storageApiKey, storagePackKey])
   if (s && s[storageKey]) {
     const st: Settings = s[storageKey]
+    enabled.value = !!st.enabled
     if (st.apiKey) apiKey.value = st.apiKey
     if (st.targetLang) targetLang.value = st.targetLang
     level.value = st.level || 'B1'
@@ -185,13 +203,15 @@ onMounted(async () => {
   }
 })
 
-// save settings when they change (simple watch)
-watch([apiKey, targetLang, level, topics, grammarFocus, lengthPreset, frequency], () => {
+// save settings when they change (merge into existing storage)
+// use an async merge so we don't wipe other fields (e.g. showHints managed by Hints.vue)
+watch([enabled, apiKey, targetLang, level, topics, grammarFocus, lengthPreset, frequency], () => {
   saveSettings()
 }, { deep: true })
 
-function saveSettings() {
+async function saveSettings() {
   const obj: Settings = {
+    enabled: enabled.value,
     apiKey: apiKey.value,
     targetLang: targetLang.value,
     level: level.value,
@@ -200,7 +220,13 @@ function saveSettings() {
     lengthPreset: lengthPreset.value,
     frequency: frequency.value
   }
-  storage.set({ [storageKey]: obj })
+  try {
+    const s = await storage.get([storageKey])
+    const base = s?.[storageKey] ?? {}
+    await storage.set({ [storageKey]: { ...base, ...obj } })
+  } catch (e) {
+    console.warn('[SmartDailySentences] failed to save settings', e)
+  }
 }
 
 /**
@@ -234,7 +260,7 @@ async function onTestConnection(passedKey?: string) {
       level: level.value,
       grammarFocus: grammarFocus.value,
       topics: topics.value,
-      lengthRange: lengthPreset.value === 'short' ? [3,7] : [8,16],
+      lengthRange: getLengthRange(),
       targetLang: targetLang.value
     }
     const ok = await aiProviders.testConnection(usedKey, settings)
@@ -248,13 +274,12 @@ async function onTestConnection(passedKey?: string) {
 }
 
 function getSettingsForPrompt() {
-  const lengthRange = lengthPreset.value === 'short' ? [3,7] : [8,16]
   return {
     count: 1,
     level: level.value,
     grammarFocus: grammarFocus.value,
     topics: topics.value,
-    lengthRange,
+    lengthRange: getLengthRange(),
     targetLang: targetLang.value
   }
 }
@@ -273,11 +298,11 @@ async function onGenerateNow() {
   generating.value = true
   try {
     const st = {
-      count: 3,
+      count: 25,
       level: level.value,
       grammarFocus: grammarFocus.value,
       topics: topics.value,
-      lengthRange: lengthPreset.value === 'short' ? [3,7] : [8,16],
+      lengthRange: getLengthRange(),
       targetLang: targetLang.value
     }
     const res = await aiProviders.generatePack(apiKey.value, st)

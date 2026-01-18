@@ -25,8 +25,9 @@ const props = defineProps<{ modelValue?: string }>()
 const emit = defineEmits(['update:modelValue'])
 
 const lengthOptions = [
-  { value: 'short', text: 'Short (3–7)' },
-  { value: 'long', text: 'Long (8–16)' }
+  { value: 'mixed', text: 'Mixed (3–16)' },
+  { value: 'long', text: 'Long (8–16)' },
+  { value: 'short', text: 'Short (3–7)' }
 ]
 
 const modelValueLocal = computed({

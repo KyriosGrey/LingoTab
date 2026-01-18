@@ -15,7 +15,7 @@
           @click="active = 'smart'"
           aria-pressed="active === 'smart'"
         >
-          Smart Daily Sentences
+          Smart Sentences
         </button>
       </nav>
     </aside>
@@ -64,6 +64,15 @@ const active = ref<'newword'|'smart'>('newword')
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+/* Brand: style consistent with other section subtitles (time-title / preview-subtitle) */
+.brand {
+  margin: 0;
+  color: hsla(var(--color-raw), 0.7);
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.3;
 }
 
 /* Menu buttons — визуально согласованы со стилем .btn (ApiKeyRow.vue) */

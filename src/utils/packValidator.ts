@@ -3,6 +3,7 @@ export type Sentence = {
   id: string
   text: string
   translation: string
+  hint?: string
   tense?: string
   topic?: string
   lengthWords?: number
@@ -47,9 +48,10 @@ export function validateAndNormalizePack(raw: any, expectedSettings?: { lengthRa
   const sentences: Sentence[] = raw.sentences.map((s: any, idx: number) => {
     if (!s || typeof s !== 'object') throw new Error(`Invalid sentence at index ${idx}`)
 
-    // Text & translation
+    // Text, translation & hint
     const text = (s.text ?? '').toString().trim()
     const translation = (s.translation ?? '').toString().trim()
+    const hint = (s.hint ?? '').toString().trim()
     if (!text) throw new Error(`Empty text for sentence at index ${idx}`)
 
     // id: accept if looks acceptable, otherwise generate local id
@@ -70,6 +72,7 @@ export function validateAndNormalizePack(raw: any, expectedSettings?: { lengthRa
       id,
       text,
       translation,
+      hint,
       tense,
       topic,
       lengthWords

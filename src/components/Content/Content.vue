@@ -8,6 +8,10 @@ import OfflineState from './OfflineState.vue'
 
 import Word from './Word.vue'
 import WordFetchError from './WordFetchError.vue'
+import SmartSentencePractice from './SmartSentencePractice.vue'
+
+import * as storage from '@/utils/storage'
+import { ref, onMounted } from 'vue'
 
 const {
   hasLearnedAllWords,
@@ -21,19 +25,42 @@ const {
 
 const { isOnline } = useOnline()
 
-getWord()
+// smart mode flag (loaded from settings). Default false.
+const smartEnabled = ref(false)
+
+onMounted(async () => {
+  try {
+    // read smartDailySettings.enabled; do not block UI
+    const s = await storage.get(['smartDailySettings'])
+    smartEnabled.value = !!(s && s.smartDailySettings && s.smartDailySettings.enabled)
+  } catch (err) {
+    console.warn('Failed to read smartDailySettings', err)
+    smartEnabled.value = false
+  }
+
+  // only fetch word when smart mode is disabled
+  if (!smartEnabled.value) {
+    getWord()
+  }
+})
 </script>
 
 <template>
-  <NoWordList v-if="!wordsPoll.length" />
-  <OfflineState v-else-if="!isOnline" />
-  <Loading v-else-if="isLoading" />
-  <WordFetchError v-else-if="error" :word="word" @retry="getWord" />
-  <LearnedAllWords v-else-if="hasLearnedAllWords" />
-  <Word
-    v-else
-    :word="word"
-    :definitions="definitions || []"
-    @marked="getWord"
-  />
+  <!-- If smart mode enabled show SmartSentencePractice -->
+  <SmartSentencePractice v-if="smartEnabled" />
+
+  <!-- Otherwise keep existing word flow -->
+  <template v-else>
+    <NoWordList v-if="!wordsPoll.length" />
+    <OfflineState v-else-if="!isOnline" />
+    <Loading v-else-if="isLoading" />
+    <WordFetchError v-else-if="error" :word="word" @retry="getWord" />
+    <LearnedAllWords v-else-if="hasLearnedAllWords" />
+    <Word
+      v-else
+      :word="word"
+      :definitions="definitions || []"
+      @marked="getWord"
+    />
+  </template>
 </template>
