@@ -8,6 +8,9 @@
     <!-- New separate section for hints -->
     <Hints />
 
+    <!-- New Mix option for words/sentences -->
+    <MixMode />
+
     <section class="panel">
       <!-- ApiKey row: Test button is colocated here -->
       <ApiKeyRow
@@ -64,6 +67,7 @@ import { ref, onMounted, computed, watch } from 'vue'
 import Header2 from './Header2.vue'
 import EnableRow from './EnableRow.vue'
 import Hints from './Hints.vue'
+import MixMode from './MixMode.vue'
 import ApiKeyRow from './ApiKeyRow.vue'
 import LanguageRow from './LanguageRow.vue'
 import CEFRlevel from './CEFRlevel.vue'
@@ -98,12 +102,12 @@ const enabled = ref(false)
 const apiKey = ref('')
 const targetLang = ref('ru')
 const level = ref('B1')
-const topics = ref<string[]>(['Daily Life & Slang'])
+const topics = ref<string[]>(['Daily Life'])
 const grammarFocus = ref<string[]>(['All'])
-const lengthPreset = ref('short')
+const lengthPreset = ref('mixed')
 const frequency = ref<string | number>('24')
 
-const topicsList = ['IT & Dev','Business','Travel','Gaming','Daily Life & Slang']
+const topicsList = ['IT-Dev','Finance and Banking','Gaming','Travel and Directions','Daily Life','Workplace Communication','Design','Social Media','Education','Entertainment' ]
 
 const grammarOptions = [
   'All',
