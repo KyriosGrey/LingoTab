@@ -41,8 +41,8 @@
             />
             <div class="input-buttons">
               <div class="buttons-left">
-                <!-- Show original (explicit) -->
-                <button class="btn left" @click="onRevealClick">Show original</button>
+                <!-- Non-interactive badge showing tense instead of clickable "Show original" -->
+                <div class="tense-badge" aria-hidden="true">{{ current?.tense ?? '—' }}</div>
               </div>
               <div class="buttons-right">
                 <!-- Dual-state button: "Check" when original is hidden, "Next →" when shown
@@ -152,18 +152,6 @@ function onEnterKey(e: KeyboardEvent) {
   }
 }
 
-/** Called when the left "Show original" button is explicitly clicked:
- * behaves like the first press: show original in header.
- */
-function onRevealClick() {
-  if (!headerShowsOriginal.value) {
-    headerShowsOriginal.value = true
-  } else {
-    // already shown — refocus
-    setTimeout(() => answerInput.value?.focus(), 0)
-  }
-}
-
 /** Handler for the dual-state right button (Check / Next) */
 function onNextClick() {
   if (!headerShowsOriginal.value) {
@@ -178,6 +166,7 @@ function onNextClick() {
 
 /** Skip/Next: move to next sentence and reset states */
 async function next() {
+  // FIXED: use pack.value.sentences
   if (!pack.value || !Array.isArray(pack.value.sentences) || pack.value.sentences.length === 0) {
     return
   }
@@ -380,16 +369,21 @@ function openSettings() {
   line-height: 1;
 }
 
-/* LEFT buttons (Show original) — use variables for background/border/color */
-.btn.left {
-  background: var(--ssp-left-btn-bg);
-  color: var(--ssp-left-btn-color);
-  border: 1px solid var(--ssp-left-btn-border);
+/* Tense badge: non-interactive element visually matching previous disabled button */
+.tense-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 8px 12px;
-}
-
-.btn.left:hover:not([disabled]) {
-  background: var(--ssp-left-btn-hover);
+  border-radius: 4px;
+  background: hsla(var(--color-raw), 0.03);
+  color: hsla(var(--color-raw), 0.6);
+  border: 1px solid hsla(var(--color-raw), 0.04);
+  font-weight: 700;
+  font-size: 0.8rem;
+  user-select: none;
+  cursor: default;
+  pointer-events: none;
 }
 
 /* NEXT button (right) — stronger, uses dedicated variables */
@@ -409,9 +403,9 @@ function openSettings() {
   box-shadow: none;
 }
 
-/* disabled */
+/* disabled (general) */
 .btn[disabled] {
-  opacity: 0.5;
+  opacity: 0.85;
   pointer-events: none;
 }
 

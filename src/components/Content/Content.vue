@@ -8,7 +8,7 @@ import OfflineState from './OfflineState.vue'
 
 import Word from './Word.vue'
 import WordFetchError from './WordFetchError.vue'
-import SmartSentencePractice from './SmartSentencePractice.vue'
+import MixedPractice from './MixedPractice.vue'
 
 import * as storage from '@/utils/storage'
 import { ref, onMounted } from 'vue'
@@ -46,8 +46,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <!-- If smart mode enabled show SmartSentencePractice -->
-  <SmartSentencePractice v-if="smartEnabled" />
+  <!-- If smart mode enabled show MixedPractice -->
+  <MixedPractice v-if="smartEnabled" />
 
   <!-- Otherwise keep existing word flow -->
   <template v-else>
