@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import Section from '@/options/components/Section.vue'
 import * as storage from '@/utils/storage'
 
@@ -9,7 +9,7 @@ const emit = defineEmits(['update:modelValue', 'save', 'test'])
 const localKey = ref(props.modelValue ?? '')
 const status = ref('')
 
-watch(() => props.modelValue, v => { localKey.value = v ?? '' })
+watch(() => props.modelValue, (v) => { localKey.value = v ?? '' })
 
 function onInput() {
   // Immediately propagate the value to parent so parent can use it (Test/Generate)
@@ -46,7 +46,8 @@ function test() {
 const statusType = computed(() => {
   const sRaw = status.value ?? ''
   const s = sRaw.trim().toLowerCase()
-  if (!s) return ''
+  if (!s)
+    return ''
 
   // Exact mappings for known messages (add new messages here)
   const exactMap: Record<string, 'success' | 'error'> = {
@@ -57,11 +58,14 @@ const statusType = computed(() => {
     'connection failed or invalid response': 'error',
   }
 
-  if (exactMap[s]) return exactMap[s]
+  if (exactMap[s])
+    return exactMap[s]
 
   // Fallback keyword checks
-  if (s.includes('ok') || s.includes('success') || s.includes('saved') || s.includes('done')) return 'success'
-  if (s.includes('error') || s.includes('fail') || s.includes('invalid')) return 'error'
+  if (s.includes('ok') || s.includes('success') || s.includes('saved') || s.includes('done'))
+    return 'success'
+  if (s.includes('error') || s.includes('fail') || s.includes('invalid'))
+    return 'error'
 
   return ''
 })
@@ -76,16 +80,20 @@ const statusType = computed(() => {
       <!-- show key as plain text so user sees what they paste -->
       <input
         v-model="localKey"
-        @input="onInput"
         class="input"
         type="text"
         placeholder="Paste your Groq API key"
         aria-label="Groq API Key"
-      />
+        @input="onInput"
+      >
       <div class="actions">
-        <button class="btn" @click="save" :disabled="!localKey">Save</button>
-        <button class="btn ghost" @click="clearKey" :disabled="!localKey">Clear</button>
-        <button class="btn" @click="test" :disabled="!localKey || testing">
+        <button class="btn" :disabled="!localKey" @click="save">
+          Save
+        </button>
+        <button class="btn ghost" :disabled="!localKey" @click="clearKey">
+          Clear
+        </button>
+        <button class="btn" :disabled="!localKey || testing" @click="test">
           {{ testing ? 'Testing…' : 'Test connection' }}
         </button>
       </div>
@@ -103,7 +111,7 @@ const statusType = computed(() => {
     </div>
 
     <!-- status badge (button-like look, single-state color depending on message) -->
-    <div v-if="status" :class="['status-badge', statusType]">
+    <div v-if="status" class="status-badge" :class="[statusType]">
       {{ status }}
     </div>
   </Section>

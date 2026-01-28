@@ -1,7 +1,7 @@
 import { ref, type Ref } from 'vue'
-import { randomNumberBetween } from '@/utils/number'
-import storage from '@/modules/localStorage'
 import useLearningWords from '@/composables/words/useLearningWords'
+import storage from '@/modules/localStorage'
+import { randomNumberBetween } from '@/utils/number'
 
 export default function useRandomWord(wordsList: Ref<string[]>) {
   const randomWord = ref('')

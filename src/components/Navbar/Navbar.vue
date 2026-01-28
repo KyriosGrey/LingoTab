@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import useBackground from '@/composables/useBackground'
-
 import { computed } from 'vue'
+
+import useBackground from '@/composables/useBackground'
 import Options from './Options.vue'
 import Search from './Search.vue'
 import ThemeSwitch from './ThemeSwitch.vue'

@@ -1,6 +1,6 @@
-import storage from '@/modules/localStorage'
-
 import { computed, ref, watch } from 'vue'
+
+import storage from '@/modules/localStorage'
 
 export enum BackgroundMode {
   NO_BG = 'NO_BG',

@@ -10,22 +10,26 @@ export async function get(keys: Keys) {
   if (Array.isArray(keys)) {
     for (const k of keys) {
       const v = localStorage.getItem(k)
-      try { result[k] = v !== null ? JSON.parse(v) : undefined } catch { result[k] = v }
+      try { result[k] = v !== null ? JSON.parse(v) : undefined }
+      catch { result[k] = v }
     }
     return result
   }
 
   if (typeof keys === 'string') {
     const v = localStorage.getItem(keys)
-    try { return { [keys]: v !== null ? JSON.parse(v) : undefined } } catch { return { [keys]: v } }
+    try { return { [keys]: v !== null ? JSON.parse(v) : undefined } }
+    catch { return { [keys]: v } }
   }
 
   if (typeof keys === 'object' && keys !== null) {
     for (const k of Object.keys(keys)) {
       const v = localStorage.getItem(k)
       if (v !== null) {
-        try { result[k] = JSON.parse(v) } catch { result[k] = v }
-      } else {
+        try { result[k] = JSON.parse(v) }
+        catch { result[k] = v }
+      }
+      else {
         result[k] = (keys as Record<string, any>)[k]
       }
     }
@@ -39,7 +43,8 @@ export async function set(obj: Record<string, any>) {
   for (const k of Object.keys(obj)) {
     try {
       localStorage.setItem(k, JSON.stringify(obj[k]))
-    } catch {
+    }
+    catch {
       localStorage.setItem(k, String(obj[k]))
     }
   }
@@ -48,7 +53,8 @@ export async function set(obj: Record<string, any>) {
 export async function remove(keys: string | string[]) {
   if (Array.isArray(keys)) {
     for (const k of keys) localStorage.removeItem(k)
-  } else {
+  }
+  else {
     localStorage.removeItem(keys)
   }
 }

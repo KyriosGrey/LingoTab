@@ -1,40 +1,9 @@
-<template>
-  <Section
-    title="Mix words & sentences"
-    description="When enabled, New Tab will alternate showing words and generated sentences."
-  >
-    <template #bar>
-      <label class="switch">
-        <input type="checkbox" :checked="localEnabled" @change="onToggle($event)" />
-        <span class="slider round" />
-      </label>
-    </template>
-
-    <div style="margin-top:10px;">
-      <div class="row">
-        <div
-          class="label-block" 
-        >
-          Words per sentence(If sentences are not available, the flow falls back to words):
-        </div>
-
-        <!-- Select aligned to the right (same visual family as Length.vue) -->
-        <Select
-          v-model="localWordsPerSentence"
-          :options="options"
-          class="select"
-        />
-      </div>
-    </div>
-  </Section>
-</template>
-
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
+import { resetMixState } from '@/composables/useSmartMix'
 import Section from '@/options/components/Section.vue'
 import Select from '@/options/components/Select.vue'
 import * as storage from '@/utils/storage'
-import { resetMixState } from '@/composables/useSmartMix'
 
 const storageKey = 'smartDailySettings'
 
@@ -53,7 +22,7 @@ const options = [
   { value: 8, text: '8' },
   { value: 9, text: '9' },
   { value: 10, text: '10' },
-  { value: 25, text: '25' }
+  { value: 25, text: '25' },
 
 ]
 
@@ -66,7 +35,8 @@ onMounted(async () => {
     const v = Number(mix.wordsPerSentence ?? 2) || 2
     // clamp to available options
     localWordsPerSentence.value = options.some(o => o.value === v) ? v : 2
-  } catch (e) {
+  }
+  catch (e) {
     console.warn('[MixMode] failed to read settings', e)
     localEnabled.value = false
     localWordsPerSentence.value = 2
@@ -79,7 +49,8 @@ async function savePartial(upd: any) {
     const base = s?.[storageKey] ?? {}
     const merged = { ...base, mixMode: { ...(base.mixMode || {}), ...upd } }
     await storage.set({ [storageKey]: merged })
-  } catch (err) {
+  }
+  catch (err) {
     console.warn('[MixMode] failed to save mixMode', err)
   }
 }
@@ -90,7 +61,8 @@ async function onToggle(e: Event) {
   localEnabled.value = v
   await savePartial({ enabled: v })
   // reset internal mix state so cycles start fresh after toggling
-  try { await resetMixState() } catch (err) { /* ignore */ }
+  try { await resetMixState() }
+  catch (err) { /* ignore */ }
 }
 
 // watch the select value and persist changes (debounced behavior not required for small updates)
@@ -100,12 +72,45 @@ watch(localWordsPerSentence, async (val, oldVal) => {
   try {
     await savePartial({ wordsPerSentence: localWordsPerSentence.value })
     // reset internal mix state when ratio changes
-    try { await resetMixState() } catch (err) { /* ignore */ }
-  } catch (err) {
+    try { await resetMixState() }
+    catch (err) { /* ignore */ }
+  }
+  catch (err) {
     console.warn('[MixMode] failed to persist wordsPerSentence', err)
   }
 })
 </script>
+
+<template>
+  <Section
+    title="Mix words & sentences"
+    description="When enabled, New Tab will alternate showing words and generated sentences."
+  >
+    <template #bar>
+      <label class="switch">
+        <input type="checkbox" :checked="localEnabled" @change="onToggle($event)">
+        <span class="slider round" />
+      </label>
+    </template>
+
+    <div style="margin-top:10px;">
+      <div class="row">
+        <div
+          class="label-block"
+        >
+          Words per sentence(If sentences are not available, the flow falls back to words):
+        </div>
+
+        <!-- Select aligned to the right (same visual family as Length.vue) -->
+        <Select
+          v-model="localWordsPerSentence"
+          :options="options"
+          class="select"
+        />
+      </div>
+    </div>
+  </Section>
+</template>
 
 <style scoped>
 /* reuse same switch styles as other sections */

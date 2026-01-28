@@ -1,8 +1,8 @@
 <script lang="ts">
-import { selectedShortcut } from '@/composables/shortcuts/useShortcutContextMenu'
-
-import useShortcuts from '@/composables/shortcuts/useShortcuts'
 import { computed, defineComponent, onMounted, ref } from 'vue'
+
+import { selectedShortcut } from '@/composables/shortcuts/useShortcutContextMenu'
+import useShortcuts from '@/composables/shortcuts/useShortcuts'
 
 const SHORTCUT_SCHEMA = {
   name: '',

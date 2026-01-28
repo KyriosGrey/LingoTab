@@ -1,5 +1,5 @@
-import storage from '@/modules/localStorage'
 import { createApp } from 'vue'
+import storage from '@/modules/localStorage'
 
 import App from './App.vue'
 import '@/styles/normalize.css'

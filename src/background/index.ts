@@ -26,19 +26,16 @@ async function getSettings(): Promise<NotificationSettings> {
 // Schedule or clear alarm based on settings
 async function rescheduleAlarm() {
   const settings = await getSettings()
-  
+
   // Clear existing alarm
   await browser.alarms.clear(ALARM_NAME)
-  
+
   if (settings.enabled) {
     // Create new alarm with specified frequency
     await browser.alarms.create(ALARM_NAME, {
       periodInMinutes: settings.frequency,
       delayInMinutes: settings.frequency,
     })
-    console.log(`Alarm scheduled with ${settings.frequency} minutes frequency`)
-  } else {
-    console.log('Alarm cleared (notifications disabled)')
   }
 }
 
@@ -49,7 +46,7 @@ async function getRandomLearnedWord(): Promise<string | null> {
   if (!Array.isArray(learnedWords) || learnedWords.length === 0) {
     return null
   }
-  
+
   const randomIndex = Math.floor(Math.random() * learnedWords.length)
   return learnedWords[randomIndex]
 }
@@ -67,50 +64,50 @@ async function translateWord(word: string, targetLang: string): Promise<string |
     const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${targetLang}&dt=t&q=${encodeURIComponent(word)}`
     const response = await fetch(url)
     const data = await response.json()
-    
+
     if (data && data[0] && data[0][0] && data[0][0][0]) {
       return data[0][0][0]
     }
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Translation failed:', error)
   }
-  
+
   return null
 }
 
 // Show a notification with a learned word
 async function showNotification(isTest = false) {
   const word = await getRandomLearnedWord()
-  
+
   if (!word) {
-    console.log('No learned words to show notification')
     return
   }
-  
+
   const targetLang = await getTargetLanguage()
   const translation = await translateWord(word, targetLang)
-  
+
   // 50/50 probability: show word or translation
   const showingTranslation = Math.random() < 0.5
-  
+
   const notificationId = isTest ? `test-${Date.now()}` : `reminder-${Date.now()}`
-  
+
   // Store data for this notification
   notificationData.set(notificationId, {
     word,
     translation: translation || undefined,
     showingTranslation,
   })
-  
+
   // Create notification
   const title = showingTranslation && translation
     ? `Translation: ${translation}`
     : `Word: ${word}`
-  
+
   const message = showingTranslation && translation
     ? `What's the English word?`
     : `What's the translation?`
-  
+
   await browser.notifications.create(notificationId, {
     type: 'basic',
     iconUrl: browser.runtime.getURL('assets/128.png'),
@@ -123,28 +120,28 @@ async function showNotification(isTest = false) {
 if (browser.notifications.onButtonClicked) {
   browser.notifications.onButtonClicked.addListener(async (notificationId, buttonIndex) => {
     const data = notificationData.get(notificationId)
-    
+
     if (!data) {
       console.warn('Notification data not found for:', notificationId)
       return
     }
-    
+
     if (buttonIndex === 0) {
       // Show translation button
       const { word, translation, showingTranslation } = data
-      
+
       // Toggle what we're showing
       const newShowingTranslation = !showingTranslation
       notificationData.set(notificationId, { ...data, showingTranslation: newShowingTranslation })
-      
+
       const title = newShowingTranslation && translation
         ? `Translation: ${translation}`
         : `Word: ${word}`
-      
+
       const messageText = newShowingTranslation && translation
         ? `English word: ${word}`
         : translation ? `Translation: ${translation}` : 'Translation not available'
-      
+
       // Clear and recreate notification (Firefox doesn't support update)
       await browser.notifications.clear(notificationId)
       await browser.notifications.create(notificationId, {
@@ -153,13 +150,14 @@ if (browser.notifications.onButtonClicked) {
         title,
         message: messageText,
       } as any)
-    } else if (buttonIndex === 1) {
+    }
+    else if (buttonIndex === 1) {
       // Learn again button - open new tab with the word
       const { word } = data
       await browser.tabs.create({
         url: browser.runtime.getURL(`dist/newTab/index.html?word=${encodeURIComponent(word)}`),
       })
-      
+
       // Clear notification
       await browser.notifications.clear(notificationId)
       notificationData.delete(notificationId)
@@ -170,13 +168,13 @@ if (browser.notifications.onButtonClicked) {
 // Handle notification clicks - open new tab with the word
 browser.notifications.onClicked.addListener(async (notificationId) => {
   const data = notificationData.get(notificationId)
-  
+
   if (data) {
     const { word } = data
     await browser.tabs.create({
       url: browser.runtime.getURL(`dist/newTab/index.html?word=${encodeURIComponent(word)}`),
     })
-    
+
     // Clear notification
     await browser.notifications.clear(notificationId)
     notificationData.delete(notificationId)
@@ -204,17 +202,17 @@ browser.runtime.onMessage.addListener(async (message: any) => {
     await rescheduleAlarm()
     return { success: true }
   }
-  
+
   if (message.type === 'testNotification') {
     await showNotification(true)
     return { success: true }
   }
-  
+
   if (message.type === 'syncLearnedWords') {
     // Mirroring is triggered from content/options, just acknowledge
     return { success: true }
   }
-  
+
   if (message.type === 'syncGttl') {
     // Mirroring is triggered from options, just acknowledge
     return { success: true }
@@ -223,14 +221,12 @@ browser.runtime.onMessage.addListener(async (message: any) => {
 
 // Initialize on install/update
 browser.runtime.onInstalled.addListener(async () => {
-  console.log('Extension installed/updated, scheduling alarms')
   await rescheduleAlarm()
 })
 
 // Initialize on startup
 browser.runtime.onStartup.addListener(async () => {
-  console.log('Extension started, scheduling alarms')
   await rescheduleAlarm()
 })
 
-console.log('Background service worker initialized')
+

@@ -1,3 +1,23 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import Section from '@/options/components/Section.vue'
+import Select from '@/options/components/Select.vue'
+
+const props = defineProps<{ modelValue?: string }>()
+const emit = defineEmits(['update:modelValue'])
+
+const lengthOptions = [
+  { value: 'mixed', text: 'Mixed (3–16)' },
+  { value: 'long', text: 'Long (8–16)' },
+  { value: 'short', text: 'Short (3–7)' },
+]
+
+const modelValueLocal = computed({
+  get() { return props.modelValue ?? 'short' },
+  set(v: any) { emit('update:modelValue', v) },
+})
+</script>
+
 <template>
   <Section
     title="Sentence length"
@@ -15,26 +35,6 @@
     </template>
   </Section>
 </template>
-
-<script setup lang="ts">
-import { computed } from 'vue'
-import Section from '@/options/components/Section.vue'
-import Select from '@/options/components/Select.vue'
-
-const props = defineProps<{ modelValue?: string }>()
-const emit = defineEmits(['update:modelValue'])
-
-const lengthOptions = [
-  { value: 'mixed', text: 'Mixed (3–16)' },
-  { value: 'long', text: 'Long (8–16)' },
-  { value: 'short', text: 'Short (3–7)' }
-]
-
-const modelValueLocal = computed({
-  get() { return props.modelValue ?? 'short' },
-  set(v: any) { emit('update:modelValue', v) }
-})
-</script>
 
 <style scoped>
 /* Align the select to the right of the section header (same pattern as CEFR level) */

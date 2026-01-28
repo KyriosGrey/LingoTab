@@ -1,68 +1,5 @@
-<template>
-  <div class="content">
-    <!-- Если нет пака — единый блок с CTA -->
-    <div v-if="!pack || !pack.sentences || pack.sentences.length === 0" class="meanings" style="margin-top:8px;">
-      <div class="meaning boxed">
-        <p>No Smart Sentences pack found. Generate a pack in Settings to start practicing.</p>
-        <div style="margin-top:12px;">
-          <button class="spoiler-btn" @click="openSettings">⚙️ Settings</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Если пак есть — две визуальные секции -->
-    <div v-else class="smart-practice">
-      <!-- Верхний блок: перевод или оригинал в зависимости от состояния -->
-      <div class="top-block boxed">
-        <div class="muted">Translate to English:</div>
-        <div class="translation-box" aria-live="polite">
-          {{ headerShowsOriginal ? current?.text : current?.translation }}
-        </div>
-
-        <!-- hint: показываем только если включено в настройках и hint присутствует -->
-        <div v-if="showHints && current?.hint" class="hint muted" style="margin-top:8px;">
-          {{ current.hint }}
-        </div>
-      </div>
-
-      <!-- Нижний блок: ввод/кнопки/счётчик -->
-      <div class="bottom-block meaning boxed" style="margin-top:12px;">
-        <div style="display:flex; flex-direction:column; gap:10px;">
-          <!-- input-wrap: контейнер с относительным позиционированием,
-               внутри textarea (в потоке) и кнопки, позиционированные внизу -->
-          <div class="input-wrap">
-            <textarea
-              v-model="input"
-              ref="answerInput"
-              @keydown.enter="onEnterKey"
-              class="answer-input"
-              placeholder="Type the English sentence here"
-              aria-label="Enter English sentence"
-            />
-            <div class="input-buttons">
-              <div class="buttons-left">
-                <!-- Non-interactive badge showing tense instead of clickable "Show original" -->
-                <div class="tense-badge" aria-hidden="true">{{ current?.tense ?? '—' }}</div>
-              </div>
-              <div class="buttons-right">
-                <!-- Dual-state button: "Check" when original is hidden, "Next →" when shown
-                     Keep the visual style of the strong NEXT button (class "btn next"). -->
-                <button class="btn next" @click="onNextClick">{{ headerShowsOriginal ? 'Next →' : 'Check' }}</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="counter" style="margin-top:12px; color: hsla(var(--color-raw),0.6); font-size:0.9rem;">
-            Sentence {{ indexDisplay }} of {{ pack.sentences.length }}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import * as storage from '@/utils/storage'
 
 const PACK_KEY = 'lastSmartPack'
@@ -82,7 +19,8 @@ const showHints = ref(false) // controls whether hint is shown
 const answerInput = ref<HTMLTextAreaElement | null>(null)
 
 const current = computed(() => {
-  if (!pack.value || !Array.isArray(pack.value.sentences) || index.value < 0) return null
+  if (!pack.value || !Array.isArray(pack.value.sentences) || index.value < 0)
+    return null
   return pack.value.sentences[index.value] ?? null
 })
 
@@ -107,14 +45,17 @@ async function loadPackAndState() {
       index.value = next
       // persist new lastIndex
       await storage.set({ [STATE_KEY]: { lastIndex: next } })
-    } else {
+    }
+    else {
       index.value = -1
     }
-  } catch (err) {
+  }
+  catch (err) {
     console.warn('Failed to load smart pack/state', err)
     pack.value = null
     index.value = -1
-  } finally {
+  }
+  finally {
     loading.value = false
     input.value = ''
     headerShowsOriginal.value = false
@@ -131,8 +72,8 @@ onMounted(() => {
  * Handle Enter key in textarea:
  * - If Shift+Enter -> allow newline (do nothing)
  * - Otherwise:
- *   * If original is not shown in header -> reveal original in header
- *   * If original already shown -> proceed to next sentence
+ *   If original is not shown in header -> reveal original in header
+ *   If original already shown -> proceed to next sentence
  */
 function onEnterKey(e: KeyboardEvent) {
   if ((e as any).shiftKey) {
@@ -144,7 +85,8 @@ function onEnterKey(e: KeyboardEvent) {
   if (!headerShowsOriginal.value) {
     // First action: reveal original in header
     headerShowsOriginal.value = true
-  } else {
+  }
+  else {
     // Second action: next sentence
     next().then(() => {
       setTimeout(() => answerInput.value?.focus(), 0)
@@ -157,7 +99,8 @@ function onNextClick() {
   if (!headerShowsOriginal.value) {
     headerShowsOriginal.value = true
     setTimeout(() => answerInput.value?.focus(), 0)
-  } else {
+  }
+  else {
     next().then(() => {
       setTimeout(() => answerInput.value?.focus(), 0)
     })
@@ -190,17 +133,90 @@ function openSettings() {
       runtime.openOptionsPage()
       return
     }
-  } catch (err) {
+  }
+  catch (err) {
     // ignore
   }
   // Fallback: open options page url relative to extension (best-effort)
   try {
     window.open('/options/index.html', '_blank')
-  } catch (err) {
+  }
+  catch (err) {
     console.warn('Could not open options page', err)
   }
 }
 </script>
+
+<template>
+  <div class="content">
+    <!-- Если нет пака — единый блок с CTA -->
+    <div v-if="!pack || !pack.sentences || pack.sentences.length === 0" class="meanings" style="margin-top:8px;">
+      <div class="meaning boxed">
+        <p>No Smart Sentences pack found. Generate a pack in Settings to start practicing.</p>
+        <div style="margin-top:12px;">
+          <button class="spoiler-btn" @click="openSettings">
+            ⚙️ Settings
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Если пак есть — две визуальные секции -->
+    <div v-else class="smart-practice">
+      <!-- Верхний блок: перевод или оригинал в зависимости от состояния -->
+      <div class="top-block boxed">
+        <div class="muted">
+          Translate to English:
+        </div>
+        <div class="translation-box" aria-live="polite">
+          {{ headerShowsOriginal ? current?.text : current?.translation }}
+        </div>
+
+        <!-- hint: показываем только если включено в настройках и hint присутствует -->
+        <div v-if="showHints && current?.hint" class="hint muted" style="margin-top:8px;">
+          {{ current.hint }}
+        </div>
+      </div>
+
+      <!-- Нижний блок: ввод/кнопки/счётчик -->
+      <div class="bottom-block meaning boxed" style="margin-top:12px;">
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <!-- input-wrap: контейнер с относительным позиционированием,
+               внутри textarea (в потоке) и кнопки, позиционированные внизу -->
+          <div class="input-wrap">
+            <textarea
+              ref="answerInput"
+              v-model="input"
+              class="answer-input"
+              placeholder="Type the English sentence here"
+              aria-label="Enter English sentence"
+              @keydown.enter="onEnterKey"
+            />
+            <div class="input-buttons">
+              <div class="buttons-left">
+                <!-- Non-interactive badge showing tense instead of clickable "Show original" -->
+                <div class="tense-badge" aria-hidden="true">
+                  {{ current?.tense ?? '—' }}
+                </div>
+              </div>
+              <div class="buttons-right">
+                <!-- Dual-state button: "Check" when original is hidden, "Next →" when shown
+                     Keep the visual style of the strong NEXT button (class "btn next"). -->
+                <button class="btn next" @click="onNextClick">
+                  {{ headerShowsOriginal ? 'Next →' : 'Check' }}
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="counter" style="margin-top:12px; color: hsla(var(--color-raw),0.6); font-size:0.9rem;">
+            Sentence {{ indexDisplay }} of {{ pack.sentences.length }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 .content {

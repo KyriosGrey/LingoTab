@@ -1,11 +1,11 @@
 <script setup lang="ts">
+import { ref, watch } from 'vue'
 import useWordLists from '@/composables/words/useWordLists'
+
 import WORD_LISTS from '@/data/words'
 
-import Section from '../components/Section.vue'
-
 import storage from '@/modules/localStorage'
-import { ref, watch } from 'vue'
+import Section from '../components/Section.vue'
 
 const { selectedListKeys } = useWordLists()
 
@@ -14,7 +14,6 @@ const showLearningOnly = ref(storage.get('showLearningOnly') === 'true')
 watch(showLearningOnly, (val) => {
   storage.set('showLearningOnly', String(val))
 })
-
 </script>
 
 <template>
@@ -39,15 +38,15 @@ watch(showLearningOnly, (val) => {
         </label>
       </li>
     </ul>
-	<div class="vocab-list__item" style="margin-top: 10px;">
-  	<label class="checkbox">
-    	<b class="vocab-list__item__name">Learning words only</b>
-    	<small class="vocab-list__item__count">(show only your saved words)</small>
+    <div class="vocab-list__item" style="margin-top: 10px;">
+      <label class="checkbox">
+        <b class="vocab-list__item__name">Learning words only</b>
+        <small class="vocab-list__item__count">(show only your saved words)</small>
 
-    	<input type="checkbox" v-model="showLearningOnly">
-    	<span class="checkmark" />
-  	</label>
-	</div>
+        <input v-model="showLearningOnly" type="checkbox">
+        <span class="checkmark" />
+      </label>
+    </div>
   </Section>
 </template>
 

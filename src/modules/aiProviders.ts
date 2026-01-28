@@ -2,10 +2,11 @@
 // Added robust parsing: attempts to salvage partial JSON responses (cut/truncated model output),
 // retries with x-api-key header on auth failure, logs and saves raw responses for debugging.
 
+import type { Pack } from '@/utils/packValidator'
+import { validateAndNormalizePack } from '@/utils/packValidator'
 import * as storage from '@/utils/storage'
-import { validateAndNormalizePack, Pack } from '@/utils/packValidator'
 
-export type GeneratorSettings = {
+export interface GeneratorSettings {
   count: number
   level: string
   grammarFocus: string[]
@@ -78,24 +79,31 @@ Follow these strict rules for the "hint" field:
 
 /** helper to extract text from chat/completions (choices) */
 function extractTextFromChatResponse(resp: any): string | null {
-  if (!resp) return null
+  if (!resp)
+    return null
   const c = resp?.choices
   if (Array.isArray(c) && c.length) {
     const first = c[0]
-    if (first?.message?.content && typeof first.message.content === 'string') return first.message.content.trim()
-    if (typeof first.text === 'string' && first.text.trim()) return first.text.trim()
-    if (typeof resp.output_text === 'string' && resp.output_text.trim()) return resp.output_text.trim()
+    if (first?.message?.content && typeof first.message.content === 'string')
+      return first.message.content.trim()
+    if (typeof first.text === 'string' && first.text.trim())
+      return first.text.trim()
+    if (typeof resp.output_text === 'string' && resp.output_text.trim())
+      return resp.output_text.trim()
   }
   const seen = new Set<any>()
   const stack = [resp]
   while (stack.length) {
     const node = stack.pop()
-    if (!node || seen.has(node)) continue
+    if (!node || seen.has(node))
+      continue
     seen.add(node)
-    if (typeof node === 'string' && node.trim()) return node.trim()
+    if (typeof node === 'string' && node.trim())
+      return node.trim()
     if (Array.isArray(node)) {
       for (let i = node.length - 1; i >= 0; i--) stack.push(node[i])
-    } else if (typeof node === 'object') {
+    }
+    else if (typeof node === 'object') {
       for (const k of Object.keys(node).reverse()) stack.push(node[k])
     }
   }
@@ -107,30 +115,35 @@ async function doGroqRequest(apiKey: string, body: any, apiUrl?: string, useXApi
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), 20000)
   try {
-    const headers: Record<string,string> = { 'Content-Type': 'application/json' }
-    if (useXApiKeyHeader) headers['x-api-key'] = apiKey
-    else headers['Authorization'] = `Bearer ${apiKey}`
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' }
+    if (useXApiKeyHeader)
+      headers['x-api-key'] = apiKey
+    else headers.Authorization = `Bearer ${apiKey}`
 
-    console.debug('[aiProviders] doGroqRequest ->', { url: base, useXApiKeyHeader, headersPreview: { ...(headers['Authorization'] ? { Authorization: 'Bearer ***' } : {}), ...(headers['x-api-key'] ? { 'x-api-key': '***' } : {}) }, bodyPreview: typeof body === 'object' ? { model: body.model, messagesCount: Array.isArray(body.messages) ? body.messages.length : 0 } : undefined })
+    console.debug('[aiProviders] doGroqRequest ->', { url: base, useXApiKeyHeader, headersPreview: { ...(headers.Authorization ? { Authorization: 'Bearer ***' } : {}), ...(headers['x-api-key'] ? { 'x-api-key': '***' } : {}) }, bodyPreview: typeof body === 'object' ? { model: body.model, messagesCount: Array.isArray(body.messages) ? body.messages.length : 0 } : undefined })
 
     const res = await fetch(base, {
       method: 'POST',
       headers,
       body: JSON.stringify(body),
-      signal: controller.signal
+      signal: controller.signal,
     })
 
     const text = await res.text().catch(() => '')
     let json = null
-    try { json = text ? JSON.parse(text) : null } catch { /* keep json null */ }
+    try { json = text ? JSON.parse(text) : null }
+    catch { /* keep json null */ }
 
     console.debug('[aiProviders] doGroqRequest response', { ok: res.ok, status: res.status, textSnippet: (text || '').slice(0, 1000), parsedJsonPresent: !!json })
 
     return { ok: res.ok, status: res.status, text, json }
-  } catch (err: any) {
-    if (err?.name === 'AbortError') throw new Error('Groq call timeout')
+  }
+  catch (err: any) {
+    if (err?.name === 'AbortError')
+      throw new Error('Groq call timeout')
     throw err
-  } finally {
+  }
+  finally {
     clearTimeout(timeout)
   }
 }
@@ -138,7 +151,7 @@ async function doGroqRequest(apiKey: string, body: any, apiUrl?: string, useXApi
 /** attempt to clean trailing commas before object/array closing braces */
 function stripTrailingCommas(s: string) {
   // remove ",}" -> "}" and ",]" -> "]"
-  return s.replace(/,\s*}/g, '}').replace(/,\s*]/g, ']')
+  return s.replace(/,\s*\}/g, '}').replace(/,\s*\]/g, ']')
 }
 
 /** single-request helper: performs one chat/completions call, parses JSON and normalizes pack */
@@ -146,7 +159,7 @@ async function generatePackOnce(apiKey: string, settings: GeneratorSettings, mod
   const prompt = buildPrompt(settings)
   const messages = [
     { role: 'system', content: 'You are a helpful assistant that outputs ONLY JSON, exactly one JSON object, no commentary.' },
-    { role: 'user', content: prompt }
+    { role: 'user', content: prompt },
   ]
 
   // raised tokens slightly to reduce truncation chance
@@ -155,7 +168,7 @@ async function generatePackOnce(apiKey: string, settings: GeneratorSettings, mod
     messages,
     temperature: 0.0,
     max_tokens: 1500,
-    response_format: { type: 'json_object' }
+    response_format: { type: 'json_object' },
   }
 
   const bodyNoFormat = { model, messages, temperature: 0.0, max_tokens: 1500 }
@@ -170,35 +183,41 @@ async function generatePackOnce(apiKey: string, settings: GeneratorSettings, mod
     // store both attempts for debugging
     try {
       await storage.set({ lastSmartRawResponse: [attempt.json ?? attempt.text ?? null, second.json ?? second.text ?? null], lastSmartRawResponseAt: Date.now() })
-    } catch (e) { console.warn('Failed to save raw responses', e) }
+    }
+    catch (e) { console.warn('Failed to save raw responses', e) }
     attempt = second
   }
 
   // If still not ok and error mentions response_format, retry without response_format
   if (!attempt.ok) {
     const errText = attempt.text || ''
-    const badFieldRE = /response_format|response[_]?mime|Unknown name|Unknown field/i
+    const badFieldRE = /response_format|response_?mime|Unknown name|Unknown field/i
     if ((attempt.status === 400 || attempt.status === 422) && badFieldRE.test(errText)) {
       console.debug('[aiProviders] response_format unsupported — retrying without it')
       attempt = await doGroqRequest(apiKey, bodyNoFormat, apiUrl, false)
       if (!attempt.ok && (attempt.status === 401 || attempt.status === 403)) {
         console.debug('[aiProviders] Authorization failed on bodyNoFormat with Bearer, retrying with x-api-key header')
         const second = await doGroqRequest(apiKey, bodyNoFormat, apiUrl, true)
-        try { await storage.set({ lastSmartRawResponse: [attempt.json ?? attempt.text ?? null, second.json ?? second.text ?? null], lastSmartRawResponseAt: Date.now() }) } catch (e) { console.warn('Failed to save raw responses', e) }
+        try { await storage.set({ lastSmartRawResponse: [attempt.json ?? attempt.text ?? null, second.json ?? second.text ?? null], lastSmartRawResponseAt: Date.now() }) }
+        catch (e) { console.warn('Failed to save raw responses', e) }
         attempt = second
       }
-      if (!attempt.ok) throw new Error(`Groq API Error ${attempt.status}: ${attempt.text?.slice?.(0,500) ?? attempt.text}`)
-    } else {
+      if (!attempt.ok)
+        throw new Error(`Groq API Error ${attempt.status}: ${attempt.text?.slice?.(0, 500) ?? attempt.text}`)
+    }
+    else {
       // Save raw attempt for debugging
-      try { await storage.set({ lastSmartRawResponse: attempt.json ?? attempt.text ?? null, lastSmartRawResponseAt: Date.now() }) } catch (e) { console.warn('Failed to save raw response', e) }
-      throw new Error(`Groq API Error ${attempt.status}: ${errText?.slice?.(0,500) ?? errText}`)
+      try { await storage.set({ lastSmartRawResponse: attempt.json ?? attempt.text ?? null, lastSmartRawResponseAt: Date.now() }) }
+      catch (e) { console.warn('Failed to save raw response', e) }
+      throw new Error(`Groq API Error ${attempt.status}: ${errText?.slice?.(0, 500) ?? errText}`)
     }
   }
 
   // Save raw response (only last)
   try {
     await storage.set({ lastSmartRawResponse: attempt.json ?? attempt.text ?? null, lastSmartRawResponseAt: Date.now() })
-  } catch (e) {
+  }
+  catch (e) {
     console.warn('Failed to save raw response', e)
   }
 
@@ -213,13 +232,15 @@ async function generatePackOnce(apiKey: string, settings: GeneratorSettings, mod
   let parsed: any = null
   try {
     parsed = JSON.parse(contentText)
-  } catch (err1) {
+  }
+  catch (err1) {
     // try to find JSON object inside text (greedy)
     const m = contentText.match(/(\{[\s\S]*\})/)
     if (m) {
       try {
         parsed = JSON.parse(m[1])
-      } catch (err2) {
+      }
+      catch (err2) {
         // Try salvage: cut up to last closing brace and clean trailing commas
         const lastBrace = contentText.lastIndexOf('}')
         if (lastBrace > -1) {
@@ -227,16 +248,19 @@ async function generatePackOnce(apiKey: string, settings: GeneratorSettings, mod
           try {
             parsed = JSON.parse(candidate)
             console.debug('[aiProviders] salvage parse succeeded by trimming to last }')
-          } catch (err3) {
+          }
+          catch (err3) {
             console.debug('[aiProviders] salvage parse failed after trimming last }, errors:', err1, err2, err3)
             throw new Error('No valid JSON found in model response')
           }
-        } else {
+        }
+        else {
           console.debug('[aiProviders] JSON regex found but parse failed and no trailing } to salvage:', err1, err2)
           throw new Error('No valid JSON found in model response')
         }
       }
-    } else {
+    }
+    else {
       // If no {…} match, try salvage by trimming to last } anyway (some outputs are plain strings)
       const lastBrace = contentText.lastIndexOf('}')
       if (lastBrace > -1) {
@@ -244,12 +268,14 @@ async function generatePackOnce(apiKey: string, settings: GeneratorSettings, mod
         try {
           parsed = JSON.parse(candidate)
           console.debug('[aiProviders] salvage parse succeeded by trimming to last } (no regex match)')
-        } catch (errFinal) {
+        }
+        catch (errFinal) {
           console.debug('[aiProviders] final salvage parse failed', errFinal)
           throw new Error('No valid JSON found in model response')
         }
-      } else {
-        console.debug('[aiProviders] no JSON object found inside contentText, snippet:', contentText.slice(0,1000))
+      }
+      else {
+        console.debug('[aiProviders] no JSON object found inside contentText, snippet:', contentText.slice(0, 1000))
         throw new Error('No valid JSON found in model response')
       }
     }
@@ -275,7 +301,7 @@ export async function generatePack(apiKey: string, settings: GeneratorSettings, 
   // First attempt: request double candidates (clamped)
   const firstSettings = { ...settings, count: Math.max(desired * 2, desired) }
   const first = await generatePackOnce(apiKey, firstSettings, model, apiUrl)
-  let candidates = (first.pack.sentences || []).filter(s => {
+  let candidates = (first.pack.sentences || []).filter((s) => {
     const len = Number(s.lengthWords) || 0
     return Number.isFinite(len) && len >= min && len <= max && typeof s.text === 'string' && s.text.trim().length > 0
   })
@@ -292,7 +318,7 @@ export async function generatePack(apiKey: string, settings: GeneratorSettings, 
   try {
     const secondSettings = { ...settings, count: missing }
     const second = await generatePackOnce(apiKey, secondSettings, model, apiUrl)
-    const candidates2 = (second.pack.sentences || []).filter(s => {
+    const candidates2 = (second.pack.sentences || []).filter((s) => {
       const len = Number(s.lengthWords) || 0
       return Number.isFinite(len) && len >= min && len <= max && typeof s.text === 'string' && s.text.trim().length > 0
     })
@@ -300,7 +326,8 @@ export async function generatePack(apiKey: string, settings: GeneratorSettings, 
     const final = candidates.slice(0, desired)
     // raw: include both raw responses for debugging
     return { raw: [first.raw, second.raw], pack: { ...first.pack, sentences: final, count: final.length } }
-  } catch (e) {
+  }
+  catch (e) {
     // if second attempt failed, return whatever we have from first attempt
     console.debug('[aiProviders] second attempt failed, returning partial candidates', e)
     const final = candidates.slice(0, desired)
@@ -316,15 +343,16 @@ export async function testConnection(apiKey: string, settings?: Partial<Generato
     level: settings?.level || 'B1',
     grammarFocus: settings?.grammarFocus || ['All'],
     topics: settings?.topics || ['Daily Life & Slang'],
-    lengthRange: settings?.lengthRange || [5,15],
-    targetLang: settings?.targetLang || 'ru'
+    lengthRange: settings?.lengthRange || [5, 15],
+    targetLang: settings?.targetLang || 'ru',
   }
   const usedModel = model || DEFAULT_GROQ_MODEL
   try {
     const res = await generatePack(apiKey, s, usedModel, apiUrl)
     console.debug('[aiProviders] testConnection finished, sentences:', res.pack.sentences?.length)
     return Array.isArray(res.pack.sentences) && res.pack.sentences.length >= 1
-  } catch (err) {
+  }
+  catch (err) {
     console.debug('[aiProviders] testConnection error', err)
     return false
   }

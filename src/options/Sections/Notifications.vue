@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import browser from 'webextension-polyfill'
+import storage from '@/modules/localStorage'
+import { syncGttlMirror, syncLearnedWordsMirror } from '@/utils/storageMirror'
 import Section from '../components/Section.vue'
 import Select from '../components/Select.vue'
-import storage from '@/modules/localStorage'
-import { syncLearnedWordsMirror, syncGttlMirror } from '@/utils/storageMirror'
 
 const SETTINGS_KEY = 'notificationSettings'
 
@@ -32,7 +32,8 @@ async function loadSettings() {
     const settings: NotificationSettings = result[SETTINGS_KEY] || { enabled: false, frequency: 60 }
     enabled.value = settings.enabled
     frequency.value = settings.frequency
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to load notification settings:', error)
   }
 }
@@ -44,21 +45,21 @@ async function saveSettings() {
       enabled: enabled.value,
       frequency: frequency.value,
     }
-    
+
     await browser.storage.local.set({ [SETTINGS_KEY]: settings })
-    
+
     // If enabling notifications, sync mirrors now
     if (enabled.value) {
       await initializeMirrors()
     }
-    
+
     // Notify background worker to reschedule alarms
     await browser.runtime.sendMessage({ type: 'updateNotificationSettings' })
-    
-    console.log('Notification settings saved')
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to save notification settings:', error)
-  } finally {
+  }
+  finally {
     isSaving.value = false
   }
 }
@@ -69,13 +70,12 @@ async function initializeMirrors() {
     const lwData = storage.get('lw')
     const learnedWords = lwData ? lwData.split(',').filter(Boolean) : []
     await syncLearnedWordsMirror(learnedWords)
-    
+
     // Mirror target language
     const gttl = storage.get('gttl') || 'ru'
     await syncGttlMirror(gttl)
-    
-    console.log('Mirrors initialized')
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to initialize mirrors:', error)
   }
 }
@@ -85,12 +85,13 @@ async function testNotification() {
   try {
     // Ensure mirrors are synced before testing
     await initializeMirrors()
-    
+
     await browser.runtime.sendMessage({ type: 'testNotification' })
-    console.log('Test notification triggered')
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to trigger test notification:', error)
-  } finally {
+  }
+  finally {
     isTestingNotification.value = false
   }
 }

@@ -28,7 +28,7 @@ export default function useGoogleTranslate() {
 
   function storeTargetLanguageCode(code: GoogleTranslateCodeLang['code']) {
     storage.set(GOOGLE_TRANSLATE_TARGET_LANGUAGE_CODE_STORAGE_KEY, code)
-    
+
     // Mirror to browser.storage.local for background service worker
     syncGttlMirror(code).catch(console.error)
   }

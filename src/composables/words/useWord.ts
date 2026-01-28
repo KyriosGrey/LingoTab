@@ -1,5 +1,5 @@
-import { capitalizeFirstLetter } from '@/utils/string'
 import { computed, ref } from 'vue'
+import { capitalizeFirstLetter } from '@/utils/string'
 import useIgnoredWords from './useIgnoredWords'
 import useRandomWord from './useRandomWord'
 import useWordDefinitions from './useWordDefinitions'

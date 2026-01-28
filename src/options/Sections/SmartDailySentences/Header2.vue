@@ -5,7 +5,7 @@ import { version } from '@/../package.json'
 <template>
   <header class="header">
     <h1 class="title">
-      Smart Sentences Settings 
+      Smart Sentences Settings
     </h1>
 
     <div class="info">

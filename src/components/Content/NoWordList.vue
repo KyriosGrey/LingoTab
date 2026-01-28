@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 import useBackground from '@/composables/useBackground'
 
 import { openOptionsPage } from '@/utils/browser'
-
-import { computed } from 'vue'
 
 const { shouldModifyUI } = useBackground()
 

@@ -1,19 +1,27 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const active = ref<'newword' | 'smart'>('newword')
+</script>
+
 <template>
   <div class="settings-root">
     <aside class="settings-sidebar" role="navigation" aria-label="Settings menu">
-      <div class="brand">Settings</div>
+      <div class="brand">
+        Settings
+      </div>
       <nav>
         <button
-          :class="['menu-item', active === 'newword' ? 'active' : '']"
-          @click="active = 'newword'"
+          class="menu-item" :class="[active === 'newword' ? 'active' : '']"
           aria-pressed="active === 'newword'"
+          @click="active = 'newword'"
         >
           New Word Tab
         </button>
         <button
-          :class="['menu-item', active === 'smart' ? 'active' : '']"
-          @click="active = 'smart'"
+          class="menu-item" :class="[active === 'smart' ? 'active' : '']"
           aria-pressed="active === 'smart'"
+          @click="active = 'smart'"
         >
           Smart Sentences
         </button>
@@ -31,11 +39,6 @@
     </main>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref } from 'vue'
-const active = ref<'newword'|'smart'>('newword')
-</script>
 
 <style scoped>
 /* Центрируем весь блок настроек и делаем две колонки рядом */

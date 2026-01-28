@@ -1,9 +1,9 @@
 <script lang="ts">
-import useShortcutContextMenu from '@/composables/shortcuts/useShortcutContextMenu'
+import { defineComponent } from 'vue'
 
+import useShortcutContextMenu from '@/composables/shortcuts/useShortcutContextMenu'
 import useShortcutModal from '@/composables/shortcuts/useShortcutModal'
 import useShortcuts from '@/composables/shortcuts/useShortcuts'
-import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'ShortcutContextMenu',

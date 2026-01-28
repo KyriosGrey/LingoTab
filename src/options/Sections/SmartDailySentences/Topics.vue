@@ -1,3 +1,19 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import Section from '@/options/components/Section.vue'
+
+const props = defineProps<{ modelValue?: string[], items: string[], counts?: (number | undefined)[] }>()
+const emit = defineEmits(['update:modelValue'])
+
+const localValue = computed({
+  get() { return props.modelValue ?? [] },
+  set(v: any) { emit('update:modelValue', v) },
+})
+
+const items = props.items || []
+const counts = props.counts || []
+</script>
+
 <template>
   <Section
     title="Topics"
@@ -7,31 +23,15 @@
       <li v-for="(t, idx) in items" :key="t" class="vocab-list__item">
         <label class="checkbox">
           <b class="vocab-list__item__name">{{ t }}</b>
-          <small class="vocab-list__item__count" v-if="counts && counts[idx]">({{ counts[idx] }})</small>
+          <small v-if="counts && counts[idx]" class="vocab-list__item__count">({{ counts[idx] }})</small>
 
-          <input type="checkbox" :value="t" v-model="localValue" />
+          <input v-model="localValue" type="checkbox" :value="t">
           <span class="checkmark" />
         </label>
       </li>
     </ul>
   </Section>
 </template>
-
-<script setup lang="ts">
-import { computed } from 'vue'
-import Section from '@/options/components/Section.vue'
-
-const props = defineProps<{ modelValue?: string[], items: string[], counts?: (number|undefined)[] }>()
-const emit = defineEmits(['update:modelValue'])
-
-const localValue = computed({
-  get() { return props.modelValue ?? [] },
-  set(v: any) { emit('update:modelValue', v) }
-})
-
-const items = props.items || []
-const counts = props.counts || []
-</script>
 
 <style scoped>
 .vocab-list {

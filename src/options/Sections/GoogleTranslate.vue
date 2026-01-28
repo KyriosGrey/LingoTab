@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import useGoogleTranslate from '@/composables/useGoogleTranslate'
-
-import languages from '@/data/googleTranslateLanguages'
 import { ref } from 'vue'
+
+import useGoogleTranslate from '@/composables/useGoogleTranslate'
+import languages from '@/data/googleTranslateLanguages'
 
 import Section from '../components/Section.vue'
 

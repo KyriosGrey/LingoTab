@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import Drawer from '@/components/shared/Drawer.vue'
-
-import IconButton from '@/components/shared/IconButton.vue'
-import useWord from '@/composables/words/useWord'
-
 import { ref } from 'vue'
+
+import Drawer from '@/components/shared/Drawer.vue'
+import IconButton from '@/components/shared/IconButton.vue'
+
+import useWord from '@/composables/words/useWord'
 import Tabs from './Tabs.vue'
 
 const { searchWord } = useWord()

@@ -12,8 +12,8 @@ export async function syncLearnedWordsMirror(learnedWords: string[]) {
     await browser.storage.local.set({
       [MIRROR_LEARNED_KEY]: learnedWords,
     })
-    console.log('Synced learned words mirror:', learnedWords.length)
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to sync learned words mirror:', error)
   }
 }
@@ -27,8 +27,8 @@ export async function syncGttlMirror(targetLanguageCode: string) {
     await browser.storage.local.set({
       [MIRROR_GTTL_KEY]: targetLanguageCode,
     })
-    console.log('Synced gttl mirror:', targetLanguageCode)
-  } catch (error) {
+  }
+  catch (error) {
     console.error('Failed to sync gttl mirror:', error)
   }
 }

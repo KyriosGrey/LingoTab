@@ -1,75 +1,3 @@
-<template>
-  <Section
-    title="Grammar focus"
-    description="Select grammar points to emphasize in generated sentences."
-  >
-    <!-- 1) Single 'All' line -->
-    <div class="all-row">
-      <label class="checkbox">
-        <input type="checkbox" :value="'All'" v-model="localValue" />
-        <b class="vocab-list__item__name">All</b>
-        <span class="checkmark" />
-      </label>
-    </div>
-
-    <!-- 2) Time groups: Present / Past / Future in three columns -->
-    <div class="time-groups">
-      <div class="time-col">
-        <div class="time-title">Present</div>
-        <ul class="time-list">
-          <li v-for="g in presentItems" :key="g">
-            <label class="checkbox">
-              <input type="checkbox" :value="g" v-model="localValue" />
-              <span class="vocab-list__item__name">{{ g }}</span>
-              <span class="checkmark" />
-            </label>
-          </li>
-        </ul>
-      </div>
-
-      <div class="time-col">
-        <div class="time-title">Past</div>
-        <ul class="time-list">
-          <li v-for="g in pastItems" :key="g">
-            <label class="checkbox">
-              <input type="checkbox" :value="g" v-model="localValue" />
-              <span class="vocab-list__item__name">{{ g }}</span>
-              <span class="checkmark" />
-            </label>
-          </li>
-        </ul>
-      </div>
-
-      <div class="time-col">
-        <div class="time-title">Future</div>
-        <ul class="time-list">
-          <li v-for="g in futureItems" :key="g">
-            <label class="checkbox">
-              <input type="checkbox" :value="g" v-model="localValue" />
-              <span class="vocab-list__item__name">{{ g }}</span>
-              <span class="checkmark" />
-            </label>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- 3) Spacer and remaining grammar points (three columns) -->
-    <div class="other-section">
-      <div class="other-title">Other</div>
-      <ul class="other-grid">
-        <li v-for="g in otherItems" :key="g" class="vocab-list__item">
-          <label class="checkbox">
-            <input type="checkbox" :value="g" v-model="localValue" />
-            <span class="vocab-list__item__name">{{ g }}</span>
-            <span class="checkmark" />
-          </label>
-        </li>
-      </ul>
-    </div>
-  </Section>
-</template>
-
 <script setup lang="ts">
 import { computed } from 'vue'
 import Section from '@/options/components/Section.vue'
@@ -79,7 +7,7 @@ const emit = defineEmits(['update:modelValue'])
 
 const localValue = computed({
   get() { return props.modelValue ?? [] },
-  set(v: any) { emit('update:modelValue', v) }
+  set(v: any) { emit('update:modelValue', v) },
 })
 
 const items = props.items || []
@@ -89,21 +17,21 @@ const presentLabels = [
   'Present Simple',
   'Present Continuous',
   'Present Perfect',
-  'Present Perfect Continuous'
+  'Present Perfect Continuous',
 ]
 
 const pastLabels = [
   'Past Simple',
   'Past Continuous',
   'Past Perfect',
-  'Past Perfect Continuous'
+  'Past Perfect Continuous',
 ]
 
 const futureLabels = [
   'Future Simple',
   'Future Continuous',
   'Future Perfect',
-  'Future Perfect Continuous'
+  'Future Perfect Continuous',
 ]
 
 // helper to preserve canonical order and only include items that exist
@@ -120,11 +48,91 @@ const otherItems = computed(() => {
     'All',
     ...presentLabels,
     ...pastLabels,
-    ...futureLabels
+    ...futureLabels,
   ])
   return items.filter(i => !used.has(i))
 })
 </script>
+
+<template>
+  <Section
+    title="Grammar focus"
+    description="Select grammar points to emphasize in generated sentences."
+  >
+    <!-- 1) Single 'All' line -->
+    <div class="all-row">
+      <label class="checkbox">
+        <input v-model="localValue" type="checkbox" value="All">
+        <b class="vocab-list__item__name">All</b>
+        <span class="checkmark" />
+      </label>
+    </div>
+
+    <!-- 2) Time groups: Present / Past / Future in three columns -->
+    <div class="time-groups">
+      <div class="time-col">
+        <div class="time-title">
+          Present
+        </div>
+        <ul class="time-list">
+          <li v-for="g in presentItems" :key="g">
+            <label class="checkbox">
+              <input v-model="localValue" type="checkbox" :value="g">
+              <span class="vocab-list__item__name">{{ g }}</span>
+              <span class="checkmark" />
+            </label>
+          </li>
+        </ul>
+      </div>
+
+      <div class="time-col">
+        <div class="time-title">
+          Past
+        </div>
+        <ul class="time-list">
+          <li v-for="g in pastItems" :key="g">
+            <label class="checkbox">
+              <input v-model="localValue" type="checkbox" :value="g">
+              <span class="vocab-list__item__name">{{ g }}</span>
+              <span class="checkmark" />
+            </label>
+          </li>
+        </ul>
+      </div>
+
+      <div class="time-col">
+        <div class="time-title">
+          Future
+        </div>
+        <ul class="time-list">
+          <li v-for="g in futureItems" :key="g">
+            <label class="checkbox">
+              <input v-model="localValue" type="checkbox" :value="g">
+              <span class="vocab-list__item__name">{{ g }}</span>
+              <span class="checkmark" />
+            </label>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 3) Spacer and remaining grammar points (three columns) -->
+    <div class="other-section">
+      <div class="other-title">
+        Other
+      </div>
+      <ul class="other-grid">
+        <li v-for="g in otherItems" :key="g" class="vocab-list__item">
+          <label class="checkbox">
+            <input v-model="localValue" type="checkbox" :value="g">
+            <span class="vocab-list__item__name">{{ g }}</span>
+            <span class="checkmark" />
+          </label>
+        </li>
+      </ul>
+    </div>
+  </Section>
+</template>
 
 <style scoped>
 /* All single row */
