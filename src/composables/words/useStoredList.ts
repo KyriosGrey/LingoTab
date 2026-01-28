@@ -1,6 +1,9 @@
 import storage from '@/modules/localStorage'
+import { syncLearnedWords } from '@/utils/storage-sync'
 
 import { computed, ref } from 'vue'
+
+const LEARNED_WORDS_KEY = 'lw'
 
 export function useStoredList(storageKey: string) {
   const _listSet = ref(new Set<string>())
@@ -34,6 +37,13 @@ export function useStoredList(storageKey: string) {
 
   function _saveToStorage() {
     storage.set(storageKey, list.value.join())
+    
+    // Mirror learned words to browser.storage.local for background access
+    if (storageKey === LEARNED_WORDS_KEY) {
+      syncLearnedWords(list.value).catch(err => {
+        console.error('Failed to sync learned words:', err)
+      })
+    }
   }
 
   function load() {

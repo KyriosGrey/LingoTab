@@ -29,6 +29,17 @@ export async function getManifest() {
       128: './assets/128.png',
     },
 
+    background: {
+      service_worker: './dist/background/background.js',
+      type: 'module',
+    },
+
+    permissions: [
+      'storage',
+      'alarms',
+      'notifications',
+    ],
+
     host_permissions: [
   'https://translate.googleapis.com/*',
     ],

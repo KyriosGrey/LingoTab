@@ -19,6 +19,7 @@ const {
   isLoading,
   wordsPoll,
   getWord,
+  searchWord,
   error,
   word,
 } = useWord()
@@ -40,7 +41,17 @@ onMounted(async () => {
 
   // only fetch word when smart mode is disabled
   if (!smartEnabled.value) {
-    getWord()
+    // Check for word query parameter
+    const urlParams = new URLSearchParams(window.location.search)
+    const wordParam = urlParams.get('word')
+    
+    if (wordParam) {
+      // If word parameter is present, search for that specific word
+      searchWord(wordParam)
+    } else {
+      // Otherwise, get a random word as usual
+      getWord()
+    }
   }
 })
 </script>

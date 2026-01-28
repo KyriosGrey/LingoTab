@@ -50,6 +50,16 @@ export default defineConfig(({ command }) => ({
       input: {
         newTab: r('src/newTab/index.html'),
         options: r('src/options/index.html'),
+        background: r('src/background/index.ts'),
+      },
+      output: {
+        entryFileNames: (chunkInfo) => {
+          // Put background script in background folder
+          if (chunkInfo.name === 'background') {
+            return 'background/[name].js'
+          }
+          return 'assets/[name]-[hash].js'
+        },
       },
     },
   },

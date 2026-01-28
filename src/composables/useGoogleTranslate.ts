@@ -2,6 +2,7 @@ import type { GoogleTranslateCodeLang } from '@/data/googleTranslateLanguages'
 
 import GOOGLE_TRANSLATE_LANGUAGES from '@/data/googleTranslateLanguages'
 import storage from '@/modules/localStorage'
+import { syncTargetLanguage } from '@/utils/storage-sync'
 
 const GOOGLE_TRANSLATE_TARGET_LANGUAGE_CODE_STORAGE_KEY = 'gttl'
 
@@ -27,6 +28,11 @@ export default function useGoogleTranslate() {
 
   function storeTargetLanguageCode(code: GoogleTranslateCodeLang['code']) {
     storage.set(GOOGLE_TRANSLATE_TARGET_LANGUAGE_CODE_STORAGE_KEY, code)
+    
+    // Mirror target language to browser.storage.local for background access
+    syncTargetLanguage(code).catch(err => {
+      console.error('Failed to sync target language:', err)
+    })
   }
 
   return {
