@@ -11,7 +11,7 @@ import VocabularyLists from './Sections/VocabularyLists.vue'
 import Translation from './Sections/Translation.vue'
 
 /* Новая секция SmartDailySentences */
-import SmartDailySentences from './Sections/SmartDailySentences.vue'
+import SmartDailySentences from './Sections/SmartDailySentences/SmartDailySentences.vue'
 </script>
 
 <template>
