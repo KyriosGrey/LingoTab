@@ -9,9 +9,10 @@ import SiteShortcuts from './Sections/SiteShortcuts.vue'
 import Theme from './Sections/Theme.vue'
 import VocabularyLists from './Sections/VocabularyLists.vue'
 import Translation from './Sections/Translation.vue'
+import Notifications from './Sections/Notifications.vue'
 
 /* Новая секция SmartDailySentences */
-import SmartDailySentences from './Sections/SmartDailySentences.vue'
+import SmartDailySentences from './Sections/SmartDailySentences/SmartDailySentences.vue'
 </script>
 
 <template>
@@ -22,6 +23,7 @@ import SmartDailySentences from './Sections/SmartDailySentences.vue'
         <div class="options">
           <Header />
           <GoogleTranslate />
+          <Notifications />
           <SiteShortcuts />
           <Background />
           <Theme />

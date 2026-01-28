@@ -1,4 +1,5 @@
 import storage from '@/modules/localStorage'
+import { syncLearnedWordsMirror } from '@/utils/storageMirror'
 
 import { computed, ref } from 'vue'
 
@@ -34,6 +35,11 @@ export function useStoredList(storageKey: string) {
 
   function _saveToStorage() {
     storage.set(storageKey, list.value.join())
+    
+    // Mirror learned words to browser.storage.local for background service worker
+    if (storageKey === 'lw') {
+      syncLearnedWordsMirror(list.value).catch(console.error)
+    }
   }
 
   function load() {

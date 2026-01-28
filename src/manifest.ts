@@ -22,6 +22,18 @@ export async function getManifest() {
       open_in_tab: true,
     },
 
+    background: {
+      service_worker: './dist/background/index.js',
+      type: 'module',
+    },
+
+    permissions: [
+      'notifications',
+      'alarms',
+      'tabs',
+      'storage',
+    ],
+
     icons: {
       16: './assets/16.png',
       32: './assets/32.png',

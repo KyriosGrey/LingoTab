@@ -50,6 +50,16 @@ export default defineConfig(({ command }) => ({
       input: {
         newTab: r('src/newTab/index.html'),
         options: r('src/options/index.html'),
+        background: r('src/background/index.ts'),
+      },
+      output: {
+        entryFileNames: (chunkInfo) => {
+          // Background service worker should be at dist/background/index.js
+          if (chunkInfo.name === 'background') {
+            return 'background/index.js'
+          }
+          return 'dist/[name]/[name].js'
+        },
       },
     },
   },

@@ -1,0 +1,9 @@
+node_modules/
+extension/dist/
+extension/manifest.json
+extension.*.zip
+package-lock.json
+pnpm-lock.yaml
+src/components.d.ts
+.DS_Store
+*.log
