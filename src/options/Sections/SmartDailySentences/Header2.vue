@@ -13,7 +13,7 @@ import { version } from '@/../package.json'
         class="version"
         href="https://github.com/sajadhsm/new-word-tab/releases"
       >
-        NWT v{{ version }}
+        LingoTab v{{ version }}
       </a>
       <small class="copyright">
         MIT Licensed • Copyright © 2025-PRESENT Serhii Syvorotkin
