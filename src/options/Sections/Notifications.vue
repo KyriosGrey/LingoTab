@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import browser from 'webextension-polyfill'
 import {
-  getNotificationSettings,
-  setNotificationSettings,
-  initializeMirrors,
   ensureRunnerPageOpen,
+  getNotificationSettings,
+  initializeMirrors,
   mirrorLearnedWords,
   mirrorTargetLanguage,
+  setNotificationSettings,
 } from '@/composables/useNotificationMirror'
 
 import Section from '../components/Section.vue'
@@ -57,7 +57,9 @@ async function handleTestNotification() {
   // Send test message to runner
   try {
     await browser.runtime.sendMessage({ action: 'test-notification' })
-    console.log('[Notifications] Test notification sent')
+    // eslint-disable-next-line no-console
+    if (__DEV__)
+      console.log('[Notifications] Test notification sent')
   }
   catch (error) {
     console.error('[Notifications] Failed to send test notification:', error)

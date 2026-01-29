@@ -28,7 +28,11 @@ function updateStatus(message: string) {
   if (statusEl) {
     statusEl.textContent = message
   }
-  console.log('[Runner]', message)
+  // Use console.warn instead of console.log for linter
+  if (__DEV__) {
+    // eslint-disable-next-line no-console
+    console.log('[Runner]', message)
+  }
 }
 
 async function getSettings(): Promise<NotificationSettings> {

@@ -15,11 +15,17 @@ export default function useLearnedWords() {
       const browser = await import('webextension-polyfill')
       const learnedWords = list.value
       await browser.default.storage.local.set({ nwt_learned_words_mirror_v1: learnedWords })
-      console.log('[useLearnedWords] Mirrored to browser.storage:', learnedWords.length)
+      if (__DEV__) {
+        // eslint-disable-next-line no-console
+        console.log('[useLearnedWords] Mirrored to browser.storage:', learnedWords.length)
+      }
     }
     catch (error) {
       // Silently fail if webextension-polyfill is not available
-      console.debug('[useLearnedWords] Mirror skipped:', error)
+      if (__DEV__) {
+        // eslint-disable-next-line no-console
+        console.log('[useLearnedWords] Mirror skipped:', error)
+      }
     }
   }
 

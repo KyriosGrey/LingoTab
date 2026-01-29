@@ -17,7 +17,10 @@ export async function mirrorLearnedWords() {
     const learnedWordsStr = storage.get(LOCALSTORAGE_KEYS.learnedWords)
     const learnedWords = learnedWordsStr ? learnedWordsStr.split(',').filter(Boolean) : []
     await browser.storage.local.set({ [MIRROR_KEYS.learnedWords]: learnedWords })
-    console.log('[Mirror] Learned words mirrored:', learnedWords.length)
+    if (__DEV__) {
+      // eslint-disable-next-line no-console
+      console.log('[Mirror] Learned words mirrored:', learnedWords.length)
+    }
   }
   catch (error) {
     console.error('[Mirror] Failed to mirror learned words:', error)
@@ -28,7 +31,10 @@ export async function mirrorTargetLanguage() {
   try {
     const targetLang = storage.get(LOCALSTORAGE_KEYS.targetLanguage) || 'ru'
     await browser.storage.local.set({ [MIRROR_KEYS.targetLanguage]: targetLang })
-    console.log('[Mirror] Target language mirrored:', targetLang)
+    if (__DEV__) {
+      // eslint-disable-next-line no-console
+      console.log('[Mirror] Target language mirrored:', targetLang)
+    }
   }
   catch (error) {
     console.error('[Mirror] Failed to mirror target language:', error)
@@ -49,7 +55,10 @@ export async function getNotificationSettings() {
 export async function setNotificationSettings(settings: { enabled: boolean, frequency: number }) {
   try {
     await browser.storage.local.set({ [MIRROR_KEYS.notificationSettings]: settings })
-    console.log('[Mirror] Notification settings saved:', settings)
+    if (__DEV__) {
+      // eslint-disable-next-line no-console
+      console.log('[Mirror] Notification settings saved:', settings)
+    }
   }
   catch (error) {
     console.error('[Mirror] Failed to save notification settings:', error)
@@ -59,7 +68,10 @@ export async function setNotificationSettings(settings: { enabled: boolean, freq
 export async function initializeMirrors() {
   await mirrorLearnedWords()
   await mirrorTargetLanguage()
-  console.log('[Mirror] All mirrors initialized')
+  if (__DEV__) {
+    // eslint-disable-next-line no-console
+    console.log('[Mirror] All mirrors initialized')
+  }
 }
 
 export async function ensureRunnerPageOpen() {
@@ -73,10 +85,16 @@ export async function ensureRunnerPageOpen() {
     if (!runnerTab) {
       // Open runner page in background
       await browser.tabs.create({ url: runnerUrl, active: false })
-      console.log('[Mirror] Runner page opened')
+      if (__DEV__) {
+        // eslint-disable-next-line no-console
+        console.log('[Mirror] Runner page opened')
+      }
     }
     else {
-      console.log('[Mirror] Runner page already open')
+      if (__DEV__) {
+        // eslint-disable-next-line no-console
+        console.log('[Mirror] Runner page already open')
+      }
     }
   }
   catch (error) {
@@ -90,5 +108,8 @@ export function setupMirrorWatchers() {
   // We'll add event listeners in the options page
 
   // For now, we'll rely on manual mirroring when settings change
-  console.log('[Mirror] Mirror watchers would be set up here')
+  if (__DEV__) {
+    // eslint-disable-next-line no-console
+    console.log('[Mirror] Mirror watchers would be set up here')
+  }
 }

@@ -27,11 +27,17 @@ async function mirrorToBrowserStorage(code: string) {
   try {
     const browser = await import('webextension-polyfill')
     await browser.default.storage.local.set({ nwt_gttl_mirror_v1: code })
-    console.log('[useGoogleTranslate] Mirrored to browser.storage:', code)
+    if (__DEV__) {
+      // eslint-disable-next-line no-console
+      console.log('[useGoogleTranslate] Mirrored to browser.storage:', code)
+    }
   }
   catch (error) {
     // Silently fail if webextension-polyfill is not available
-    console.debug('[useGoogleTranslate] Mirror skipped:', error)
+    if (__DEV__) {
+      // eslint-disable-next-line no-console
+      console.log('[useGoogleTranslate] Mirror skipped:', error)
+    }
   }
 }
 

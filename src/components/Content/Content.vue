@@ -1,17 +1,17 @@
 <script setup lang="ts">
+import { onMounted, ref } from 'vue'
+
 import useOnline from '@/composables/useOnline'
 import useWord from '@/composables/words/useWord'
+import * as storage from '@/utils/storage'
+
 import LearnedAllWords from './LearnedAllWords.vue'
 import Loading from './Loading.vue'
+import MixedPractice from './MixedPractice.vue'
 import NoWordList from './NoWordList.vue'
 import OfflineState from './OfflineState.vue'
-
 import Word from './Word.vue'
 import WordFetchError from './WordFetchError.vue'
-import MixedPractice from './MixedPractice.vue'
-
-import * as storage from '@/utils/storage'
-import { ref, onMounted } from 'vue'
 
 const {
   hasLearnedAllWords,
@@ -34,7 +34,8 @@ onMounted(async () => {
     // read smartDailySettings.enabled; do not block UI
     const s = await storage.get(['smartDailySettings'])
     smartEnabled.value = !!(s && s.smartDailySettings && s.smartDailySettings.enabled)
-  } catch (err) {
+  }
+  catch (err) {
     console.warn('Failed to read smartDailySettings', err)
     smartEnabled.value = false
   }
@@ -48,7 +49,8 @@ onMounted(async () => {
     if (wordParam) {
       // Deep-link: search for the specific word
       searchWord(wordParam)
-    } else {
+    }
+    else {
       // Normal flow: get random word
       getWord()
     }
