@@ -5,7 +5,7 @@ import { version } from '@/../package.json'
 <template>
   <header class="header">
     <h1 class="title">
-      New Words Settings
+      Main Settings
     </h1>
 
     <div class="info">
@@ -13,7 +13,7 @@ import { version } from '@/../package.json'
         class="version"
         href="https://github.com/sajadhsm/new-word-tab/releases"
       >
-        NWT v{{ version }}
+        LingoTab v{{ version }}
       </a>
       <small class="copyright">
         MIT Licensed • Copyright © 2025-PRESENT Serhii Syvorotkin
