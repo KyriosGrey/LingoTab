@@ -14,13 +14,21 @@ const emit = defineEmits<{
 const isModalOpen = ref(false)
 const isFileSelected = ref(false)
 const importedWords = ref<string[]>([])
+const errorMessage = ref<string>('')
 
 async function handleFile(file: File) {
-  const content = (await readFile(file)) as string
-  const words = getWordsOfText(content, 30).map(w => w.toLowerCase())
+  try {
+    errorMessage.value = ''
+    const content = (await readFile(file)) as string
+    const words = getWordsOfText(content, 30).map(w => w.toLowerCase())
 
-  importedWords.value = words
-  isFileSelected.value = true
+    importedWords.value = words
+    isFileSelected.value = true
+  }
+  catch (error) {
+    errorMessage.value = 'Failed to read file. Please try again.'
+    console.error('Error reading file:', error)
+  }
 }
 
 function handleImport() {
@@ -35,6 +43,7 @@ function handleClose() {
 function handleCleanUp() {
   importedWords.value = []
   isFileSelected.value = false
+  errorMessage.value = ''
 }
 </script>
 
@@ -64,6 +73,12 @@ function handleCleanUp() {
     </div>
 
     <FileSelector id="learned-file" accept="text/plain" @file="handleFile" />
+
+    <div v-if="errorMessage" class="footer error-footer">
+      <p class="footer-msg">
+        <i-ic-round-error /> {{ errorMessage }}
+      </p>
+    </div>
 
     <div v-if="isFileSelected" class="footer">
       <template v-if="importedWords.length">

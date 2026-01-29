@@ -18,16 +18,22 @@ function handleImportLearned(words: string[]) {
 }
 
 function exportWords(words: string[], filename: string) {
-  const content = words.join('\n')
-  const blob = new Blob([content], { type: 'text/plain' })
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement('a')
-  link.href = url
-  link.download = filename
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
-  URL.revokeObjectURL(url)
+  try {
+    const content = words.join('\n')
+    const blob = new Blob([content], { type: 'text/plain' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = filename
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+  }
+  catch (error) {
+    console.error('Error exporting words:', error)
+    // Fallback: show error in console as we don't have a notification system
+  }
 }
 
 function handleExportLearning() {
