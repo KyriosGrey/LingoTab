@@ -29,8 +29,21 @@ export async function getManifest() {
       128: './assets/128.png',
     },
 
+    permissions: [
+      'notifications',
+      'storage',
+      'tabs',
+    ],
+
     host_permissions: [
   'https://translate.googleapis.com/*',
+    ],
+
+    web_accessible_resources: [
+      {
+        resources: ['dist/runner/*'],
+        matches: ['<all_urls>'],
+      },
     ],
 
     content_security_policy: {

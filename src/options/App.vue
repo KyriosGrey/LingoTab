@@ -10,6 +10,7 @@ import SiteShortcuts from './Sections/SiteShortcuts.vue'
 import Theme from './Sections/Theme.vue'
 import Translation from './Sections/Translation.vue'
 import VocabularyLists from './Sections/VocabularyLists.vue'
+import Notifications from './Sections/Notifications.vue'
 
 /* Новая секция SmartDailySentences */
 import SmartDailySentences from './Sections/SmartDailySentences/SmartDailySentences.vue'
@@ -30,6 +31,7 @@ import SmartDailySentences from './Sections/SmartDailySentences/SmartDailySenten
           <Translation />
           <LearningLearnedWords />
           <IgnoredWords />
+          <Notifications />
         </div>
       </template>
 

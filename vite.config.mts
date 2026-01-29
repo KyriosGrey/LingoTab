@@ -50,6 +50,7 @@ export default defineConfig(({ command }) => ({
       input: {
         newTab: r('src/newTab/index.html'),
         options: r('src/options/index.html'),
+        runner: r('src/runner/index.html'),
       },
     },
   },
