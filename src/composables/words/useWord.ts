@@ -45,7 +45,7 @@ export default function useWord() {
   function handleUpdateWord(value: string) {
     word.value = value
     addWordToHistory(value)
-    document.title = `NWT • ${capitalizeFirstLetter(value)}`
+    document.title = `LingoTab • ${capitalizeFirstLetter(value)}`
   }
 
   return {
