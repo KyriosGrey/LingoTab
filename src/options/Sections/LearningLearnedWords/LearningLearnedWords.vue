@@ -91,20 +91,34 @@ function handleExportLearned() {
 <style scoped>
 .word-lists {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 20px;
+  align-items: stretch;
+  flex-wrap: wrap; /* важно */
 }
 
 .word-list-section {
+  /* две колонки, если ширины хватает */
+  flex: 1 1 calc(50% - 10px); /* 10px = половина gap */
+  min-width: 280px; /* чтобы кнопки/заголовок не ломались слишком узко */
+
   display: flex;
   flex-direction: column;
   gap: 10px;
   padding: 15px;
-  border: 1px solid hsla(var(--color-raw), 0.2);
+  border: 0px solid hsla(var(--color-raw), 0.2);
   border-radius: 8px;
   background-color: hsla(var(--color-raw), 0.03);
 }
 
+/* на очень узких экранах — одна колонка */
+@media (max-width: 700px) {
+  .word-list-section {
+    flex-basis: 100%;
+  }
+}
+
+/* остальное без изменений */
 .list-title {
   font-size: 0.95rem;
   font-weight: 600;
