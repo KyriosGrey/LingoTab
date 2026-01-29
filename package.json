@@ -1,12 +1,12 @@
 {
-  "name": "new-word-tab",
-  "displayName": "New Word Tab",
-  "version": "2.0.5",
+  "name": "lingotab",
+  "displayName": "LingoTab",
+  "version": "2.1.9",
   "packageManager": "pnpm@9.15.1",
-  "description": "Learn a word per new tab",
+  "description": "Learn English in new tab",
   "author": {
-    "name": "Sajad Hashemian",
-    "email": "sajadhsm@gmail.com"
+    "name": "Serhii Syvorotkin",
+    "email": "typelater@gmail.com"
   },
   "license": "MIT",
   "scripts": {

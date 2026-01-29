@@ -1,4 +1,4 @@
-# New Word Tab
+# LingoTab
 
 > A browser extension to learn a word per new tab!
 
