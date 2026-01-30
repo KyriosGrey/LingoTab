@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import type { IWordDefinition } from '@/composables/words/useWordDefinitions'
 
+import { computed, ref, watch } from 'vue'
+
 import useBackground from '@/composables/useBackground'
 // ✅ добавляем импорт для хранения
 import storage from '@/modules/localStorage'
 
-import { computed, ref, watch } from 'vue'
-
 import Actions from './Actions.vue'
 import Phonetic from './Phonetic.vue'
+import RepetitionBlock from './RepetitionBlock.vue'
 import Translation from './Translation.vue'
 
 const props = defineProps<{
@@ -126,6 +127,8 @@ watch(
 
       <Phonetic :definition="definition" />
     </div>
+
+    <RepetitionBlock />
 
     <div v-if="definition" class="meanings">
       <div

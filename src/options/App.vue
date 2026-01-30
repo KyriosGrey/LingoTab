@@ -6,13 +6,12 @@ import GoogleTranslate from './Sections/GoogleTranslate.vue'
 import Header from './Sections/Header.vue'
 import IgnoredWords from './Sections/IgnoredWords'
 import LearningLearnedWords from './Sections/LearningLearnedWords'
+import RepetitionSettings from './Sections/RepetitionSettings.vue'
 import SiteShortcuts from './Sections/SiteShortcuts.vue'
+import SmartDailySentences from './Sections/SmartDailySentences/SmartDailySentences.vue'
 import Theme from './Sections/Theme.vue'
 import Translation from './Sections/Translation.vue'
 import VocabularyLists from './Sections/VocabularyLists.vue'
-
-/* Новая секция SmartDailySentences */
-import SmartDailySentences from './Sections/SmartDailySentences/SmartDailySentences.vue'
 </script>
 
 <template>
@@ -28,6 +27,7 @@ import SmartDailySentences from './Sections/SmartDailySentences/SmartDailySenten
           <Theme />
           <VocabularyLists />
           <Translation />
+          <RepetitionSettings />
           <LearningLearnedWords />
           <IgnoredWords />
         </div>
