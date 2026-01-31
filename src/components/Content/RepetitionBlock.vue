@@ -20,6 +20,11 @@ const reviewWords = computed(() => {
 })
 
 const hasLearnedWords = computed(() => learnedWords.value.length > 0)
+
+// Continue to next word by reloading (same as Next word button)
+function handleContinue() {
+  window.location.reload()
+}
 </script>
 
 <template>
@@ -39,6 +44,9 @@ const hasLearnedWords = computed(() => learnedWords.value.length > 0)
       <p class="repetition-hint">
         Try to recall the meaning of each word before continuing.
       </p>
+      <button class="continue-btn" @click="handleContinue">
+        Continue to Next Word →
+      </button>
     </div>
   </div>
 </template>
@@ -101,6 +109,30 @@ const hasLearnedWords = computed(() => learnedWords.value.length > 0)
   font-size: 0.9rem;
   color: hsl(0, 0%, 60%);
   font-style: italic;
+}
+
+.continue-btn {
+  margin-top: 25px;
+  padding: 12px 30px;
+  border-radius: 8px;
+  background-color: hsl(210, 60%, 50%);
+  color: hsl(0, 0%, 100%);
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.continue-btn:hover {
+  background-color: hsl(210, 60%, 60%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+.continue-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
 }
 
 @media all and (max-width: 450px) {
