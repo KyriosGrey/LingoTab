@@ -1,19 +1,16 @@
 <script setup lang="ts">
-import SettingsTabs from './SettingsTabs.vue'
-
 import Background from './Sections/Background.vue'
 import GoogleTranslate from './Sections/GoogleTranslate.vue'
 import Header from './Sections/Header.vue'
 import IgnoredWords from './Sections/IgnoredWords'
 import LearningLearnedWords from './Sections/LearningLearnedWords'
+import RepetitionFrequency from './Sections/RepetitionFrequency.vue'
 import SiteShortcuts from './Sections/SiteShortcuts.vue'
+import SmartDailySentences from './Sections/SmartDailySentences/SmartDailySentences.vue'
 import Theme from './Sections/Theme.vue'
 import Translation from './Sections/Translation.vue'
-import RepetitionFrequency from './Sections/RepetitionFrequency.vue'
 import VocabularyLists from './Sections/VocabularyLists.vue'
-
-/* Новая секция SmartDailySentences */
-import SmartDailySentences from './Sections/SmartDailySentences/SmartDailySentences.vue'
+import SettingsTabs from './SettingsTabs.vue'
 </script>
 
 <template>

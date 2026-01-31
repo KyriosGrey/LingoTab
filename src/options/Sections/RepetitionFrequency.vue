@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import Section from '../components/Section.vue'
-import storage from '@/modules/localStorage'
 import { ref, watch } from 'vue'
+
+import storage from '@/modules/localStorage'
+
+import Section from '../components/Section.vue'
 
 // Load current repetition frequency setting
 const repetitionFrequency = ref(storage.get('repetitionFrequency') || 'off')
@@ -20,7 +22,7 @@ watch(repetitionFrequency, (val) => {
     <div class="option-row">
       <label class="option-label">
         <span class="option-name">Show repetition block every:</span>
-        
+
         <select v-model="repetitionFrequency" class="option-select">
           <option value="off">Off</option>
           <option value="5">5 words</option>

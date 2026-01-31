@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
+
+import useBackground from '@/composables/useBackground'
+import useIgnoredWords from '@/composables/words/useIgnoredWords'
 import useLearnedWords from '@/composables/words/useLearnedWords'
 import useLearningWords from '@/composables/words/useLearningWords'
-import useIgnoredWords from '@/composables/words/useIgnoredWords'
+
 import Translation from './Translation.vue'
-import useBackground from '@/composables/useBackground'
 
 const { learnedWords, removeLearnedWords, reloadLearnedWords } = useLearnedWords()
 const { setAsLearning } = useLearningWords()
@@ -16,7 +18,8 @@ const backgroundClass = computed(() => ({ boxed: shouldModifyUI.value }))
 // Get a random learned word
 reloadLearnedWords()
 const randomWord = computed(() => {
-  if (learnedWords.value.length === 0) return ''
+  if (learnedWords.value.length === 0)
+    return ''
   const randomIndex = Math.floor(Math.random() * learnedWords.value.length)
   return learnedWords.value[randomIndex]
 })
@@ -32,19 +35,22 @@ watch(randomWord, () => {
 })
 
 function handleMarkAsLearning() {
-  if (!randomWord.value) return
+  if (!randomWord.value)
+    return
   setAsLearning(randomWord.value)
   removeLearnedWords(randomWord.value)
 }
 
 function handleMarkAsIgnored() {
-  if (!randomWord.value) return
+  if (!randomWord.value)
+    return
   setAsIgnored(randomWord.value)
   removeLearnedWords(randomWord.value)
 }
 
 function handleRemove() {
-  if (!randomWord.value) return
+  if (!randomWord.value)
+    return
   removeLearnedWords(randomWord.value)
 }
 </script>
@@ -54,14 +60,14 @@ function handleRemove() {
     <div class="repetition-header">
       <span class="repetition-label">Review</span>
     </div>
-    
+
     <div class="repetition-content">
       <div class="repetition-word-block">
         <template v-if="showMode === 'word'">
           <h2 class="repetition-word">
             {{ randomWord }}
           </h2>
-          
+
           <button
             v-if="!isSpoilerRevealed"
             class="spoiler-btn"
@@ -75,13 +81,13 @@ function handleRemove() {
             class="repetition-translation"
           />
         </template>
-        
+
         <template v-else>
           <Translation
             :text="randomWord"
             class="repetition-translation"
           />
-          
+
           <button
             v-if="!isSpoilerRevealed"
             class="spoiler-btn"
@@ -94,7 +100,7 @@ function handleRemove() {
           </h2>
         </template>
       </div>
-      
+
       <div class="repetition-actions">
         <button
           class="action-btn"
@@ -103,7 +109,7 @@ function handleRemove() {
         >
           <i-ic-outline-school />
         </button>
-        
+
         <button
           class="action-btn"
           title="Ignore word"
@@ -111,7 +117,7 @@ function handleRemove() {
         >
           <i-ic-outline-visibility-off />
         </button>
-        
+
         <button
           class="action-btn"
           title="Remove from list"
@@ -245,12 +251,12 @@ function handleRemove() {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .repetition-actions {
     width: 100%;
     justify-content: flex-start;
   }
-  
+
   .repetition-word {
     font-size: 1.5rem;
   }

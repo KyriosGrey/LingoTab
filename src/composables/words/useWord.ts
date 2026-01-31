@@ -1,11 +1,12 @@
-import { capitalizeFirstLetter } from '@/utils/string'
 import { computed, ref } from 'vue'
+
+import useRepetition from '@/composables/useRepetition'
+import { capitalizeFirstLetter } from '@/utils/string'
 import useIgnoredWords from './useIgnoredWords'
 import useRandomWord from './useRandomWord'
 import useWordDefinitions from './useWordDefinitions'
 import useWordLists from './useWordLists'
 import wordsHistory from './useWordsHistory'
-import useRepetition from '@/composables/useRepetition'
 
 const word = ref('')
 
