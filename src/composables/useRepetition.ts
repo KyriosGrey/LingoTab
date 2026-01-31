@@ -1,5 +1,5 @@
 import storage from '@/modules/localStorage'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import useLearnedWords from './words/useLearnedWords'
 
 export type RepetitionFrequency = 'off' | '5' | '10' | '20' | '30'
@@ -19,6 +19,13 @@ export default function useRepetition() {
   const counter = ref<number>(
     Number.parseInt(storage.get(REPETITION_COUNTER_KEY) || '0', 10),
   )
+
+  // Watch for changes in localStorage (e.g., from options page)
+  watch(() => storage.get(REPETITION_FREQUENCY_KEY), (newValue) => {
+    if (newValue) {
+      frequency.value = newValue as RepetitionFrequency
+    }
+  })
 
   const isEnabled = computed(() => frequency.value !== 'off')
 

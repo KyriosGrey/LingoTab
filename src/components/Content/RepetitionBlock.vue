@@ -65,21 +65,14 @@ function handleRemove() {
   isVisible.value = false
 }
 
-const currentDisplayMode = computed(() => {
-  if (showWordFirst.value) {
-    return isSpoilerRevealed.value ? 'word' : 'translation'
-  }
-  else {
-    return isSpoilerRevealed.value ? 'translation' : 'word'
-  }
-})
-
 const spoilerButtonText = computed(() => {
   if (showWordFirst.value) {
-    return isSpoilerRevealed.value ? 'Скрыть слово' : 'Показать слово'
+    // Start with word, reveal translation
+    return isSpoilerRevealed.value ? 'Скрыть перевод' : 'Показать перевод'
   }
   else {
-    return isSpoilerRevealed.value ? 'Скрыть перевод' : 'Показать перевод'
+    // Start with translation, reveal word
+    return isSpoilerRevealed.value ? 'Скрыть слово' : 'Показать слово'
   }
 })
 </script>
@@ -93,25 +86,6 @@ const spoilerButtonText = computed(() => {
     <div class="repetition-content">
       <div class="repetition-word-section">
         <template v-if="showWordFirst">
-          <!-- Show translation first, reveal word on click -->
-          <Translation
-            v-if="currentDisplayMode === 'translation'"
-            :text="learnedWord"
-            class="repetition-translation"
-          />
-          <button
-            v-if="!isSpoilerRevealed"
-            class="spoiler-btn"
-            @click="isSpoilerRevealed = true"
-          >
-            {{ spoilerButtonText }}
-          </button>
-          <p v-else class="repetition-word">
-            {{ learnedWord }}
-          </p>
-        </template>
-
-        <template v-else>
           <!-- Show word first, reveal translation on click -->
           <p class="repetition-word">
             {{ learnedWord }}
@@ -128,6 +102,24 @@ const spoilerButtonText = computed(() => {
             :text="learnedWord"
             class="repetition-translation"
           />
+        </template>
+
+        <template v-else>
+          <!-- Show translation first, reveal word on click -->
+          <Translation
+            :text="learnedWord"
+            class="repetition-translation"
+          />
+          <button
+            v-if="!isSpoilerRevealed"
+            class="spoiler-btn"
+            @click="isSpoilerRevealed = true"
+          >
+            {{ spoilerButtonText }}
+          </button>
+          <p v-else class="repetition-word">
+            {{ learnedWord }}
+          </p>
         </template>
       </div>
 
