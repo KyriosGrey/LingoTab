@@ -5,6 +5,7 @@ import useRandomWord from './useRandomWord'
 import useWordDefinitions from './useWordDefinitions'
 import useWordLists from './useWordLists'
 import wordsHistory from './useWordsHistory'
+import useRepetition from '@/composables/useRepetition'
 
 const word = ref('')
 
@@ -13,6 +14,7 @@ export default function useWord() {
 
   const { ignoredWords, isIgnoredWord, reloadIgnoredWords } = useIgnoredWords()
   const { addWordToHistory } = wordsHistory()
+  const { onWordShown } = useRepetition()
 
   // ✅ Исправлено: явно указываем тип word: string
   const unIgnoredWords = computed(() =>
@@ -46,6 +48,7 @@ export default function useWord() {
     word.value = value
     addWordToHistory(value)
     document.title = `LingoTab • ${capitalizeFirstLetter(value)}`
+    onWordShown()
   }
 
   return {

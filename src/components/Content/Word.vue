@@ -4,12 +4,14 @@ import type { IWordDefinition } from '@/composables/words/useWordDefinitions'
 import useBackground from '@/composables/useBackground'
 // ✅ добавляем импорт для хранения
 import storage from '@/modules/localStorage'
+import useRepetition from '@/composables/useRepetition'
 
 import { computed, ref, watch } from 'vue'
 
 import Actions from './Actions.vue'
 import Phonetic from './Phonetic.vue'
 import Translation from './Translation.vue'
+import RepetitionBlock from './RepetitionBlock.vue'
 
 const props = defineProps<{
   word: string
@@ -19,6 +21,7 @@ const props = defineProps<{
 defineEmits(['marked'])
 
 const { shouldModifyUI } = useBackground()
+const { shouldShowThisView } = useRepetition()
 
 const definition = computed(() => props.definitions?.[0])
 
@@ -126,6 +129,8 @@ watch(
 
       <Phonetic :definition="definition" />
     </div>
+
+    <RepetitionBlock v-if="shouldShowThisView" />
 
     <div v-if="definition" class="meanings">
       <div
