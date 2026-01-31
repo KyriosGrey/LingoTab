@@ -60,7 +60,7 @@ onMounted(async () => {
     <LearnedAllWords v-else-if="hasLearnedAllWords" />
     
     <!-- Show repetition block when it should be visible -->
-    <RepetitionBlock v-else-if="shouldShowRepetition" :visible="shouldShowRepetition" />
+    <RepetitionBlock v-else-if="shouldShowRepetition" />
     
     <!-- Show regular word otherwise -->
     <Word

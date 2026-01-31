@@ -2,11 +2,17 @@
 import useLearnedWords from '@/composables/words/useLearnedWords'
 import { computed } from 'vue'
 
-defineProps<{
-  visible: boolean
-}>()
-
 const { learnedWords } = useLearnedWords()
+
+// Fisher-Yates shuffle algorithm for proper randomization
+function shuffleArray<T>(array: T[]): T[] {
+  const shuffled = [...array]
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+  }
+  return shuffled
+}
 
 // Select random words from learned list for review
 const reviewWords = computed(() => {
@@ -15,7 +21,7 @@ const reviewWords = computed(() => {
   }
 
   // Show up to 5 random learned words for review
-  const shuffled = [...learnedWords.value].sort(() => Math.random() - 0.5)
+  const shuffled = shuffleArray(learnedWords.value)
   return shuffled.slice(0, Math.min(5, shuffled.length))
 })
 
@@ -28,7 +34,7 @@ function handleContinue() {
 </script>
 
 <template>
-  <div v-if="visible && hasLearnedWords" class="repetition-block">
+  <div v-if="hasLearnedWords" class="repetition-block">
     <div class="repetition-content">
       <h2 class="repetition-title">
         📚 Time for Review!
