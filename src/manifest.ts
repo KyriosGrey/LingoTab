@@ -30,7 +30,7 @@ export async function getManifest() {
     },
 
     host_permissions: [
-  'https://translate.googleapis.com/*',
+      'https://translate.googleapis.com/*',
     ],
 
     content_security_policy: {

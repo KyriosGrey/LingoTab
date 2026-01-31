@@ -19,9 +19,11 @@ async function doTranslate() {
   loading.value = true
   try {
     result.value = await translate(props.text, 'en') // в проекте слова и примеры приходят на EN
-  } catch {
+  }
+  catch {
     result.value = ''
-  } finally {
+  }
+  finally {
     loading.value = false
   }
 }
@@ -31,10 +33,12 @@ watch(() => props.text, doTranslate)
 </script>
 
 <template>
-  <p v-if="result" :class="['tr', small ? 'tr--small' : '']">
+  <p v-if="result" class="tr" :class="[small ? 'tr--small' : '']">
     {{ result }}
   </p>
-  <p v-else-if="loading" class="tr tr--muted">перевод…</p>
+  <p v-else-if="loading" class="tr tr--muted">
+    перевод…
+  </p>
 </template>
 
 <style scoped>
@@ -42,7 +46,7 @@ watch(() => props.text, doTranslate)
   margin: 4px 0 6px;
   font-size: 0.95rem;
   line-height: 1.35;
-  font-style: italic; 
+  font-style: italic;
   transition: color .3s ease;
 }
 

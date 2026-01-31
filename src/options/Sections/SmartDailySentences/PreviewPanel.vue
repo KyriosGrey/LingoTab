@@ -1,24 +1,3 @@
-<template>
-  <div v-if="pack" class="preview">
-    <div class="preview-header">
-      <h3 class="preview-title">Preview generated pack</h3>
-      <p class="preview-subtitle">
-        Review the sentences generated from your settings. Accept to save the pack locally, or discard to retry generation.
-      </p>
-    </div>
-
-    <pre class="json-preview">{{ pretty }}</pre>
-
-    <div class="row small-gap">
-      <button class="btn" @click="$emit('accept')">Accept (save pack)</button>
-      <button class="btn ghost" @click="$emit('discard')">Discard</button>
-    </div>
-
-    <!-- warning styled as status-badge (warning tone) -->
-    <div v-if="warning" class="status-badge warning">{{ warning }}</div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { computed } from 'vue'
 
@@ -29,6 +8,35 @@ const pack = computed(() => props.pack ?? null)
 const pretty = computed(() => pack.value ? JSON.stringify(pack.value, null, 2) : '')
 const warning = computed(() => props.warning ?? '')
 </script>
+
+<template>
+  <div v-if="pack" class="preview">
+    <div class="preview-header">
+      <h3 class="preview-title">
+        Preview generated pack
+      </h3>
+      <p class="preview-subtitle">
+        Review the sentences generated from your settings. Accept to save the pack locally, or discard to retry generation.
+      </p>
+    </div>
+
+    <pre class="json-preview">{{ pretty }}</pre>
+
+    <div class="row small-gap">
+      <button class="btn" @click="$emit('accept')">
+        Accept (save pack)
+      </button>
+      <button class="btn ghost" @click="$emit('discard')">
+        Discard
+      </button>
+    </div>
+
+    <!-- warning styled as status-badge (warning tone) -->
+    <div v-if="warning" class="status-badge warning">
+      {{ warning }}
+    </div>
+  </div>
+</template>
 
 <style scoped>
 .preview { margin-top: 8px; }

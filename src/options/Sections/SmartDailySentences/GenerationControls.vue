@@ -1,20 +1,6 @@
-<template>
-  <div class="row small-gap">
-    <button
-      class="btn btn--primary"
-      @click="onGenerateClick"
-      :disabled="!apiKeyPresent || generating"
-      type="button"
-    >
-      {{ generating ? 'Generating…' : 'Generate now (preview)' }}
-    </button>
-
-    <span class="muted" v-if="generating">Status: Generating…</span>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { computed } from 'vue'
+
 const props = defineProps<{ apiKey?: string, generating?: boolean }>()
 const emit = defineEmits(['generate'])
 
@@ -26,6 +12,21 @@ function onGenerateClick() {
   emit('generate')
 }
 </script>
+
+<template>
+  <div class="row small-gap">
+    <button
+      class="btn btn--primary"
+      :disabled="!apiKeyPresent || generating"
+      type="button"
+      @click="onGenerateClick"
+    >
+      {{ generating ? 'Generating…' : 'Generate now (preview)' }}
+    </button>
+
+    <span v-if="generating" class="muted">Status: Generating…</span>
+  </div>
+</template>
 
 <style scoped>
 .row.small-gap { display:flex; gap:10px; align-items:center; }

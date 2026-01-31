@@ -1,5 +1,6 @@
-import { capitalizeFirstLetter } from '@/utils/string'
 import { computed, ref } from 'vue'
+import useRepetition from '@/composables/useRepetition'
+import { capitalizeFirstLetter } from '@/utils/string'
 import useIgnoredWords from './useIgnoredWords'
 import useRandomWord from './useRandomWord'
 import useWordDefinitions from './useWordDefinitions'
@@ -13,6 +14,7 @@ export default function useWord() {
 
   const { ignoredWords, isIgnoredWord, reloadIgnoredWords } = useIgnoredWords()
   const { addWordToHistory } = wordsHistory()
+  const { onWordShown, shouldShowThisView } = useRepetition()
 
   // ✅ Исправлено: явно указываем тип word: string
   const unIgnoredWords = computed(() =>
@@ -46,6 +48,9 @@ export default function useWord() {
     word.value = value
     addWordToHistory(value)
     document.title = `LingoTab • ${capitalizeFirstLetter(value)}`
+
+    // Trigger repetition logic after word is set
+    onWordShown()
   }
 
   return {
@@ -57,5 +62,6 @@ export default function useWord() {
     getWord,
     error,
     word,
+    shouldShowRepetitionBlock: shouldShowThisView,
   }
 }

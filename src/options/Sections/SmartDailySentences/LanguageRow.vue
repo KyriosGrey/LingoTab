@@ -1,26 +1,8 @@
-<template>
-  <Section
-    title="Target language"
-    description="Choose the target language used for automatic translations."
-  >
-    <template #bar>
-      <div class="bar-actions">
-        <Select
-          v-model="selectedLangObject"
-          title="Select target language"
-          :options="langSelectOptions"
-          class="select"
-        />
-      </div>
-    </template>
-  </Section>
-</template>
-
 <script setup lang="ts">
 import { computed } from 'vue'
+import languages from '@/data/googleTranslateLanguages'
 import Section from '@/options/components/Section.vue'
 import Select from '@/options/components/Select.vue'
-import languages from '@/data/googleTranslateLanguages'
 
 /**
  * API: parent passes modelValue (string) — language code (e.g. 'ru').
@@ -44,9 +26,27 @@ const selectedLangObject = computed({
     // val is language object selected from Select
     const code = val?.code ?? 'ru'
     emit('update:modelValue', code)
-  }
+  },
 })
 </script>
+
+<template>
+  <Section
+    title="Target language"
+    description="Choose the target language used for automatic translations."
+  >
+    <template #bar>
+      <div class="bar-actions">
+        <Select
+          v-model="selectedLangObject"
+          title="Select target language"
+          :options="langSelectOptions"
+          class="select"
+        />
+      </div>
+    </template>
+  </Section>
+</template>
 
 <style scoped>
 .bar-actions {

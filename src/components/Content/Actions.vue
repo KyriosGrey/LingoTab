@@ -57,7 +57,6 @@ function handleNextWord() {
     <IconButton title="Next word" @click="handleNextWord">
       <i-ic-round-arrow-forward />
     </IconButton>
-
   </div>
 </template>
 

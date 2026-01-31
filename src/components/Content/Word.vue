@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import type { IWordDefinition } from '@/composables/words/useWordDefinitions'
 
+import { computed, ref, watch } from 'vue'
 import useBackground from '@/composables/useBackground'
+import useWord from '@/composables/words/useWord'
+
 // ✅ добавляем импорт для хранения
 import storage from '@/modules/localStorage'
 
-import { computed, ref, watch } from 'vue'
-
 import Actions from './Actions.vue'
 import Phonetic from './Phonetic.vue'
+import RepetitionBlock from './RepetitionBlock.vue'
 import Translation from './Translation.vue'
 
 const props = defineProps<{
@@ -19,6 +21,7 @@ const props = defineProps<{
 defineEmits(['marked'])
 
 const { shouldModifyUI } = useBackground()
+const { shouldShowRepetitionBlock } = useWord()
 
 const definition = computed(() => props.definitions?.[0])
 
@@ -126,6 +129,9 @@ watch(
 
       <Phonetic :definition="definition" />
     </div>
+
+    <!-- Repetition Block: appears between title and meanings -->
+    <RepetitionBlock v-if="shouldShowRepetitionBlock" />
 
     <div v-if="definition" class="meanings">
       <div

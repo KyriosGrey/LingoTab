@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-import { formatBytes } from '@/utils/number'
 import { ref } from 'vue'
+import { formatBytes } from '@/utils/number'
 
 interface Props {
   id: string

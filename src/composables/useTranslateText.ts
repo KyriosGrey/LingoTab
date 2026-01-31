@@ -12,7 +12,8 @@ function loadCache(): CacheMap {
   try {
     const raw = storage.get(CACHE_KEY)
     return raw ? JSON.parse(raw) : {}
-  } catch {
+  }
+  catch {
     return {}
   }
 }
@@ -26,7 +27,8 @@ function saveCache(cache: CacheMap) {
         .forEach(([k]) => delete cache[k])
     }
     storage.set(CACHE_KEY, JSON.stringify(cache))
-  } catch {
+  }
+  catch {
     // ignore quota errors
   }
 }
@@ -41,7 +43,8 @@ async function fetchTranslate(text: string, sl: string, tl: string): Promise<str
   const q = encodeURIComponent(text)
   const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sl}&tl=${tl}&dt=t&q=${q}`
   const res = await fetch(url)
-  if (!res.ok) throw new Error(`Translate HTTP ${res.status}`)
+  if (!res.ok)
+    throw new Error(`Translate HTTP ${res.status}`)
   const data = await res.json() as any
   const chunks: string[] = (data?.[0] || [])
     .map((seg: any) => seg?.[0])
@@ -57,7 +60,8 @@ export default function useTranslateText() {
     const target = (tlOverride || tl).toLowerCase()
     const k = key(text, sl, target)
     const cache = loadCache()
-    if (cache[k]) return cache[k]
+    if (cache[k])
+      return cache[k]
 
     // Короткие строки переводятся очень быстро; длинным даём таймаут
     const controller = new AbortController()
@@ -68,7 +72,8 @@ export default function useTranslateText() {
       cache[k] = translated
       saveCache(cache)
       return translated
-    } finally {
+    }
+    finally {
       clearTimeout(timer)
     }
   }

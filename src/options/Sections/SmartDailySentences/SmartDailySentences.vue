@@ -1,87 +1,23 @@
-<template>
-  <section class="smart-root">
-    <Header2 />
-
-    <!-- Enable toggle block (no hints control here anymore) -->
-    <EnableRow v-model="enabled" />
-
-    <!-- New separate section for hints -->
-    <Hints />
-
-    <!-- New Mix option for words/sentences -->
-    <MixMode />
-
-    <section class="panel">
-      <!-- ApiKey row: Test button is colocated here -->
-      <ApiKeyRow
-        v-model="apiKey"
-        @save="onApiKeySaved"
-        @test="onTestConnection"
-        :testing="testing"
-        :status="testResult"
-        :status-type="testResultType"
-      />
-
-      <!-- show test result near API row — kept for backward compatibility if needed.
-           ApiKeyRow now also receives testResult via props; this is a visual fallback
-           and will use the same .status-badge styles. -->
-      <div v-if="testResult" :class="['status-badge', testResultType]">
-        {{ testResult }}
-      </div>
-
-      <LanguageRow v-model="targetLang" />
-
-      <CEFRlevel v-model="level" />
-
-      <Topics v-model="topics" :items="topicsList" />
-
-      <GrammarFocus v-model="grammarFocus" :items="grammarOptions" />
-
-      <Length v-model="lengthPreset" />
-
-      <UpdateFrequency v-model="frequency" />
-
-      <GenerationControls
-        :api-key="apiKey"
-        :generating="generating"
-        @generate="onGenerateNow"
-      />
-
-      <!-- genResult styled as status-badge (button-like notification) -->
-      <div v-if="genResult" :class="['status-badge', genResultType]">
-        {{ genResult }}
-      </div>
-
-      <PreviewPanel
-        :pack="previewPack"
-        :warning="previewWarning"
-        @accept="acceptPreview"
-        @discard="discardPreview"
-      />
-    </section>
-  </section>
-</template>
-
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from 'vue'
-import Header2 from './Header2.vue'
-import EnableRow from './EnableRow.vue'
-import Hints from './Hints.vue'
-import MixMode from './MixMode.vue'
-import ApiKeyRow from './ApiKeyRow.vue'
-import LanguageRow from './LanguageRow.vue'
-import CEFRlevel from './CEFRlevel.vue'
-import Topics from './Topics.vue'
-import GrammarFocus from './GrammarFocus.vue'
-import Length from './Length.vue'
-import UpdateFrequency from './UpdateFrequency.vue'
-import GenerationControls from './GenerationControls.vue'
-import PreviewPanel from './PreviewPanel.vue'
-
+import { computed, onMounted, ref, watch } from 'vue'
 import * as aiProviders from '@/modules/aiProviders'
 import * as storage from '@/utils/storage'
+import ApiKeyRow from './ApiKeyRow.vue'
+import CEFRlevel from './CEFRlevel.vue'
+import EnableRow from './EnableRow.vue'
+import GenerationControls from './GenerationControls.vue'
+import GrammarFocus from './GrammarFocus.vue'
+import Header2 from './Header2.vue'
+import Hints from './Hints.vue'
+import LanguageRow from './LanguageRow.vue'
+import Length from './Length.vue'
+import MixMode from './MixMode.vue'
+import PreviewPanel from './PreviewPanel.vue'
 
-type Settings = {
+import Topics from './Topics.vue'
+import UpdateFrequency from './UpdateFrequency.vue'
+
+interface Settings {
   enabled?: boolean
   apiKey?: string
   targetLang?: string
@@ -107,7 +43,7 @@ const grammarFocus = ref<string[]>(['All'])
 const lengthPreset = ref('mixed')
 const frequency = ref<string | number>('24')
 
-const topicsList = ['IT-Dev','Finance and Banking','Gaming','Travel and Directions','Daily Life','Workplace Communication','Design','Social Media','Education','Entertainment' ]
+const topicsList = ['IT-Dev', 'Finance and Banking', 'Gaming', 'Travel and Directions', 'Daily Life', 'Workplace Communication', 'Design', 'Social Media', 'Education', 'Entertainment']
 
 const grammarOptions = [
   'All',
@@ -127,21 +63,23 @@ const grammarOptions = [
   'Passive Voice',
   'Modal Verbs',
   'Reported Speech',
-  'Gerund & Infinitive'
+  'Gerund & Infinitive',
 ]
 
 const generating = ref(false)
 const testing = ref(false)
 const genResult = ref('')
-const testResult = ref('')    // separate result for test connection
+const testResult = ref('') // separate result for test connection
 const previewPack = ref<any | null>(null)
 const previewRaw = ref<any | null>(null)
 const previewWarning = ref('')
 
 // helper: return length range array based on current lengthPreset
 function getLengthRange(): [number, number] {
-  if (lengthPreset.value === 'short') return [4, 7]
-  if (lengthPreset.value === 'mixed') return [3, 16]
+  if (lengthPreset.value === 'short')
+    return [4, 7]
+  if (lengthPreset.value === 'mixed')
+    return [3, 16]
   return [8, 16]
 }
 
@@ -150,7 +88,8 @@ function getLengthRange(): [number, number] {
 const testResultType = computed(() => {
   const sRaw = testResult.value ?? ''
   const s = sRaw.trim().toLowerCase()
-  if (!s) return ''
+  if (!s)
+    return ''
 
   const exactMap: Record<string, 'success' | 'error'> = {
     'connection ok': 'success',
@@ -160,9 +99,12 @@ const testResultType = computed(() => {
     'connection failed or invalid response': 'error',
   }
 
-  if (exactMap[s]) return exactMap[s]
-  if (s.includes('ok') || s.includes('success')) return 'success'
-  if (s.includes('error') || s.includes('fail') || s.includes('invalid')) return 'error'
+  if (exactMap[s])
+    return exactMap[s]
+  if (s.includes('ok') || s.includes('success'))
+    return 'success'
+  if (s.includes('error') || s.includes('fail') || s.includes('invalid'))
+    return 'error'
   return ''
 })
 
@@ -171,7 +113,8 @@ const testResultType = computed(() => {
 const genResultType = computed(() => {
   const sRaw = genResult.value ?? ''
   const s = sRaw.trim().toLowerCase()
-  if (!s) return ''
+  if (!s)
+    return ''
 
   const exactMap: Record<string, 'success' | 'error'> = {
     'preview ready': 'success',
@@ -180,10 +123,14 @@ const genResultType = computed(() => {
   }
 
   // exact startsWith check for "preview ready" which has variable count
-  if (s.startsWith('preview ready')) return 'success'
-  if (exactMap[s]) return exactMap[s]
-  if (s.includes('saved') || s.includes('preview ready')) return 'success'
-  if (s.includes('error') || s.includes('fail') || s.includes('no api key')) return 'error'
+  if (s.startsWith('preview ready'))
+    return 'success'
+  if (exactMap[s])
+    return exactMap[s]
+  if (s.includes('saved') || s.includes('preview ready'))
+    return 'success'
+  if (s.includes('error') || s.includes('fail') || s.includes('no api key'))
+    return 'error'
   return ''
 })
 
@@ -193,17 +140,21 @@ onMounted(async () => {
   if (s && s[storageKey]) {
     const st: Settings = s[storageKey]
     enabled.value = !!st.enabled
-    if (st.apiKey) apiKey.value = st.apiKey
-    if (st.targetLang) targetLang.value = st.targetLang
+    if (st.apiKey)
+      apiKey.value = st.apiKey
+    if (st.targetLang)
+      targetLang.value = st.targetLang
     level.value = st.level || 'B1'
     topics.value = st.topics && st.topics.length ? st.topics : ['Daily Life & Slang']
     grammarFocus.value = st.grammarFocus && st.grammarFocus.length ? st.grammarFocus : ['All']
     lengthPreset.value = st.lengthPreset || 'short'
     frequency.value = st.frequency || '24'
-  } else {
+  }
+  else {
     // if there's separate saved apiKey
     const s2 = await storage.get([storageApiKey])
-    if (s2 && s2[storageApiKey]) apiKey.value = s2[storageApiKey]
+    if (s2 && s2[storageApiKey])
+      apiKey.value = s2[storageApiKey]
   }
 })
 
@@ -222,13 +173,14 @@ async function saveSettings() {
     topics: topics.value,
     grammarFocus: grammarFocus.value,
     lengthPreset: lengthPreset.value,
-    frequency: frequency.value
+    frequency: frequency.value,
   }
   try {
     const s = await storage.get([storageKey])
     const base = s?.[storageKey] ?? {}
     await storage.set({ [storageKey]: { ...base, ...obj } })
-  } catch (e) {
+  }
+  catch (e) {
     console.warn('[SmartDailySentences] failed to save settings', e)
   }
 }
@@ -255,7 +207,8 @@ async function onTestConnection(passedKey?: string) {
   const usedKey = (typeof passedKey === 'string' && passedKey.trim()) ? passedKey.trim() : apiKey.value
   if (!usedKey) { testResult.value = 'No API key'; return }
   // optionally reflect the tested key into parent state so UI shows it
-  if (usedKey !== apiKey.value) apiKey.value = usedKey
+  if (usedKey !== apiKey.value)
+    apiKey.value = usedKey
 
   testing.value = true
   try {
@@ -265,14 +218,16 @@ async function onTestConnection(passedKey?: string) {
       grammarFocus: grammarFocus.value,
       topics: topics.value,
       lengthRange: getLengthRange(),
-      targetLang: targetLang.value
+      targetLang: targetLang.value,
     }
     const ok = await aiProviders.testConnection(usedKey, settings)
     testResult.value = ok ? 'Connection OK' : 'Connection failed or invalid response'
-  } catch (e: any) {
-    testResult.value = 'Error: ' + (e?.message || String(e))
+  }
+  catch (e: any) {
+    testResult.value = `Error: ${e?.message || String(e)}`
     console.debug('[SmartDailySentences] onTestConnection caught', e)
-  } finally {
+  }
+  finally {
     testing.value = false
   }
 }
@@ -284,7 +239,7 @@ function getSettingsForPrompt() {
     grammarFocus: grammarFocus.value,
     topics: topics.value,
     lengthRange: getLengthRange(),
-    targetLang: targetLang.value
+    targetLang: targetLang.value,
   }
 }
 
@@ -307,7 +262,7 @@ async function onGenerateNow() {
       grammarFocus: grammarFocus.value,
       topics: topics.value,
       lengthRange: getLengthRange(),
-      targetLang: targetLang.value
+      targetLang: targetLang.value,
     }
     const res = await aiProviders.generatePack(apiKey.value, st)
     previewRaw.value = res.raw
@@ -316,16 +271,19 @@ async function onGenerateNow() {
       previewWarning.value = `Generated ${previewPack.value?.sentences?.length ?? 0} of ${st.count} requested sentences. You may retry.`
     }
     genResult.value = `Preview ready: ${res.pack.sentences.length} sentences. Review and Accept to save.`
-  } catch (e: any) {
-    genResult.value = 'Error: ' + (e?.message || String(e))
+  }
+  catch (e: any) {
+    genResult.value = `Error: ${e?.message || String(e)}`
     console.debug('[SmartDailySentences] onGenerateNow error', e)
-  } finally {
+  }
+  finally {
     generating.value = false
   }
 }
 
 async function acceptPreview() {
-  if (!previewPack.value) return
+  if (!previewPack.value)
+    return
   await storage.set({ [storagePackKey]: previewPack.value, lastSmartPackGeneratedAt: Date.now() })
   previewPack.value = null
   previewRaw.value = null
@@ -340,6 +298,70 @@ function discardPreview() {
   genResult.value = 'Preview discarded.'
 }
 </script>
+
+<template>
+  <section class="smart-root">
+    <Header2 />
+
+    <!-- Enable toggle block (no hints control here anymore) -->
+    <EnableRow v-model="enabled" />
+
+    <!-- New separate section for hints -->
+    <Hints />
+
+    <!-- New Mix option for words/sentences -->
+    <MixMode />
+
+    <section class="panel">
+      <!-- ApiKey row: Test button is colocated here -->
+      <ApiKeyRow
+        v-model="apiKey"
+        :testing="testing"
+        :status="testResult"
+        :status-type="testResultType"
+        @save="onApiKeySaved"
+        @test="onTestConnection"
+      />
+
+      <!-- show test result near API row — kept for backward compatibility if needed.
+           ApiKeyRow now also receives testResult via props; this is a visual fallback
+           and will use the same .status-badge styles. -->
+      <div v-if="testResult" class="status-badge" :class="[testResultType]">
+        {{ testResult }}
+      </div>
+
+      <LanguageRow v-model="targetLang" />
+
+      <CEFRlevel v-model="level" />
+
+      <Topics v-model="topics" :items="topicsList" />
+
+      <GrammarFocus v-model="grammarFocus" :items="grammarOptions" />
+
+      <Length v-model="lengthPreset" />
+
+      <UpdateFrequency v-model="frequency" />
+
+      <GenerationControls
+        :api-key="apiKey"
+        :generating="generating"
+        @generate="onGenerateNow"
+      />
+
+      <!-- genResult styled as status-badge (button-like notification) -->
+      <div v-if="genResult" class="status-badge" :class="[genResultType]">
+        {{ genResult }}
+      </div>
+
+      <PreviewPanel
+        :pack="previewPack"
+        :warning="previewWarning"
+        @accept="acceptPreview"
+        @discard="discardPreview"
+      />
+    </section>
+  </section>
+</template>
 
 <style scoped>
 .smart-root { display:flex; flex-direction:column; gap:10px; padding: 0; }

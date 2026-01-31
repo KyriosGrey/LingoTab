@@ -1,3 +1,20 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import Section from '@/options/components/Section.vue'
+import Select from '@/options/components/Select.vue'
+
+const props = defineProps<{ modelValue?: string }>()
+const emit = defineEmits(['update:modelValue'])
+
+const levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2']
+const levelOptions = levels.map(l => ({ value: l, text: l }))
+
+const modelValueLocal = computed({
+  get() { return props.modelValue ?? 'B1' },
+  set(v: any) { emit('update:modelValue', v) },
+})
+</script>
+
 <template>
   <Section
     title="CEFR level"
@@ -15,23 +32,6 @@
     </template>
   </Section>
 </template>
-
-<script setup lang="ts">
-import { computed } from 'vue'
-import Section from '@/options/components/Section.vue'
-import Select from '@/options/components/Select.vue'
-
-const props = defineProps<{ modelValue?: string }>()
-const emit = defineEmits(['update:modelValue'])
-
-const levels = ['A1','A2','B1','B2','C1','C2']
-const levelOptions = levels.map(l => ({ value: l, text: l }))
-
-const modelValueLocal = computed({
-  get() { return props.modelValue ?? 'B1' },
-  set(v: any) { emit('update:modelValue', v) }
-})
-</script>
 
 <style scoped>
 /* Container for controls that sit in the section bar (keeps them aligned to the right) */

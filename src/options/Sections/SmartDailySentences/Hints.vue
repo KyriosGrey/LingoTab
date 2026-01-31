@@ -1,19 +1,5 @@
-<template>
-  <Section
-    title="Hints"
-    description="When enabled, each generated sentence may include a grammar hint"
-  >
-    <template #bar>
-      <label class="switch">
-        <input type="checkbox" :checked="localShowHints" @change="onToggle($event)" />
-        <span class="slider round" />
-      </label>
-    </template>
-  </Section>
-</template>
-
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import Section from '@/options/components/Section.vue'
 import * as storage from '@/utils/storage'
 
@@ -26,7 +12,8 @@ onMounted(async () => {
     const s = await storage.get([storageKey])
     const st = s?.[storageKey] ?? {}
     localShowHints.value = !!st.showHints
-  } catch (e) {
+  }
+  catch (e) {
     console.warn('[Hints] failed to read settings', e)
     localShowHints.value = false
   }
@@ -43,11 +30,26 @@ async function onToggle(e: Event) {
     const base = s?.[storageKey] ?? {}
     const merged = { ...base, showHints: v }
     await storage.set({ [storageKey]: merged })
-  } catch (err) {
+  }
+  catch (err) {
     console.warn('[Hints] failed to save showHints', err)
   }
 }
 </script>
+
+<template>
+  <Section
+    title="Hints"
+    description="When enabled, each generated sentence may include a grammar hint"
+  >
+    <template #bar>
+      <label class="switch">
+        <input type="checkbox" :checked="localShowHints" @change="onToggle($event)">
+        <span class="slider round" />
+      </label>
+    </template>
+  </Section>
+</template>
 
 <style scoped>
 /* reuse same switch styles as other sections */

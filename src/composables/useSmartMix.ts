@@ -3,8 +3,8 @@ import * as storage from '@/utils/storage'
 const SETTINGS_KEY = 'smartDailySettings'
 const MIX_STATE_KEY = 'smartDailyMixState'
 
-type MixConfig = { enabled: boolean, wordsPerSentence: number }
-type MixState = { wordsShownInCycle: number, wordsPerSentence: number }
+interface MixConfig { enabled: boolean, wordsPerSentence: number }
+interface MixState { wordsShownInCycle: number, wordsPerSentence: number }
 
 /** Load config from smartDailySettings.mixMode */
 export async function loadMixConfig(): Promise<MixConfig> {
@@ -13,9 +13,10 @@ export async function loadMixConfig(): Promise<MixConfig> {
     const cfg = s?.[SETTINGS_KEY]?.mixMode ?? {}
     return {
       enabled: !!cfg.enabled,
-      wordsPerSentence: Math.max(1, Number(cfg.wordsPerSentence ?? 2))
+      wordsPerSentence: Math.max(1, Number(cfg.wordsPerSentence ?? 2)),
     }
-  } catch (e) {
+  }
+  catch (e) {
     return { enabled: false, wordsPerSentence: 2 }
   }
 }
@@ -27,7 +28,8 @@ export async function loadMixConfig(): Promise<MixConfig> {
  */
 export async function decideNextIsSentence(): Promise<boolean> {
   const cfg = await loadMixConfig()
-  if (!cfg.enabled) return false
+  if (!cfg.enabled)
+    return false
 
   const s = await storage.get([MIX_STATE_KEY])
   const st: MixState = s?.[MIX_STATE_KEY] ?? { wordsShownInCycle: 0, wordsPerSentence: cfg.wordsPerSentence }
@@ -42,7 +44,8 @@ export async function decideNextIsSentence(): Promise<boolean> {
     st.wordsShownInCycle = (st.wordsShownInCycle ?? 0) + 1
     await storage.set({ [MIX_STATE_KEY]: st })
     return false // show word
-  } else {
+  }
+  else {
     // time to show a sentence; reset counter
     st.wordsShownInCycle = 0
     st.wordsPerSentence = cfg.wordsPerSentence

@@ -1,11 +1,11 @@
 <script lang="ts">
-import useShortcutContextMenu from '@/composables/shortcuts/useShortcutContextMenu'
-
-import useShortcuts from '@/composables/shortcuts/useShortcuts'
-
 import { defineComponent } from 'vue'
 
 import Draggable from 'vuedraggable'
+
+import useShortcutContextMenu from '@/composables/shortcuts/useShortcutContextMenu'
+
+import useShortcuts from '@/composables/shortcuts/useShortcuts'
 import Shortcut from './Shortcut.vue'
 
 export default defineComponent({

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import Section from '../components/Section.vue'
-import storage from '@/modules/localStorage'
 import { ref, watch } from 'vue'
+import storage from '@/modules/localStorage'
+import Section from '../components/Section.vue'
 
 // Загружаем текущее значение настройки
 const hideTranslationUnderSpoiler = ref(storage.get('hideTranslationUnderSpoiler') === 'true')
@@ -22,7 +22,7 @@ watch(hideTranslationUnderSpoiler, (val) => {
         <b class="vocab-list__item__name">Hide translation under spoiler</b>
         <small class="vocab-list__item__count">(translation will be hidden until you click “Show”)</small>
 
-        <input type="checkbox" v-model="hideTranslationUnderSpoiler">
+        <input v-model="hideTranslationUnderSpoiler" type="checkbox">
         <span class="checkmark" />
       </label>
     </div>

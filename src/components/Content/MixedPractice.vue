@@ -1,9 +1,107 @@
+<script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import useOnline from '@/composables/useOnline'
+import { decideNextIsSentence } from '@/composables/useSmartMix'
+
+import useWord from '@/composables/words/useWord'
+import * as storage from '@/utils/storage'
+
+import LearnedAllWords from './LearnedAllWords.vue'
+import Loading from './Loading.vue'
+import NoWordList from './NoWordList.vue'
+import OfflineState from './OfflineState.vue'
+
+import SmartSentencePractice from './SmartSentencePractice.vue'
+import Word from './Word.vue'
+import WordFetchError from './WordFetchError.vue'
+
+const PACK_KEY = 'lastSmartPack'
+const MIX_SETTINGS_KEY = 'smartDailySettings'
+
+const loading = ref(true)
+const showSentence = ref(false)
+
+const { isOnline } = useOnline()
+const {
+  hasLearnedAllWords,
+  definitions,
+  isLoading,
+  wordsPoll,
+  getWord,
+  error,
+  word,
+} = useWord()
+
+async function onWordMarked() {
+  // reuse existing flow: when a word is marked, fetch next word
+  try { await getWord() }
+  catch (e) { /* ignore */ }
+}
+
+async function decideAndPrepare() {
+  loading.value = true
+  try {
+    // read settings and pack together
+    const s = await storage.get([MIX_SETTINGS_KEY, PACK_KEY])
+    const settings = s?.[MIX_SETTINGS_KEY] ?? {}
+    const pack = s?.[PACK_KEY] ?? null
+
+    const smartEnabledGlobally = !!settings.enabled
+    const mixEnabled = !!settings.mixMode?.enabled
+    const hasSentences = !!(pack && Array.isArray(pack.sentences) && pack.sentences.length > 0)
+
+    // If mix is disabled -> preserve previous behavior:
+    // when smart mode is enabled and there is a pack -> show sentences,
+    // otherwise fallback to words.
+    if (!mixEnabled) {
+      if (smartEnabledGlobally && hasSentences) {
+        showSentence.value = true
+      }
+      else {
+        showSentence.value = false
+        try { await getWord() }
+        catch (e) { /* ignore */ }
+      }
+      return
+    }
+
+    // If mix is enabled -> decide by cycle
+    const wantSentence = await decideNextIsSentence()
+
+    // only show sentence when smart mode and pack are available
+    if (wantSentence && smartEnabledGlobally && hasSentences) {
+      showSentence.value = true
+    }
+    else {
+      showSentence.value = false
+      try { await getWord() }
+      catch (e) { /* ignore */ }
+    }
+  }
+  catch (err) {
+    console.warn('[MixedPractice] decideAndPrepare error', err)
+    showSentence.value = false
+    try { await getWord() }
+    catch (e) { /* ignore */ }
+  }
+  finally {
+    loading.value = false
+  }
+}
+
+onMounted(() => {
+  decideAndPrepare()
+})
+</script>
+
 <template>
   <div>
     <template v-if="loading">
       <!-- while deciding, reuse the existing Loading behavior (simple placeholder) -->
       <div class="content">
-        <div class="meaning boxed">Loading…</div>
+        <div class="meaning boxed">
+          Loading…
+        </div>
       </div>
     </template>
 
@@ -26,94 +124,6 @@
     </template>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import * as storage from '@/utils/storage'
-import { decideNextIsSentence } from '@/composables/useSmartMix'
-
-import useOnline from '@/composables/useOnline'
-import useWord from '@/composables/words/useWord'
-
-import LearnedAllWords from './LearnedAllWords.vue'
-import Loading from './Loading.vue'
-import NoWordList from './NoWordList.vue'
-import OfflineState from './OfflineState.vue'
-
-import Word from './Word.vue'
-import WordFetchError from './WordFetchError.vue'
-import SmartSentencePractice from './SmartSentencePractice.vue'
-
-const PACK_KEY = 'lastSmartPack'
-const MIX_SETTINGS_KEY = 'smartDailySettings'
-
-const loading = ref(true)
-const showSentence = ref(false)
-
-const { isOnline } = useOnline()
-const {
-  hasLearnedAllWords,
-  definitions,
-  isLoading,
-  wordsPoll,
-  getWord,
-  error,
-  word,
-} = useWord()
-
-async function onWordMarked() {
-  // reuse existing flow: when a word is marked, fetch next word
-  try { await getWord() } catch (e) { /* ignore */ }
-}
-
-async function decideAndPrepare() {
-  loading.value = true
-  try {
-    // read settings and pack together
-    const s = await storage.get([MIX_SETTINGS_KEY, PACK_KEY])
-    const settings = s?.[MIX_SETTINGS_KEY] ?? {}
-    const pack = s?.[PACK_KEY] ?? null
-
-    const smartEnabledGlobally = !!settings.enabled
-    const mixEnabled = !!settings.mixMode?.enabled
-    const hasSentences = !!(pack && Array.isArray(pack.sentences) && pack.sentences.length > 0)
-
-    // If mix is disabled -> preserve previous behavior:
-    // when smart mode is enabled and there is a pack -> show sentences,
-    // otherwise fallback to words.
-    if (!mixEnabled) {
-      if (smartEnabledGlobally && hasSentences) {
-        showSentence.value = true
-      } else {
-        showSentence.value = false
-        try { await getWord() } catch (e) { /* ignore */ }
-      }
-      return
-    }
-
-    // If mix is enabled -> decide by cycle
-    const wantSentence = await decideNextIsSentence()
-
-    // only show sentence when smart mode and pack are available
-    if (wantSentence && smartEnabledGlobally && hasSentences) {
-      showSentence.value = true
-    } else {
-      showSentence.value = false
-      try { await getWord() } catch (e) { /* ignore */ }
-    }
-  } catch (err) {
-    console.warn('[MixedPractice] decideAndPrepare error', err)
-    showSentence.value = false
-    try { await getWord() } catch (e) { /* ignore */ }
-  } finally {
-    loading.value = false
-  }
-}
-
-onMounted(() => {
-  decideAndPrepare()
-})
-</script>
 
 <style scoped>
 /* Reuse existing component spacing to match Word/SmartSentencePractice layout.

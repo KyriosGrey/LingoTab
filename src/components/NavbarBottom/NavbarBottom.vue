@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-import useBackground from '@/composables/useBackground'
-
 import { computed } from 'vue'
+
+import useBackground from '@/composables/useBackground'
 import MarkedWords from './MarkedWords'
 
 import WordsHistory from './WordsHistory'

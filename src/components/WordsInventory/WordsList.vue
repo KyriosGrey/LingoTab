@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import type { WordList } from '@/data/words'
 
-import useWord from '@/composables/words/useWord'
-
-import wordLists from '@/data/words'
 import { ref } from 'vue'
+
+import useWord from '@/composables/words/useWord'
+import wordLists from '@/data/words'
 
 const emit = defineEmits(['check'])
 

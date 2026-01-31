@@ -1,17 +1,3 @@
-<template>
-  <Section
-    title="Smart Sentences"
-    description="When enabled, New Tab will show Smart Sentences practice instead of the regular word study interface."
-  >
-    <template #bar>
-      <label class="switch">
-        <input type="checkbox" :checked="local" @change="onChange($event)" />
-        <span class="slider round" />
-      </label>
-    </template>
-  </Section>
-</template>
-
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import Section from '@/options/components/Section.vue'
@@ -21,7 +7,7 @@ const emit = defineEmits(['update:modelValue'])
 
 const local = ref<boolean>(!!props.modelValue)
 
-watch(() => props.modelValue, v => { local.value = !!v })
+watch(() => props.modelValue, (v) => { local.value = !!v })
 
 function onChange(e: Event) {
   const target = e.target as HTMLInputElement
@@ -29,6 +15,20 @@ function onChange(e: Event) {
   emit('update:modelValue', local.value)
 }
 </script>
+
+<template>
+  <Section
+    title="Smart Sentences"
+    description="When enabled, New Tab will show Smart Sentences practice instead of the regular word study interface."
+  >
+    <template #bar>
+      <label class="switch">
+        <input type="checkbox" :checked="local" @change="onChange($event)">
+        <span class="slider round" />
+      </label>
+    </template>
+  </Section>
+</template>
 
 <style scoped>
 /* Copied switch styles from SiteShortcuts.vue for pixel-perfect match */
