@@ -25,14 +25,7 @@ export default function useRepetition() {
     }
 
     // Read current counter (default to 0)
-    const counterStr = storage.get(REPETITION_COUNTER_KEY)
-    let counter = 0
-    if (counterStr) {
-      counter = Number.parseInt(counterStr, 10)
-      if (Number.isNaN(counter)) {
-        counter = 0
-      }
-    }
+    let counter = Number.parseInt(storage.get(REPETITION_COUNTER_KEY) || '0', 10) || 0
 
     // Increment counter
     counter += 1

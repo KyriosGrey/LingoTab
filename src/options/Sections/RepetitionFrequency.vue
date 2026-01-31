@@ -4,7 +4,7 @@ import storage from '@/modules/localStorage'
 import Section from '../components/Section.vue'
 
 // Load current frequency setting
-const repetitionFrequency = ref(storage.get('repetitionFrequency') || 'off')
+const repetitionFrequency = ref(storage.get('repetitionFrequency') ?? 'off')
 
 // Watch for changes and save
 watch(repetitionFrequency, (val) => {

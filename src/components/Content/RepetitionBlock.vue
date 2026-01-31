@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import useIgnoredWords from '@/composables/words/useIgnoredWords'
 import useLearnedWords from '@/composables/words/useLearnedWords'
 import useLearningWords from '@/composables/words/useLearningWords'
@@ -9,17 +9,19 @@ const { learnedWords, removeLearnedWords } = useLearnedWords()
 const { setAsIgnored } = useIgnoredWords()
 const { setAsLearning } = useLearningWords()
 
-// Get a random learned word
-const randomWord = computed(() => {
-  if (learnedWords.value.length === 0)
-    return null
-  const randomIndex = Math.floor(Math.random() * learnedWords.value.length)
-  return learnedWords.value[randomIndex]
-})
-
-// 50/50 chance to show word or translation first
+// Select a random learned word once on mount
+const randomWord = ref<string | null>(null)
 const showWordFirst = ref(Math.random() < 0.5)
 const isSpoilerRevealed = ref(false)
+
+onMounted(() => {
+  if (learnedWords.value.length === 0) {
+    randomWord.value = null
+    return
+  }
+  const randomIndex = Math.floor(Math.random() * learnedWords.value.length)
+  randomWord.value = learnedWords.value[randomIndex]
+})
 
 // Action handlers
 function handleMarkAsLearning() {
@@ -63,7 +65,7 @@ function handleRemoveFromList() {
             class="spoiler-btn"
             @click="isSpoilerRevealed = true"
           >
-            Показать перевод
+            Show translation
           </button>
           <Translation
             v-if="isSpoilerRevealed"
@@ -83,7 +85,7 @@ function handleRemoveFromList() {
             class="spoiler-btn"
             @click="isSpoilerRevealed = true"
           >
-            Показать слово
+            Show word
           </button>
           <h2 v-if="isSpoilerRevealed" class="practice-word">
             {{ randomWord }}
