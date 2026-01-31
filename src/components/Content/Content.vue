@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import useOnline from '@/composables/useOnline'
 import useWord from '@/composables/words/useWord'
+import * as storage from '@/utils/storage'
 import LearnedAllWords from './LearnedAllWords.vue'
 import Loading from './Loading.vue'
+import MixedPractice from './MixedPractice.vue'
 import NoWordList from './NoWordList.vue'
 import OfflineState from './OfflineState.vue'
+import RepetitionBlock from './RepetitionBlock.vue'
 
 import Word from './Word.vue'
 import WordFetchError from './WordFetchError.vue'
-import MixedPractice from './MixedPractice.vue'
 
-import * as storage from '@/utils/storage'
 import { ref, onMounted } from 'vue'
 
 const {
@@ -21,6 +22,7 @@ const {
   getWord,
   error,
   word,
+  shouldShowRepetition,
 } = useWord()
 
 const { isOnline } = useOnline()
@@ -56,6 +58,11 @@ onMounted(async () => {
     <Loading v-else-if="isLoading" />
     <WordFetchError v-else-if="error" :word="word" @retry="getWord" />
     <LearnedAllWords v-else-if="hasLearnedAllWords" />
+    
+    <!-- Show repetition block when it should be visible -->
+    <RepetitionBlock v-else-if="shouldShowRepetition" :visible="shouldShowRepetition" />
+    
+    <!-- Show regular word otherwise -->
     <Word
       v-else
       :word="word"

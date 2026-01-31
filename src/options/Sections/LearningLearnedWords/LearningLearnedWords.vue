@@ -5,6 +5,7 @@ import useLearningWords from '@/composables/words/useLearningWords'
 import Section from '@/options/components/Section.vue'
 import ImportLearnedFile from './ImportLearnedFile.vue'
 import ImportLearningFile from './ImportLearningFile.vue'
+import RepetitionFrequency from './RepetitionFrequency.vue'
 
 const { learningWords, setAsLearning } = useLearningWords()
 const { learnedWords, setAsLearned } = useLearnedWords()
@@ -85,6 +86,9 @@ function handleExportLearned() {
         </div>
       </div>
     </div>
+
+    <!-- Repetition Frequency Setting -->
+    <RepetitionFrequency />
   </Section>
 </template>
 

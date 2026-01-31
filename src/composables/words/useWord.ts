@@ -1,5 +1,6 @@
 import { capitalizeFirstLetter } from '@/utils/string'
 import { computed, ref } from 'vue'
+import useRepetition from '../useRepetition'
 import useIgnoredWords from './useIgnoredWords'
 import useRandomWord from './useRandomWord'
 import useWordDefinitions from './useWordDefinitions'
@@ -13,6 +14,7 @@ export default function useWord() {
 
   const { ignoredWords, isIgnoredWord, reloadIgnoredWords } = useIgnoredWords()
   const { addWordToHistory } = wordsHistory()
+  const { shouldShowRepetition, shouldShowNowAndResetIfNeeded } = useRepetition()
 
   // ✅ Исправлено: явно указываем тип word: string
   const unIgnoredWords = computed(() =>
@@ -40,6 +42,8 @@ export default function useWord() {
     const lowerCaseWord = searchedWord.toLowerCase()
     await getDefinitions(lowerCaseWord)
     handleUpdateWord(lowerCaseWord)
+    // Check and update repetition counter after word is displayed
+    await shouldShowNowAndResetIfNeeded()
   }
 
   function handleUpdateWord(value: string) {
@@ -57,5 +61,6 @@ export default function useWord() {
     getWord,
     error,
     word,
+    shouldShowRepetition,
   }
 }
