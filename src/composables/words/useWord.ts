@@ -1,5 +1,6 @@
 import { capitalizeFirstLetter } from '@/utils/string'
 import { computed, ref } from 'vue'
+import useRepetition from '../useRepetition'
 import useIgnoredWords from './useIgnoredWords'
 import useRandomWord from './useRandomWord'
 import useWordDefinitions from './useWordDefinitions'
@@ -10,6 +11,7 @@ const word = ref('')
 
 export default function useWord() {
   const { wordsPoll } = useWordLists()
+  const { incrementCounter } = useRepetition()
 
   const { ignoredWords, isIgnoredWord, reloadIgnoredWords } = useIgnoredWords()
   const { addWordToHistory } = wordsHistory()
@@ -46,6 +48,9 @@ export default function useWord() {
     word.value = value
     addWordToHistory(value)
     document.title = `LingoTab • ${capitalizeFirstLetter(value)}`
+
+    // Increment repetition counter when a word is shown
+    incrementCounter()
   }
 
   return {
