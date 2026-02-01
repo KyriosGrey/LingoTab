@@ -1,54 +1,27 @@
-<template>
-  <div>
-    <template v-if="loading">
-      <!-- while deciding, reuse the existing Loading behavior (simple placeholder) -->
-      <div class="content">
-        <div class="meaning boxed">Loading…</div>
-      </div>
-    </template>
-
-    <!-- If decided to show a sentence and pack is available — mount full SmartSentencePractice -->
-    <SmartSentencePractice v-else-if="showSentence" />
-
-    <!-- Otherwise show word flow (re-uses Word.vue and word composable) -->
-    <template v-else>
-      <NoWordList v-if="!wordsPoll.length" />
-      <OfflineState v-else-if="!isOnline" />
-      <Loading v-else-if="isLoading" />
-      <WordFetchError v-else-if="error" :word="word" @retry="getWord" />
-      <LearnedAllWords v-else-if="hasLearnedAllWords" />
-      <Word
-        v-else
-        :word="word"
-        :definitions="definitions || []"
-        @marked="onWordMarked"
-      />
-    </template>
-  </div>
-</template>
-
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import * as storage from '@/utils/storage'
+import { onMounted, ref } from 'vue'
+import useOnline from '@/composables/useOnline'
+import { decideShowRepetitionNow } from '@/composables/useRepetition'
 import { decideNextIsSentence } from '@/composables/useSmartMix'
 
-import useOnline from '@/composables/useOnline'
 import useWord from '@/composables/words/useWord'
+import * as storage from '@/utils/storage'
 
 import LearnedAllWords from './LearnedAllWords.vue'
 import Loading from './Loading.vue'
 import NoWordList from './NoWordList.vue'
 import OfflineState from './OfflineState.vue'
 
+import SmartSentencePractice from './SmartSentencePractice.vue'
 import Word from './Word.vue'
 import WordFetchError from './WordFetchError.vue'
-import SmartSentencePractice from './SmartSentencePractice.vue'
 
 const PACK_KEY = 'lastSmartPack'
 const MIX_SETTINGS_KEY = 'smartDailySettings'
 
 const loading = ref(true)
 const showSentence = ref(false)
+const showRepetitionNow = ref(false)
 
 const { isOnline } = useOnline()
 const {
@@ -63,7 +36,12 @@ const {
 
 async function onWordMarked() {
   // reuse existing flow: when a word is marked, fetch next word
-  try { await getWord() } catch (e) { /* ignore */ }
+  try {
+    await getWord()
+  }
+  catch {
+    /* ignore */
+  }
 }
 
 async function decideAndPrepare() {
@@ -84,9 +62,17 @@ async function decideAndPrepare() {
     if (!mixEnabled) {
       if (smartEnabledGlobally && hasSentences) {
         showSentence.value = true
-      } else {
+        showRepetitionNow.value = false
+      }
+      else {
         showSentence.value = false
-        try { await getWord() } catch (e) { /* ignore */ }
+        showRepetitionNow.value = decideShowRepetitionNow()
+        try {
+          await getWord()
+        }
+        catch {
+          /* ignore */
+        }
       }
       return
     }
@@ -97,15 +83,32 @@ async function decideAndPrepare() {
     // only show sentence when smart mode and pack are available
     if (wantSentence && smartEnabledGlobally && hasSentences) {
       showSentence.value = true
-    } else {
-      showSentence.value = false
-      try { await getWord() } catch (e) { /* ignore */ }
+      showRepetitionNow.value = false
     }
-  } catch (err) {
+    else {
+      showSentence.value = false
+      // Only decide repetition on word flow
+      showRepetitionNow.value = decideShowRepetitionNow()
+      try {
+        await getWord()
+      }
+      catch {
+        /* ignore */
+      }
+    }
+  }
+  catch (err) {
     console.warn('[MixedPractice] decideAndPrepare error', err)
     showSentence.value = false
-    try { await getWord() } catch (e) { /* ignore */ }
-  } finally {
+    showRepetitionNow.value = false
+    try {
+      await getWord()
+    }
+    catch {
+      /* ignore */
+    }
+  }
+  finally {
     loading.value = false
   }
 }
@@ -114,6 +117,38 @@ onMounted(() => {
   decideAndPrepare()
 })
 </script>
+
+<template>
+  <div>
+    <template v-if="loading">
+      <!-- while deciding, reuse the existing Loading behavior (simple placeholder) -->
+      <div class="content">
+        <div class="meaning boxed">
+          Loading…
+        </div>
+      </div>
+    </template>
+
+    <!-- If decided to show a sentence and pack is available — mount full SmartSentencePractice -->
+    <SmartSentencePractice v-else-if="showSentence" />
+
+    <!-- Otherwise show word flow (re-uses Word.vue and word composable) -->
+    <template v-else>
+      <NoWordList v-if="!wordsPoll.length" />
+      <OfflineState v-else-if="!isOnline" />
+      <Loading v-else-if="isLoading" />
+      <WordFetchError v-else-if="error" :word="word" @retry="getWord" />
+      <LearnedAllWords v-else-if="hasLearnedAllWords" />
+      <Word
+        v-else
+        :word="word"
+        :definitions="definitions || []"
+        :show-repetition="showRepetitionNow"
+        @marked="onWordMarked"
+      />
+    </template>
+  </div>
+</template>
 
 <style scoped>
 /* Reuse existing component spacing to match Word/SmartSentencePractice layout.
