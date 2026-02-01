@@ -26,30 +26,15 @@ watch(repetitionFrequency, (val) => {
 
 <template>
   <Section
-    title="Repetition Block"
-    description="Show a random learned word for review during practice. Configure how often it appears."
+    title="Learned words review"
+    description="Shows a random learned word for review. Configure how often it appears."
   >
-    <div class="repetition-setting">
-      <label class="label">Frequency:</label>
+    <template #bar>
       <Select
         v-model="repetitionFrequency"
         :options="frequencyOptions"
         title="Choose repetition frequency"
       />
-    </div>
+    </template>
   </Section>
 </template>
-
-<style scoped>
-.repetition-setting {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.label {
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-</style>
