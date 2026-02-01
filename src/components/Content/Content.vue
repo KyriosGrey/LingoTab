@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import useOnline from '@/composables/useOnline'
 import useWord from '@/composables/words/useWord'
+import { decideShowRepetitionNow } from '@/composables/useRepetition'
+
 import LearnedAllWords from './LearnedAllWords.vue'
 import Loading from './Loading.vue'
 import NoWordList from './NoWordList.vue'
@@ -28,19 +30,29 @@ const { isOnline } = useOnline()
 // smart mode flag (loaded from settings). Default false.
 const smartEnabled = ref(false)
 
+// repetition flag for the current word view (variant A: in-memory per view)
+const showRepetitionNow = ref(false)
+
+async function getWordWithRepetition() {
+  // Decide repetition ONLY for word flow
+  showRepetitionNow.value = decideShowRepetitionNow()
+  await getWord()
+}
+
 onMounted(async () => {
   try {
     // read smartDailySettings.enabled; do not block UI
     const s = await storage.get(['smartDailySettings'])
     smartEnabled.value = !!(s && s.smartDailySettings && s.smartDailySettings.enabled)
-  } catch (err) {
+  }
+  catch (err) {
     console.warn('Failed to read smartDailySettings', err)
     smartEnabled.value = false
   }
 
   // only fetch word when smart mode is disabled
   if (!smartEnabled.value) {
-    getWord()
+    getWordWithRepetition()
   }
 })
 </script>
@@ -54,13 +66,21 @@ onMounted(async () => {
     <NoWordList v-if="!wordsPoll.length" />
     <OfflineState v-else-if="!isOnline" />
     <Loading v-else-if="isLoading" />
-    <WordFetchError v-else-if="error" :word="word" @retry="getWord" />
+
+    <WordFetchError
+      v-else-if="error"
+      :word="word"
+      @retry="getWordWithRepetition"
+    />
+
     <LearnedAllWords v-else-if="hasLearnedAllWords" />
+
     <Word
       v-else
       :word="word"
       :definitions="definitions || []"
-      @marked="getWord"
+      :show-repetition="showRepetitionNow"
+      @marked="getWordWithRepetition"
     />
   </template>
 </template>
