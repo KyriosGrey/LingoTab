@@ -29,37 +29,32 @@ Generate EXACTLY ${count} DISTINCT English sentences that match these constraint
 - For each sentence provide a short, direct, neutral translation into '${targetLang}'.
 
 IMPORTANT RULES (FOLLOW THESE EXACTLY):
-1) LENGTH CONSTRAINT FIRST: EACH sentence.text MUST contain between ${min} and ${max} WORDS INCLUSIVE. The field "lengthWords" MUST equal the actual number of words in "text". IF A SENTENCE IS TOO SHORT, ADD DESCRIPTIVE ADJECTIVES (e.g., "big", "fast"), ADVERBS (e.g., "often", "quickly"), OR SPECIFIC TIME MARKERS (e.g., "at five o'clock", "every single day") TO REACH THE MINIMUM. 
-2) RETURN EXACTLY ONE VALID JSON OBJECT described in rule (4) AND NOTHING ELSE (NO EXPLANATIONS, NO MARKDOWN, NO EXTRA TEXT).
+1) QUALITY + TIME CONTEXT:
+- Each sentence.text must be ${min}-${max} words and must not aim for the minimum; prefer learner-friendly sentences with clear context.
+- lengthWords must equal the true word count of sentence.text.
+- Every sentence.text MUST include at least ONE explicit time anchor / temporal cue that helps infer tense/aspect (e.g., yesterday/last night, two hours ago, right now, these days, tomorrow/next week, already/yet/still, for/since, by the time..., before/after..., when/while + clause).
+- Forbidden: bare tense-only sentences without time/context (e.g., "I had eaten.").
+- The time cue should naturally match the tense/aspect and should vary across sentences (avoid repeating the same marker too often).
+- If a sentence feels bare (simple subject + auxiliary + verb), add a time marker and one small concrete detail (place/reason/object/short clause) while staying within the word limit.
 
-3) IMPORTANT NEW RULE (HINT): For each sentence produce an additional field "hint" — a short hint string that is THE ORIGINAL ENGLISH SENTENCE with KEY GRAMMAR TOKENS REPLACED IN-PLACE by the exact placeholder [____].
+2) OUTPUT: Return EXACTLY ONE valid JSON object described in rule (4) and NOTHING ELSE (no explanations, no markdown, no extra text).
 
-Follow these strict rules for the "hint" field:
-- IN-PLACE REPLACEMENT ONLY: Do not reorder words, do not add or remove other words, and do not leave the replaced original token visible next to the placeholder. Replace each target token exactly where it appears with the exact substring [____].
-- TOKENS TO REPLACE: Replace ONLY grammar-bearing tokens, including:
-  * auxiliary verbs (be / am / is / are / was / were / been / being),
-  * perfect auxiliaries (have / has / had and their contracted forms),
-  * modal verbs (can, could, will, would, should, must, may, might),
-  * negation words (not and n't),
-  * main verb forms that carry aspect/tense information — including present participle (the -ing form, e.g. "testing") and past participle (e.g. "done", "written") when they are part of the verb phrase expressing tense/aspect.
-- DO NOT replace content words: nouns, adjectives, adverbs, determiners, prepositions, numerals, punctuation, or translation text must remain unchanged.
-- WHITESPACE & PUNCTUATION: Preserve original spacing and punctuation exactly. The hint must be the original sentence with placeholders inserted — not a paraphrase.
-- PLACEHOLDER FORMAT: Use the exact placeholder [____] (four underscores inside square brackets). Use one [____] per replaced token.
-- MULTIPLE REPLACEMENTS: If a verb phrase contains several grammar tokens (e.g. "has been testing"), replace each grammar token separately and in-place (e.g. "[____] [____] [____]").
-- IF NO RELIABLE GRAMMAR TOKEN IS IDENTIFIABLE: set "hint" to be exactly equal to the original "text" (i.e., no change) rather than producing an invalid or reordered hint.
-- EXAMPLES (valid hints):
-  - text: "She has not done her homework yet."
-    hint: "She [____] [____] [____] her homework yet."
-  - text: "The team has not won any big tournaments yet."
-    hint: "The team [____] [____] [____] any big tournaments yet."
-  - text: "The team has been testing the software every day."
-    hint: "The team [____] [____] [____] the software every day."
-  - text: "He hasn't finished the task."
-    hint: "He [____] [____] the task."
-- FORBIDDEN HINTS (invalid):
-  - Reordering tokens (e.g. "The team not [____] won ...")
-  - Keeping the replaced word next to the placeholder (e.g. "[____] won")
-  - Paraphrasing or changing punctuation
+3) HINT FIELD (IN-PLACE TOKEN MASKING):
+For each sentence add "hint": the original English sentence with key grammar tokens replaced IN-PLACE by the exact placeholder [____].
+Rules:
+- Do not reorder words and do not add/remove words; preserve spacing and punctuation exactly.
+- Replace ONLY grammar-bearing tokens:
+  * auxiliaries (be/am/is/are/was/were/been/being),
+  * perfect auxiliaries (have/has/had and contractions),
+  * modals (can/could/will/would/should/must/may/might),
+  * negation (not / n't),
+  * verb forms that carry tense/aspect inside the verb phrase (e.g., -ing participle, past participle).
+- Do NOT replace content words (nouns/adjectives/adverbs/determiners/prepositions/numerals).
+- Use exactly one [____] per replaced token; if multiple tokens in a verb phrase, replace each (e.g., "has been testing" -> "[____] [____] [____]").
+- If no reliable grammar token is identifiable, set hint exactly equal to text.
+Example:
+- text: "She has not done her homework yet."
+  hint: "She [____] [____] [____] her homework yet."
 
 4) The JSON must follow this schema exactly (order inside each sentence object matters: lengthWords then text):
 {
@@ -69,10 +64,17 @@ Follow these strict rules for the "hint" field:
     { "id": "1", "lengthWords": integer, "text":"English sentence.", "translation":"Translation in ${targetLang}.", "hint":"Sentence with [____] blanks.", "tense":"", "topic":"" }
   ]
 }
-5) Use simple numeric ids starting from "1" up to the count (e.g. "1","2","3"). IDs must be unique within the returned pack.
-6) Each sentence.text MUST end with appropriate punctuation ('.' '?' or '!').
-7) 'translation' must be a short neutral translation in one sentence; do NOT include extra commentary.
-8) Use ASCII quotes and a parsable JSON (no trailing commas). Ensure numbers are integers.
+
+5) IDs: Use simple numeric string ids "1".."${count}" (unique).
+
+6) FORM MIX (PACK-LEVEL):
+- Keep forms balanced across the pack (~1/3 each): affirmative, negative (contains not/n't/never/no as negation), interrogative (ends with '?').
+- If ${count} is not divisible by 3: allocate remainder to affirmative first, then negative, then interrogative.
+- Questions MUST end with '?'. Non-questions MUST end with '.' or '!'.
+
+7) translation: one short neutral sentence in ${targetLang}, no extra commentary.
+
+8) JSON: Use ASCII quotes, valid parsable JSON, no trailing commas, integers where required.
 `
 }
 
