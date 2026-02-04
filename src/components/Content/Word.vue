@@ -83,7 +83,7 @@ watch(
               <Translation
                 v-if="word"
                 :text="word"
-                class="word-translation"
+                variant="word"
               />
             </template>
 
@@ -102,7 +102,7 @@ watch(
               <Translation
                 v-if="isSpoilerRevealed && word"
                 :text="word"
-                class="word-translation"
+                variant="word"
               />
             </template>
           </template>
@@ -114,7 +114,7 @@ watch(
             <Translation
               v-if="word"
               :text="word"
-              class="word-translation"
+              variant="word"
             />
           </template>
         </div>
@@ -145,13 +145,23 @@ watch(
         <div v-for="(def, defIndex) of meaning.definitions" :key="defIndex">
           <p class="meaning__def">
             {{ def.definition }}
+            <Translation
+              v-if="def.definition"
+              :text="def.definition"
+              small
+              display="tooltip"
+            />
           </p>
-          <Translation v-if="def.definition" :text="def.definition" small />
 
           <p v-if="def.example" class="meaning__example">
             {{ def.example }}
+            <Translation
+              v-if="def.example"
+              :text="def.example"
+              small
+              display="tooltip"
+            />
           </p>
-          <Translation v-if="def.example" :text="def.example" small />
         </div>
       </div>
     </div>
@@ -187,12 +197,7 @@ watch(
   align-items: flex-start;
 }
 
-/* Немного увеличим перевод основного слова */
-.word-translation {
-  font-size: 1.3rem;
-  font-style: italic;
-  margin-top: 0.25rem;
-}
+/* ✅ Размер перевода основного сло  а теперь задаётся внутри Translation.vue через variant="word" */
 
 /* ✅ стиль для кнопки спойлера */
 /* ✅ Новый стиль кнопки "Показать перевод" */
