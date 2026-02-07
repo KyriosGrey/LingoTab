@@ -3,12 +3,21 @@ import storage from '@/modules/localStorage'
 const FREQUENCY_KEY = 'repetitionFrequency'
 const COUNTER_KEY = 'repetitionCounter'
 
-type FrequencyOption = 'off' | '5' | '10' | '20' | '30'
+type FrequencyOption = 'off' | '1' | '2' | '3' | '4' | '5' | '10' | '20'
 
 /** Load repetition frequency from localStorage */
 export function loadRepetitionFrequency(): FrequencyOption {
   const val = storage.get(FREQUENCY_KEY)
-  if (val === '5' || val === '10' || val === '20' || val === '30' || val === 'off') {
+  if (
+    val === 'off'
+    || val === '1'
+    || val === '2'
+    || val === '3'
+    || val === '4'
+    || val === '5'
+    || val === '10'
+    || val === '20'
+  ) {
     return val
   }
   return 'off'
