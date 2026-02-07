@@ -25,14 +25,14 @@ const props = defineProps<{ modelValue?: string | number }>()
 const emit = defineEmits(['update:modelValue'])
 
 const frequencyOptions = [
-  { value: '24', text: 'Once per 24 hours' },
-  { value: '12', text: 'Once per 12 hours' },
-  { value: 'manual', text: 'Manual only' }
+  { value: '24', text: 'Once per 24 hours (Not working)' },
+  { value: '12', text: 'Once per 12 hours (Not working)' },
+  { value: 'manual', text: 'Manual only' },
 ]
 
 const modelValueLocal = computed({
   get() { return props.modelValue ?? '24' },
-  set(v: any) { emit('update:modelValue', v) }
+  set(v: any) { emit('update:modelValue', v) },
 })
 </script>
 

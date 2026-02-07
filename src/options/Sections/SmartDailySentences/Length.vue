@@ -26,13 +26,13 @@ const emit = defineEmits(['update:modelValue'])
 
 const lengthOptions = [
   { value: 'mixed', text: 'Mixed (3–16)' },
-  { value: 'long', text: 'Long (8–16)' },
-  { value: 'short', text: 'Short (3–7)' }
+  { value: 'long', text: 'Long (8–16) (Not working)' },
+  { value: 'short', text: 'Short (3–7) (Not working)' },
 ]
 
 const modelValueLocal = computed({
   get() { return props.modelValue ?? 'short' },
-  set(v: any) { emit('update:modelValue', v) }
+  set(v: any) { emit('update:modelValue', v) },
 })
 </script>
 
