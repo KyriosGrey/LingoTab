@@ -11,10 +11,13 @@ const repetitionFrequency = ref(loadRepetitionFrequency())
 // Options for the dropdown
 const frequencyOptions = [
   { value: 'off', text: 'Off' },
+  { value: '1', text: 'Every 1 word' },
+  { value: '2', text: 'Every 2 words' },
+  { value: '3', text: 'Every 3 words' },
+  { value: '4', text: 'Every 4 words' },
   { value: '5', text: 'Every 5 words' },
   { value: '10', text: 'Every 10 words' },
   { value: '20', text: 'Every 20 words' },
-  { value: '30', text: 'Every 30 words' },
 ]
 
 // Watch for changes and save + reset counter
