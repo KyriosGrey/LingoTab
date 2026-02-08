@@ -57,7 +57,7 @@ const currentCards = computed(() => {
           {{ currentCards.explain.description }}
         </p>
         <div class="focus-note">
-          <strong>Focus:</strong> {{ currentCards.explain.focusNote }}
+          {{ currentCards.explain.focusNote }}
         </div>
         <div class="formula">
           <strong>Formula:</strong> <code>{{ currentCards.explain.formula }}</code>
@@ -75,12 +75,9 @@ const currentCards = computed(() => {
       </div>
 
       <div class="card mistakes-card">
-        <h4 class="card-title">
-          Common Mistakes
-        </h4>
         <div class="mistakes-list">
           <div v-for="(mistake, idx) in currentCards.mistakes.mistakes" :key="idx" class="mistake">
-            <div class="mistake-title">
+            <div class="mistake-note">
               {{ mistake.title }}
             </div>
             <div class="mistake-wrong">
@@ -340,7 +337,7 @@ const currentCards = computed(() => {
 
 .triggers-list {
   margin: 8px 0 0 0;
-  padding-left: 20px;
+  padding-left: 0px;
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
