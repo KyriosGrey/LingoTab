@@ -15,7 +15,7 @@ const CANONICAL_TENSE_KEYS = [
   'future-perfect-continuous',
 ] as const
 
-type CanonicalTenseKey = typeof CANONICAL_TENSE_KEYS[number]
+export type CanonicalTenseKey = typeof CANONICAL_TENSE_KEYS[number]
 
 // Alias mapping: maps various representations to canonical keys
 const TENSE_ALIASES: Record<string, CanonicalTenseKey> = {

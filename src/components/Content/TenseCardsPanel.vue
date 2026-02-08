@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { normalizeTense } from '@/composables/smartSentences/useTenseCards'
+import { normalizeTense, useTenseCards } from '@/composables/smartSentences/useTenseCards'
 import { tenseCardsMap, tenseOptions } from '@/data/smartSentences/tenseCards'
 
 const props = defineProps<{
   currentTense?: string
 }>()
 
+const { defaultTenseKey } = useTenseCards()
+
 // Selected tense key (internal state)
-const selectedTense = ref<string>('present-simple')
+const selectedTense = ref<string>(defaultTenseKey)
 
 // Auto-sync from currentTense prop
 watch(
@@ -26,7 +28,7 @@ watch(
 
 // Get current card set based on selected tense
 const currentCards = computed(() => {
-  return tenseCardsMap[selectedTense.value] || tenseCardsMap['present-simple']
+  return tenseCardsMap[selectedTense.value] || tenseCardsMap[defaultTenseKey]
 })
 </script>
 
