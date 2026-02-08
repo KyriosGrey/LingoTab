@@ -1,91 +1,7 @@
-<template>
-  <div class="tense-cards-panel">
-    <!-- Header with dropdown -->
-    <div class="panel-header">
-      <h3 class="panel-title">Grammar Reference</h3>
-      <select v-model="selectedTense" class="tense-select tiny-scrollbar">
-        <option v-for="option in tenseOptions" :key="option.value" :value="option.value">
-          {{ option.text }}
-        </option>
-      </select>
-    </div>
-
-    <!-- Cards grid -->
-    <div v-if="currentCards" class="cards-grid">
-      <!-- Row 1: ExplainCard and MistakesCard side-by-side -->
-      <div class="card explain-card">
-        <h4 class="card-title">{{ currentCards.explain.title }}</h4>
-        <p class="card-description">{{ currentCards.explain.description }}</p>
-        <div class="focus-note">
-          <strong>Focus:</strong> {{ currentCards.explain.focusNote }}
-        </div>
-        <div class="formula">
-          <strong>Formula:</strong> <code>{{ currentCards.explain.formula }}</code>
-        </div>
-        <div class="examples">
-          <div v-for="(example, idx) in currentCards.explain.examples" :key="idx" class="example">
-            <div class="example-en">{{ example.en }}</div>
-            <div class="example-ru">{{ example.ru }}</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card mistakes-card">
-        <h4 class="card-title">Common Mistakes</h4>
-        <div class="mistakes-list">
-          <div v-for="(mistake, idx) in currentCards.mistakes.mistakes" :key="idx" class="mistake">
-            <div class="mistake-title">{{ mistake.title }}</div>
-            <div class="mistake-wrong">{{ mistake.wrong }}</div>
-            <div class="mistake-right">{{ mistake.right }}</div>
-            <div class="mistake-note">{{ mistake.note }}</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Row 2: WhenToUseCard full width -->
-      <div class="card when-to-use-card">
-        <h4 class="card-title">{{ currentCards.whenToUse.title }}</h4>
-        <div class="when-content">
-          <div class="triggers-section">
-            <strong>Time markers:</strong>
-            <ul class="triggers-list">
-              <li v-for="(trigger, idx) in currentCards.whenToUse.triggers" :key="idx">
-                {{ trigger.text }}
-              </li>
-            </ul>
-          </div>
-          <div class="comparison-section">
-            <div class="comparison-block">
-              <h5 class="comparison-title">{{ currentCards.whenToUse.comparison.left.title }}</h5>
-              <div v-for="(example, idx) in currentCards.whenToUse.comparison.left.examples" :key="idx" class="comparison-example">
-                <div class="example-en">{{ example.en }}</div>
-                <div class="example-ru">{{ example.ru }}</div>
-              </div>
-              <div v-if="currentCards.whenToUse.comparison.left.note" class="comparison-note">
-                {{ currentCards.whenToUse.comparison.left.note }}
-              </div>
-            </div>
-            <div class="comparison-block">
-              <h5 class="comparison-title">{{ currentCards.whenToUse.comparison.right.title }}</h5>
-              <div v-for="(example, idx) in currentCards.whenToUse.comparison.right.examples" :key="idx" class="comparison-example">
-                <div class="example-en">{{ example.en }}</div>
-                <div class="example-ru">{{ example.ru }}</div>
-              </div>
-              <div v-if="currentCards.whenToUse.comparison.right.note" class="comparison-note">
-                {{ currentCards.whenToUse.comparison.right.note }}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
-import { tenseOptions, tenseCardsMap } from '@/data/smartSentences/tenseCards'
+import { computed, ref, watch } from 'vue'
 import { normalizeTense } from '@/composables/smartSentences/useTenseCards'
+import { tenseCardsMap, tenseOptions } from '@/data/smartSentences/tenseCards'
 
 const props = defineProps<{
   currentTense?: string
@@ -105,7 +21,7 @@ watch(
       }
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 // Get current card set based on selected tense
@@ -113,6 +29,124 @@ const currentCards = computed(() => {
   return tenseCardsMap[selectedTense.value] || tenseCardsMap['present-simple']
 })
 </script>
+
+<template>
+  <div class="tense-cards-panel">
+    <!-- Header with dropdown -->
+    <div class="panel-header">
+      <h3 class="panel-title">
+        Grammar Reference
+      </h3>
+      <select v-model="selectedTense" class="tense-select tiny-scrollbar">
+        <option v-for="option in tenseOptions" :key="option.value" :value="option.value">
+          {{ option.text }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Cards grid -->
+    <div v-if="currentCards" class="cards-grid">
+      <!-- Row 1: ExplainCard and MistakesCard side-by-side -->
+      <div class="card explain-card">
+        <h4 class="card-title">
+          {{ currentCards.explain.title }}
+        </h4>
+        <p class="card-description">
+          {{ currentCards.explain.description }}
+        </p>
+        <div class="focus-note">
+          <strong>Focus:</strong> {{ currentCards.explain.focusNote }}
+        </div>
+        <div class="formula">
+          <strong>Formula:</strong> <code>{{ currentCards.explain.formula }}</code>
+        </div>
+        <div class="examples">
+          <div v-for="(example, idx) in currentCards.explain.examples" :key="idx" class="example">
+            <div class="example-en">
+              {{ example.en }}
+            </div>
+            <div class="example-ru">
+              {{ example.ru }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mistakes-card">
+        <h4 class="card-title">
+          Common Mistakes
+        </h4>
+        <div class="mistakes-list">
+          <div v-for="(mistake, idx) in currentCards.mistakes.mistakes" :key="idx" class="mistake">
+            <div class="mistake-title">
+              {{ mistake.title }}
+            </div>
+            <div class="mistake-wrong">
+              {{ mistake.wrong }}
+            </div>
+            <div class="mistake-right">
+              {{ mistake.right }}
+            </div>
+            <div class="mistake-note">
+              {{ mistake.note }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: WhenToUseCard full width -->
+      <div class="card when-to-use-card">
+        <h4 class="card-title">
+          {{ currentCards.whenToUse.title }}
+        </h4>
+        <div class="when-content">
+          <div class="triggers-section">
+            <strong>Time markers:</strong>
+            <ul class="triggers-list">
+              <li v-for="(trigger, idx) in currentCards.whenToUse.triggers" :key="idx">
+                {{ trigger.text }}
+              </li>
+            </ul>
+          </div>
+          <div class="comparison-section">
+            <div class="comparison-block">
+              <h5 class="comparison-title">
+                {{ currentCards.whenToUse.comparison.left.title }}
+              </h5>
+              <div v-for="(example, idx) in currentCards.whenToUse.comparison.left.examples" :key="idx" class="comparison-example">
+                <div class="example-en">
+                  {{ example.en }}
+                </div>
+                <div class="example-ru">
+                  {{ example.ru }}
+                </div>
+              </div>
+              <div v-if="currentCards.whenToUse.comparison.left.note" class="comparison-note">
+                {{ currentCards.whenToUse.comparison.left.note }}
+              </div>
+            </div>
+            <div class="comparison-block">
+              <h5 class="comparison-title">
+                {{ currentCards.whenToUse.comparison.right.title }}
+              </h5>
+              <div v-for="(example, idx) in currentCards.whenToUse.comparison.right.examples" :key="idx" class="comparison-example">
+                <div class="example-en">
+                  {{ example.en }}
+                </div>
+                <div class="example-ru">
+                  {{ example.ru }}
+                </div>
+              </div>
+              <div v-if="currentCards.whenToUse.comparison.right.note" class="comparison-note">
+                {{ currentCards.whenToUse.comparison.right.note }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style scoped>
 .tense-cards-panel {

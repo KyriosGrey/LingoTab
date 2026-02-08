@@ -1,13 +1,13 @@
 import type { TenseCardSet, TenseOption } from './types'
-import { presentSimple } from './present-simple'
-import { presentContinuous } from './present-continuous'
-import { presentPerfect } from './present-perfect'
-import { pastSimple } from './past-simple'
-import { pastContinuous } from './past-continuous'
-import { pastPerfect } from './past-perfect'
-import { futureSimple } from './future-simple'
 import { futureContinuous } from './future-continuous'
 import { futurePerfectContinuous } from './future-perfect-continuous'
+import { futureSimple } from './future-simple'
+import { pastContinuous } from './past-continuous'
+import { pastPerfect } from './past-perfect'
+import { pastSimple } from './past-simple'
+import { presentContinuous } from './present-continuous'
+import { presentPerfect } from './present-perfect'
+import { presentSimple } from './present-simple'
 
 // List of all tense options for the dropdown
 export const tenseOptions: TenseOption[] = [
@@ -19,7 +19,7 @@ export const tenseOptions: TenseOption[] = [
   { value: 'past-perfect', text: 'Past Perfect' },
   { value: 'future-simple', text: 'Future Simple' },
   { value: 'future-continuous', text: 'Future Continuous' },
-  { value: 'future-perfect-continuous', text: 'Future Perfect Continuous' }
+  { value: 'future-perfect-continuous', text: 'Future Perfect Continuous' },
 ]
 
 // Mapping from tense key to content
@@ -32,7 +32,7 @@ export const tenseCardsMap: Record<string, TenseCardSet> = {
   'past-perfect': pastPerfect,
   'future-simple': futureSimple,
   'future-continuous': futureContinuous,
-  'future-perfect-continuous': futurePerfectContinuous
+  'future-perfect-continuous': futurePerfectContinuous,
 }
 
 // Export types
