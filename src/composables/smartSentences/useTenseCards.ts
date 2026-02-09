@@ -7,12 +7,22 @@ const CANONICAL_TENSE_KEYS = [
   'present-simple',
   'present-continuous',
   'present-perfect',
+  'present-perfect-continuous',
   'past-simple',
   'past-continuous',
   'past-perfect',
+  'past-perfect-continuous',
   'future-simple',
+  'future-perfect',
   'future-continuous',
   'future-perfect-continuous',
+
+  // ✅ NEW "Other"
+  'conditionals',
+  'passive-voice',
+  'modal-verbs',
+  'reported-speech',
+  'gerund-and-infinitive',
 ] as const
 
 export type CanonicalTenseKey = typeof CANONICAL_TENSE_KEYS[number]
@@ -33,6 +43,12 @@ const TENSE_ALIASES: Record<string, CanonicalTenseKey> = {
   'present perfect': 'present-perfect',
   'presentperfect': 'present-perfect',
 
+  // Present Perfect Continuous
+  'present perfect continuous': 'present-perfect-continuous',
+  'presentperfectcontinuous': 'present-perfect-continuous',
+  'present perfect progressive': 'present-perfect-continuous',
+  'presentperfectprogressive': 'present-perfect-continuous',
+
   // Past Simple
   'past simple': 'past-simple',
   'pastsimple': 'past-simple',
@@ -47,10 +63,20 @@ const TENSE_ALIASES: Record<string, CanonicalTenseKey> = {
   'past perfect': 'past-perfect',
   'pastperfect': 'past-perfect',
 
+  // Past Perfect Continuous
+  'past perfect continuous': 'past-perfect-continuous',
+  'pastperfectcontinuous': 'past-perfect-continuous',
+  'past perfect progressive': 'past-perfect-continuous',
+  'pastperfectprogressive': 'past-perfect-continuous',
+
   // Future Simple
   'future simple': 'future-simple',
   'futuresimple': 'future-simple',
   'simple future': 'future-simple',
+
+  // Future Perfect
+  'future perfect': 'future-perfect',
+  'futureperfect': 'future-perfect',
 
   // Future Continuous
   'future continuous': 'future-continuous',
@@ -61,33 +87,51 @@ const TENSE_ALIASES: Record<string, CanonicalTenseKey> = {
   'future perfect continuous': 'future-perfect-continuous',
   'futureperfectcontinuous': 'future-perfect-continuous',
   'future perfect progressive': 'future-perfect-continuous',
+  'futureperfectprogressive': 'future-perfect-continuous',
+
+  // ✅ NEW "Other" aliases
+  conditional: 'conditionals',
+  conditionals: 'conditionals',
+
+  'passive voice': 'passive-voice',
+  passivevoice: 'passive-voice',
+  passive: 'passive-voice',
+  'passive-voice': 'passive-voice',
+
+  'modal verbs': 'modal-verbs',
+  modalverbs: 'modal-verbs',
+  modals: 'modal-verbs',
+  'modal-verbs': 'modal-verbs',
+
+  'reported speech': 'reported-speech',
+  reportedspeech: 'reported-speech',
+  reported: 'reported-speech',
+  'reported-speech': 'reported-speech',
+
+  'gerund & infinitive': 'gerund-and-infinitive',
+  'gerunds & infinitives': 'gerund-and-infinitive',
+  'gerund and infinitive': 'gerund-and-infinitive',
+  gerundinfinitive: 'gerund-and-infinitive',
+  'gerund-and-infinitive': 'gerund-and-infinitive',
 }
 
 const DEFAULT_TENSE_KEY: CanonicalTenseKey = 'present-simple'
 
-/**
- * Normalizes a tense string to a canonical tense key
- * @param tense - The tense string from sentence.tense (can be undefined)
- * @returns Canonical tense key or default if not recognized
- */
 export function normalizeTense(tense?: string): CanonicalTenseKey {
   if (!tense || typeof tense !== 'string') {
     return DEFAULT_TENSE_KEY
   }
 
-  // Normalize: trim, lowercase, and check if it's already a canonical key
   const normalized = tense.trim().toLowerCase()
 
   if (CANONICAL_TENSE_KEYS.includes(normalized as CanonicalTenseKey)) {
     return normalized as CanonicalTenseKey
   }
 
-  // Check aliases
   if (normalized in TENSE_ALIASES) {
     return TENSE_ALIASES[normalized]
   }
 
-  // If not found, return default
   return DEFAULT_TENSE_KEY
 }
 
