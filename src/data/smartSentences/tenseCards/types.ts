@@ -1,24 +1,39 @@
 // Type definitions for tense cards
 
+export type TextBlock = {
+  text: string
+  /**
+   * Translate this RU text into current Google Translate target language (gttl)
+   * when gttl != 'ru'. If false/undefined, show as-is.
+   */
+  trRu?: boolean
+}
+
+export type TextLike = string | TextBlock
+
+export function asTextBlock(v: TextLike): TextBlock {
+  return typeof v === 'string' ? { text: v } : v
+}
+
 export interface Example {
   en: string
-  ru: string
+  ru?: TextLike
 }
 
 export interface ExplainCard {
   type: 'explain'
-  title: string
-  description: string
-  focusNote: string
+  title: TextLike
+  description: TextLike
+  focusNote: TextLike
   formula: string
   examples: Example[]
 }
 
 export interface Mistake {
-  title: string
+  title: TextLike
   wrong: string
   right: string
-  note: string
+  note: TextLike
 }
 
 export interface MistakesCard {
@@ -27,18 +42,18 @@ export interface MistakesCard {
 }
 
 export interface Trigger {
-  text: string
+  text: TextLike
 }
 
 export interface ComparisonBlock {
   title: string
   examples: Example[]
-  note?: string
+  note?: TextLike
 }
 
 export interface WhenToUseCard {
   type: 'whenToUse'
-  title: string
+  title: TextLike
   triggers: Trigger[]
   comparison: {
     left: ComparisonBlock

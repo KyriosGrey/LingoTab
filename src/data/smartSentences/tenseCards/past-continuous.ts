@@ -3,48 +3,99 @@ import type { TenseCardSet } from './types'
 export const pastContinuous: TenseCardSet = {
   explain: {
     type: 'explain',
-    title: 'Past Continuous',
-    description: 'TODO: Add description for Past Continuous',
-    focusNote: 'TODO: Add focus note',
-    formula: 'TODO: Add formula',
+    title: {
+      text: 'Past Continuous — процесс в конкретный момент в прошлом',
+      trRu: true,
+    },
+    description: {
+      text: 'Используется, когда мы говорим о действии, которое было в процессе в определённый момент в прошлом.',
+      trRu: true,
+    },
+    focusNote: {
+      text: 'Фокус не на результате, а на том, что происходило в этот момент. Часто используется как фон для другого действия или описание ситуации, а не события.',
+      trRu: true,
+    },
+    formula: 'Subject + was / were + verb-ing',
     examples: [
-      { en: 'TODO: Example 1', ru: 'TODO: Пример 1' },
-      { en: 'TODO: Example 2', ru: 'TODO: Пример 2' },
-      { en: 'TODO: Example 3', ru: 'TODO: Пример 3' },
+      {
+        en: 'She was playing the game when I called her.',
+        ru: { text: 'Она играла в игру, когда я ей позвонил.', trRu: true },
+      },
+      {
+        en: 'I was not working when you called.',
+        ru: { text: 'Я не работал, когда ты позвонил.', trRu: true },
+      },
+      {
+        en: 'Were you working when I texted you?',
+        ru: { text: 'Ты работал, когда я тебе написал?', trRu: true },
+      },
     ],
   },
+
   mistakes: {
     type: 'mistakes',
     mistakes: [
-      { title: 'TODO: Mistake 1', wrong: '❌ TODO: Wrong', right: '✅ TODO: Right', note: 'TODO: Note' },
-      { title: 'TODO: Mistake 2', wrong: '❌ TODO: Wrong', right: '✅ TODO: Right', note: 'TODO: Note' },
-      { title: 'TODO: Mistake 3', wrong: '❌ TODO: Wrong', right: '✅ TODO: Right', note: 'TODO: Note' },
+      {
+        title: { text: 'Ошибка 1 — путаница с Past Simple', trRu: true },
+        wrong: '❌ I worked when he arrived',
+        right: '✅ I was working when he arrived',
+        note: {
+          text: 'Past Simple — событие. Past Continuous — фон / процесс',
+          trRu: true,
+        },
+      },
+      {
+        title: { text: 'Ошибка 2 — использование без конкретного момента', trRu: true },
+        wrong: '❌ I was working yesterday',
+        right: '✅ I worked yesterday',
+        note: {
+          text: 'Past Continuous лучше работает с моментом или контекстом, а не просто датой.',
+          trRu: true,
+        },
+      },
+      {
+        title: { text: 'Ошибка 3 — неправильный глагол состояния', trRu: true },
+        wrong: '❌ I was knowing the answer',
+        right: '✅ I knew the answer',
+        note: {
+          text: 'Stative verbs (know, like, believe, want) → почти никогда не используются в Continuous.',
+          trRu: true,
+        },
+      },
     ],
   },
+
   whenToUse: {
     type: 'whenToUse',
-    title: 'When to Use',
+    title: { text: 'Когда нужен Past Continuous', trRu: true },
+
+    // ✅ triggers не переводим (как договорились)
     triggers: [
-      { text: 'TODO: Trigger 1' },
-      { text: 'TODO: Trigger 2' },
-      { text: 'TODO: Trigger 3' },
+      { text: 'when / while' },
+      { text: 'at that moment' },
+      { text: 'at 7 p.m. yesterday' },
+      { text: 'as' },
+      { text: 'описание фона (music was playing, people were talking)' },
     ],
+
     comparison: {
       left: {
-        title: 'TODO: Comparison Title 1',
+        title: 'Past Simple',
         examples: [
-          { en: 'TODO: Example 1', ru: 'TODO: Пример 1' },
-          { en: 'TODO: Example 2', ru: 'TODO: Пример 2' },
+          {
+            en: 'I answered the phone.',
+            ru: { text: 'Я ответил на телефон. (событие)', trRu: true },
+          },
         ],
-        note: 'TODO: Note',
       },
       right: {
-        title: 'TODO: Comparison Title 2',
+        title: 'Past Continuous',
         examples: [
-          { en: 'TODO: Example 1', ru: 'TODO: Пример 1' },
-          { en: 'TODO: Example 2', ru: 'TODO: Пример 2' },
+          {
+            en: 'I was working when you called.',
+            ru: { text: 'Я работал, когда ты позвонил. (процесс в момент звонка)', trRu: true },
+          },
         ],
-        note: 'TODO: Note',
       },
     },
   },
