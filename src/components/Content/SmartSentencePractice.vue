@@ -57,6 +57,9 @@
           </div>
         </div>
       </div>
+
+      <!-- Tense Cards Panel: always shown when pack exists -->
+      <TenseCardsPanel :currentTense="current?.tense" />
     </div>
   </div>
 </template>
@@ -64,6 +67,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import * as storage from '@/utils/storage'
+import TenseCardsPanel from './TenseCardsPanel.vue'
 
 const PACK_KEY = 'lastSmartPack'
 const STATE_KEY = 'smartDailyPracticeState'

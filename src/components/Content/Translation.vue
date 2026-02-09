@@ -12,7 +12,7 @@ const props = withDefaults(defineProps<{
   text: string | undefined
   small?: boolean
   /**
-   * block  - render translation as a separate line (<p>)
+   * block  - render translation as a separate line (<p> by default)
    * tooltip - render inline "?" icon with custom tooltip on hover/focus
    */
   display?: 'block' | 'tooltip'
@@ -23,10 +23,23 @@ const props = withDefaults(defineProps<{
    * Only affects display="block". Tooltip mode has its own styling.
    */
   variant?: 'default' | 'word'
+  /**
+   * Source language for translation.
+   * Default is 'en' to preserve existing behavior (words/examples come in EN).
+   * Use 'ru' for Russian lines in tense cards.
+   */
+  from?: string
+  /**
+   * Which tag to render in block mode.
+   * Default 'p' keeps existing DOM/layout. Use 'span' for inline usage (e.g., inside headings).
+   */
+  as?: 'p' | 'span'
 }>(), {
   display: 'block',
   small: false,
   variant: 'default',
+  from: 'en',
+  as: 'p',
 })
 
 const { translate } = useTranslateText()
@@ -41,7 +54,7 @@ async function doTranslate() {
 
   loading.value = true
   try {
-    result.value = await translate(props.text, 'en') // в проекте слова и примеры приходят на EN
+    result.value = await translate(props.text, props.from)
   } catch {
     result.value = ''
   } finally {
@@ -50,7 +63,7 @@ async function doTranslate() {
 }
 
 onMounted(doTranslate)
-watch(() => props.text, doTranslate)
+watch(() => [props.text, props.from], doTranslate)
 
 const hasTooltipText = computed(() => Boolean(result.value) || loading.value)
 const tooltipText = computed(() => {
@@ -63,7 +76,8 @@ const tooltipText = computed(() => {
 <template>
   <!-- block mode -->
   <template v-if="display === 'block'">
-    <p
+    <component
+      :is="as"
       v-if="result"
       v-bind="attrs"
       :class="[
@@ -73,9 +87,10 @@ const tooltipText = computed(() => {
       ]"
     >
       {{ result }}
-    </p>
+    </component>
 
-    <p
+    <component
+      :is="as"
       v-else-if="loading"
       v-bind="attrs"
       :class="[
@@ -85,7 +100,7 @@ const tooltipText = computed(() => {
       ]"
     >
       перевод…
-    </p>
+    </component>
   </template>
 
   <!-- tooltip mode -->
@@ -103,6 +118,7 @@ const tooltipText = computed(() => {
     </span>
   </template>
 </template>
+
 
 <style scoped>
 /* Regular translation line (block mode) */
