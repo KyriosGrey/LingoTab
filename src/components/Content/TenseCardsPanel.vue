@@ -2,43 +2,46 @@
 import { computed, ref, watch } from 'vue'
 import { normalizeTense, useTenseCards } from '@/composables/smartSentences/useTenseCards'
 import { tenseCardsMap, tenseOptions } from '@/data/smartSentences/tenseCards'
+import useGoogleTranslate from '@/composables/useGoogleTranslate'
+import Translation from '@/components/Content/Translation.vue'
+import type { TextBlock } from '@/data/smartSentences/tenseCards/types'
 
 const props = defineProps<{
   currentTense?: string
 }>()
 
 const { defaultTenseKey } = useTenseCards()
-
-// Selected tense key (internal state)
 const selectedTense = ref<string>(defaultTenseKey)
 
-// Auto-sync from currentTense prop
+const { targetLanguage } = useGoogleTranslate()
+const gttlCode = computed(() => (targetLanguage?.code || 'ru').toLowerCase())
+const shouldTranslateRu = computed(() => gttlCode.value !== 'ru')
+
 watch(
   () => props.currentTense,
   (newTense) => {
     if (newTense) {
       const normalized = normalizeTense(newTense)
-      if (normalized !== selectedTense.value) {
-        selectedTense.value = normalized
-      }
+      if (normalized !== selectedTense.value) selectedTense.value = normalized
     }
   },
   { immediate: true },
 )
 
-// Get current card set based on selected tense
 const currentCards = computed(() => {
   return tenseCardsMap[selectedTense.value] || tenseCardsMap[defaultTenseKey]
 })
+
+function shouldTranslateBlock(block?: TextBlock) {
+  return Boolean(block?.text && block.trRu && shouldTranslateRu.value)
+}
 </script>
 
 <template>
   <div class="tense-cards-panel">
-    <!-- Header with dropdown -->
     <div class="panel-header">
-      <h3 class="panel-title">
-        Grammar Reference
-      </h3>
+      <h3 class="panel-title">Grammar Reference</h3>
+
       <select v-model="selectedTense" class="tense-select tiny-scrollbar">
         <option v-for="option in tenseOptions" :key="option.value" :value="option.value">
           {{ option.text }}
@@ -46,29 +49,62 @@ const currentCards = computed(() => {
       </select>
     </div>
 
-    <!-- Cards grid -->
     <div v-if="currentCards" class="cards-grid">
-      <!-- Row 1: ExplainCard and MistakesCard side-by-side -->
       <div class="card explain-card">
         <h4 class="card-title">
-          {{ currentCards.explain.title }}
+          <Translation
+            v-if="shouldTranslateBlock(currentCards.explain.title)"
+            :text="currentCards.explain.title.text"
+            from="ru"
+            display="block"
+          />
+          <template v-else>
+            {{ currentCards.explain.title.text }}
+          </template>
         </h4>
+
         <p class="card-description">
-          {{ currentCards.explain.description }}
+          <Translation
+            v-if="shouldTranslateBlock(currentCards.explain.description)"
+            :text="currentCards.explain.description.text"
+            from="ru"
+            small
+          />
+          <template v-else>
+            {{ currentCards.explain.description.text }}
+          </template>
         </p>
+
         <div class="focus-note">
-          {{ currentCards.explain.focusNote }}
+          <Translation
+            v-if="shouldTranslateBlock(currentCards.explain.focusNote)"
+            :text="currentCards.explain.focusNote.text"
+            from="ru"
+            small
+          />
+          <template v-else>
+            {{ currentCards.explain.focusNote.text }}
+          </template>
         </div>
+
         <div class="formula">
           <strong>Formula:</strong> <code>{{ currentCards.explain.formula }}</code>
         </div>
+
         <div class="examples">
           <div v-for="(example, idx) in currentCards.explain.examples" :key="idx" class="example">
-            <div class="example-en">
-              {{ example.en }}
-            </div>
-            <div class="example-ru">
-              {{ example.ru }}
+            <div class="example-en">{{ example.en }}</div>
+
+            <div v-if="example.ru" class="example-ru">
+              <Translation
+                v-if="shouldTranslateBlock(example.ru)"
+                :text="example.ru.text"
+                from="ru"
+                small
+              />
+              <template v-else>
+                {{ example.ru.text }}
+              </template>
             </div>
           </div>
         </div>
@@ -78,75 +114,134 @@ const currentCards = computed(() => {
         <div class="mistakes-list">
           <div v-for="(mistake, idx) in currentCards.mistakes.mistakes" :key="idx" class="mistake">
             <div class="mistake-note">
-              {{ mistake.title }}
+              <Translation
+                v-if="shouldTranslateBlock(mistake.title)"
+                :text="mistake.title.text"
+                from="ru"
+                small
+              />
+              <template v-else>
+                {{ mistake.title.text }}
+              </template>
             </div>
-            <div class="mistake-wrong">
-              {{ mistake.wrong }}
-            </div>
-            <div class="mistake-right">
-              {{ mistake.right }}
-            </div>
+
+            <div class="mistake-wrong">{{ mistake.wrong }}</div>
+            <div class="mistake-right">{{ mistake.right }}</div>
+
             <div class="mistake-note">
-              {{ mistake.note }}
+              <Translation
+                v-if="shouldTranslateBlock(mistake.note)"
+                :text="mistake.note.text"
+                from="ru"
+                small
+              />
+              <template v-else>
+                {{ mistake.note.text }}
+              </template>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Row 2: WhenToUseCard full width -->
       <div class="card when-to-use-card">
         <h4 class="card-title">
-          {{ currentCards.whenToUse.title }}
+          <Translation
+            v-if="shouldTranslateBlock(currentCards.whenToUse.title)"
+            :text="currentCards.whenToUse.title.text"
+            from="ru"
+          />
+          <template v-else>
+            {{ currentCards.whenToUse.title.text }}
+          </template>
         </h4>
+
         <div class="when-content">
           <div class="triggers-section">
             <strong>Time markers:</strong>
             <ul class="triggers-list">
               <li v-for="(trigger, idx) in currentCards.whenToUse.triggers" :key="idx">
-                {{ trigger.text }}
+                <Translation
+                  v-if="shouldTranslateBlock(trigger)"
+                  :text="trigger.text"
+                  from="ru"
+                  small
+                />
+                <template v-else>
+                  {{ trigger.text }}
+                </template>
               </li>
             </ul>
           </div>
+
           <div class="comparison-section">
             <div class="comparison-block">
-              <h5 class="comparison-title">
-                {{ currentCards.whenToUse.comparison.left.title }}
-              </h5>
+              <h5 class="comparison-title">{{ currentCards.whenToUse.comparison.left.title }}</h5>
+
               <div v-for="(example, idx) in currentCards.whenToUse.comparison.left.examples" :key="idx" class="comparison-example">
-                <div class="example-en">
-                  {{ example.en }}
-                </div>
-                <div class="example-ru">
-                  {{ example.ru }}
+                <div class="example-en">{{ example.en }}</div>
+                <div v-if="example.ru" class="example-ru">
+                  <Translation
+                    v-if="shouldTranslateBlock(example.ru)"
+                    :text="example.ru.text"
+                    from="ru"
+                    small
+                  />
+                  <template v-else>
+                    {{ example.ru.text }}
+                  </template>
                 </div>
               </div>
+
               <div v-if="currentCards.whenToUse.comparison.left.note" class="comparison-note">
-                {{ currentCards.whenToUse.comparison.left.note }}
+                <Translation
+                  v-if="shouldTranslateBlock(currentCards.whenToUse.comparison.left.note)"
+                  :text="currentCards.whenToUse.comparison.left.note.text"
+                  from="ru"
+                  small
+                />
+                <template v-else>
+                  {{ currentCards.whenToUse.comparison.left.note.text }}
+                </template>
               </div>
             </div>
+
             <div class="comparison-block">
-              <h5 class="comparison-title">
-                {{ currentCards.whenToUse.comparison.right.title }}
-              </h5>
+              <h5 class="comparison-title">{{ currentCards.whenToUse.comparison.right.title }}</h5>
+
               <div v-for="(example, idx) in currentCards.whenToUse.comparison.right.examples" :key="idx" class="comparison-example">
-                <div class="example-en">
-                  {{ example.en }}
-                </div>
-                <div class="example-ru">
-                  {{ example.ru }}
+                <div class="example-en">{{ example.en }}</div>
+                <div v-if="example.ru" class="example-ru">
+                  <Translation
+                    v-if="shouldTranslateBlock(example.ru)"
+                    :text="example.ru.text"
+                    from="ru"
+                    small
+                  />
+                  <template v-else>
+                    {{ example.ru.text }}
+                  </template>
                 </div>
               </div>
+
               <div v-if="currentCards.whenToUse.comparison.right.note" class="comparison-note">
-                {{ currentCards.whenToUse.comparison.right.note }}
+                <Translation
+                  v-if="shouldTranslateBlock(currentCards.whenToUse.comparison.right.note)"
+                  :text="currentCards.whenToUse.comparison.right.note.text"
+                  from="ru"
+                  small
+                />
+                <template v-else>
+                  {{ currentCards.whenToUse.comparison.right.note.text }}
+                </template>
               </div>
             </div>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </template>
-
 <style scoped>
 .tense-cards-panel {
   margin: 20px auto 50px;
