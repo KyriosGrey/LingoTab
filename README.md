@@ -1,6 +1,6 @@
 # LingoTab
 
-> A browser extension to learn a word per new tab!
+> Учите английский язык каждый раз, когда открываете новую вкладку.
 
 ![Screenshot](./media/github.png)
 
@@ -10,11 +10,7 @@
 
 - [**Firefox Add-ons**](https://addons.mozilla.org/en-US/firefox/addon/new-word-tab/)
 
-
-
-# LingoTab
-
-> Учите английский язык каждый раз, когда открываете новую вкладку.
+---
 
 LingoTab — это расширение для браузера Firefox, превращающее стандартную страницу новой вкладки в мощный инструмент для изучения английского языка.
 
@@ -57,7 +53,7 @@ LingoTab — это расширение для браузера Firefox, пре
 ---
 
 
-### Special thanks to
+### Credits:
 
-- [Free Dictionary API](https://github.com/meetDeveloper/freeDictionaryAPI) which powers word definitions lookup.
-- [Sepehr Mohammadi](https://github.com/sepehrity) who made it possible to publish on Chrome Web Store.
+- Special thanks to [Free Dictionary API](https://github.com/meetDeveloper/freeDictionaryAPI) which powers word definitions lookup.
+- Based on: [new-word-tab](https://github.com/sajadhsm/new-word-tab) by Sajad Hashemian.
