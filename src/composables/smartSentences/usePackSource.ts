@@ -1,6 +1,5 @@
 import { ref } from 'vue'
 import * as storage from '@/utils/storage'
-import type { Pack } from '@/utils/packValidator'
 
 const STORAGE_KEY = 'smartPackSource'
 
