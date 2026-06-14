@@ -11,6 +11,12 @@
     <!-- New Mix option for words/sentences -->
     <MixMode />
 
+    <!-- Built-in sentence pack toggle -->
+    <BuiltInPackRow />
+
+    <!-- Imported sentence pack section -->
+    <ImportedPackRow />
+
     <section class="panel">
       <!-- ApiKey row: Test button is colocated here -->
       <ApiKeyRow
@@ -68,6 +74,8 @@ import Header2 from './Header2.vue'
 import EnableRow from './EnableRow.vue'
 import Hints from './Hints.vue'
 import MixMode from './MixMode.vue'
+import BuiltInPackRow from './BuiltInPackRow.vue'
+import ImportedPackRow from './ImportedPackRow.vue'
 import ApiKeyRow from './ApiKeyRow.vue'
 import LanguageRow from './LanguageRow.vue'
 import CEFRlevel from './CEFRlevel.vue'
@@ -80,6 +88,9 @@ import PreviewPanel from './PreviewPanel.vue'
 
 import * as aiProviders from '@/modules/aiProviders'
 import * as storage from '@/utils/storage'
+import { validateAndNormalizePack } from '@/utils/packValidator'
+import { usePackSource } from '@/composables/smartSentences/usePackSource'
+import { builtInPack } from '@/data/smartSentences/builtInPack'
 
 type Settings = {
   enabled?: boolean
@@ -96,6 +107,9 @@ type Settings = {
 const storageKey = 'smartDailySettings'
 const storageApiKey = 'smartDailyApiKey'
 const storagePackKey = 'lastSmartPack'
+const storageUploadedPackKey = 'smartUploadedPack'
+
+const { loadSource, setSource, getSource, isBuiltInActive, isUploadedActive } = usePackSource()
 
 // state
 const enabled = ref(false)
@@ -133,7 +147,7 @@ const grammarOptions = [
 const generating = ref(false)
 const testing = ref(false)
 const genResult = ref('')
-const testResult = ref('')    // separate result for test connection
+const testResult = ref('')
 const previewPack = ref<any | null>(null)
 const previewRaw = ref<any | null>(null)
 const previewWarning = ref('')
@@ -146,7 +160,6 @@ function getLengthRange(): [number, number] {
 }
 
 // Compute visual type for testResult using explicit mapping for known messages.
-// Add new exact messages here as needed.
 const testResultType = computed(() => {
   const sRaw = testResult.value ?? ''
   const s = sRaw.trim().toLowerCase()
@@ -167,7 +180,6 @@ const testResultType = computed(() => {
 })
 
 // Compute visual type for genResult (Preview messages).
-// Mark preview-ready and pack-saved messages as success; errors as error.
 const genResultType = computed(() => {
   const sRaw = genResult.value ?? ''
   const s = sRaw.trim().toLowerCase()
@@ -177,18 +189,24 @@ const genResultType = computed(() => {
     'preview ready': 'success',
     'pack saved.': 'success',
     'pack saved': 'success',
+    'built-in pack loaded: 25 sentences. review and accept to save.': 'success',
+    'uploaded pack loaded': 'success',
   }
 
-  // exact startsWith check for "preview ready" which has variable count
+  if (s.startsWith('built-in pack loaded')) return 'success'
+  if (s.startsWith('uploaded pack loaded')) return 'success'
   if (s.startsWith('preview ready')) return 'success'
   if (exactMap[s]) return exactMap[s]
-  if (s.includes('saved') || s.includes('preview ready')) return 'success'
+  if (s.includes('saved') || s.includes('loaded')) return 'success'
   if (s.includes('error') || s.includes('fail') || s.includes('no api key')) return 'error'
   return ''
 })
 
 // load saved settings
 onMounted(async () => {
+  // Load pack source preference
+  await loadSource()
+
   const s = await storage.get([storageKey, storageApiKey, storagePackKey])
   if (s && s[storageKey]) {
     const st: Settings = s[storageKey]
@@ -208,7 +226,6 @@ onMounted(async () => {
 })
 
 // save settings when they change (merge into existing storage)
-// use an async merge so we don't wipe other fields (e.g. showHints managed by Hints.vue)
 watch([enabled, apiKey, targetLang, level, topics, grammarFocus, lengthPreset, frequency], () => {
   saveSettings()
 }, { deep: true })
@@ -233,28 +250,17 @@ async function saveSettings() {
   }
 }
 
-/**
- * Called when ApiKeyRow emits save.
- * Keep saved key in storage and update local apiKey ref.
- */
 function onApiKeySaved(val: string) {
   apiKey.value = val
   storage.set({ [storageApiKey]: val })
-  // clear previous test result when key changes
   testResult.value = ''
 }
 
-/**
- * Test connection handler.
- * Accepts optional passedKey (emitted from ApiKeyRow) and uses it if provided,
- * otherwise uses current apiKey ref.
- */
 async function onTestConnection(passedKey?: string) {
   console.debug('[SmartDailySentences] onTestConnection called, passedKey=', passedKey, 'apiKey=', apiKey.value)
   testResult.value = ''
   const usedKey = (typeof passedKey === 'string' && passedKey.trim()) ? passedKey.trim() : apiKey.value
   if (!usedKey) { testResult.value = 'No API key'; return }
-  // optionally reflect the tested key into parent state so UI shows it
   if (usedKey !== apiKey.value) apiKey.value = usedKey
 
   testing.value = true
@@ -277,27 +283,48 @@ async function onTestConnection(passedKey?: string) {
   }
 }
 
-function getSettingsForPrompt() {
-  return {
-    count: 1,
-    level: level.value,
-    grammarFocus: grammarFocus.value,
-    topics: topics.value,
-    lengthRange: getLengthRange(),
-    targetLang: targetLang.value
-  }
-}
-
 /**
  * Generate now (preview).
- * Uses current apiKey ref. Logs and uses optional chaining to be safe.
+ * Priority: Built-in → Uploaded → API
  */
 async function onGenerateNow() {
-  console.debug('[SmartDailySentences] onGenerateNow called, apiKey=', apiKey.value)
+  console.debug('[SmartDailySentences] onGenerateNow called, source=', getSource())
   previewPack.value = null
   previewRaw.value = null
   previewWarning.value = ''
   genResult.value = ''
+
+  // ✅ Check: if built-in enabled, use it
+  if (isBuiltInActive()) {
+    try {
+      previewPack.value = builtInPack
+      genResult.value = 'Built-in pack loaded: 25 sentences. Review and Accept to save.'
+      return
+    } catch (e: any) {
+      genResult.value = 'Error loading built-in pack: ' + (e?.message || String(e))
+      console.debug('[SmartDailySentences] onGenerateNow built-in error', e)
+      return
+    }
+  }
+
+  // ✅ Check: if uploaded enabled, load from storage
+  if (isUploadedActive()) {
+    try {
+      const data = await storage.get([storageUploadedPackKey])
+      if (data && data[storageUploadedPackKey]) {
+        const uploaded = data[storageUploadedPackKey]
+        previewPack.value = uploaded
+        genResult.value = `Uploaded pack loaded: ${uploaded.count} sentences. Review and Accept to save.`
+        return
+      }
+    } catch (e: any) {
+      genResult.value = 'Error loading uploaded pack: ' + (e?.message || String(e))
+      console.debug('[SmartDailySentences] onGenerateNow uploaded error', e)
+      return
+    }
+  }
+
+  // Otherwise, use API (neurosource)
   if (!apiKey.value) { genResult.value = 'No API key'; return }
   generating.value = true
   try {
@@ -324,13 +351,36 @@ async function onGenerateNow() {
   }
 }
 
+/**
+ * Accept preview — handle different sources
+ */
 async function acceptPreview() {
   if (!previewPack.value) return
-  await storage.set({ [storagePackKey]: previewPack.value, lastSmartPackGeneratedAt: Date.now() })
-  previewPack.value = null
-  previewRaw.value = null
-  previewWarning.value = ''
-  genResult.value = 'Pack saved.'
+
+  try {
+    const source = getSource()
+
+    // If this was built-in or uploaded, just save
+    if (source === 'builtin' || source === 'uploaded') {
+      await storage.set({ [storagePackKey]: previewPack.value, lastSmartPackGeneratedAt: Date.now() })
+    } else {
+      // This is AI-generated, so clear alternative sources
+      await setSource('ai')
+      await storage.set({
+        [storagePackKey]: previewPack.value,
+        lastSmartPackGeneratedAt: Date.now(),
+        smartBuiltInEnabled: false
+      })
+    }
+
+    previewPack.value = null
+    previewRaw.value = null
+    previewWarning.value = ''
+    genResult.value = 'Pack saved.'
+  } catch (e: any) {
+    genResult.value = 'Error saving pack: ' + (e?.message || String(e))
+    console.warn('[SmartDailySentences] acceptPreview error', e)
+  }
 }
 
 function discardPreview() {

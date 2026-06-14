@@ -68,6 +68,7 @@
 import { ref, computed, onMounted } from 'vue'
 import * as storage from '@/utils/storage'
 import TenseCardsPanel from './TenseCardsPanel.vue'
+import { builtInPack } from '@/data/smartSentences/builtInPack'
 
 const PACK_KEY = 'lastSmartPack'
 const STATE_KEY = 'smartDailyPracticeState'
@@ -96,8 +97,17 @@ async function loadPackAndState() {
   loading.value = true
   try {
     // include settings so we can read showHints
-    const s = await storage.get([PACK_KEY, STATE_KEY, SETTINGS_KEY])
-    pack.value = s?.[PACK_KEY] ?? null
+    const s = await storage.get([PACK_KEY, STATE_KEY, SETTINGS_KEY, 'smartPackSource', 'smartUploadedPack'])
+    
+    const source = s?.['smartPackSource']
+    if (source === 'builtin') {
+      pack.value = builtInPack
+    } else if (source === 'uploaded') {
+      pack.value = s?.['smartUploadedPack'] ?? null
+    } else {
+      pack.value = s?.[PACK_KEY] ?? null
+    }
+
     const st = s?.[STATE_KEY] ?? { lastIndex: -1 }
     const last = typeof st.lastIndex === 'number' ? st.lastIndex : -1
 

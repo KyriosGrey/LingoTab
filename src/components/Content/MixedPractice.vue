@@ -6,6 +6,7 @@ import { decideNextIsSentence } from '@/composables/useSmartMix'
 
 import useWord from '@/composables/words/useWord'
 import * as storage from '@/utils/storage'
+import { builtInPack } from '@/data/smartSentences/builtInPack'
 
 import LearnedAllWords from './LearnedAllWords.vue'
 import Loading from './Loading.vue'
@@ -48,9 +49,18 @@ async function decideAndPrepare() {
   loading.value = true
   try {
     // read settings and pack together
-    const s = await storage.get([MIX_SETTINGS_KEY, PACK_KEY])
+    const s = await storage.get([MIX_SETTINGS_KEY, PACK_KEY, 'smartPackSource', 'smartUploadedPack'])
     const settings = s?.[MIX_SETTINGS_KEY] ?? {}
-    const pack = s?.[PACK_KEY] ?? null
+    
+    let pack = null
+    const source = s?.['smartPackSource']
+    if (source === 'builtin') {
+      pack = builtInPack
+    } else if (source === 'uploaded') {
+      pack = s?.['smartUploadedPack'] ?? null
+    } else {
+      pack = s?.[PACK_KEY] ?? null
+    }
 
     const smartEnabledGlobally = !!settings.enabled
     const mixEnabled = !!settings.mixMode?.enabled
