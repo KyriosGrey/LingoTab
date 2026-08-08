@@ -39,29 +39,39 @@ IMPORTANT RULES (FOLLOW THESE EXACTLY):
 
 2) OUTPUT: Return EXACTLY ONE valid JSON object described in rule (4) and NOTHING ELSE (no explanations, no markdown, no extra text).
 
-3) HINT FIELD (IN-PLACE TOKEN MASKING):
-For each sentence add "hint": the original English sentence with key grammar tokens replaced IN-PLACE by the exact placeholder [____].
-Rules:
-- Do not reorder words and do not add/remove words; preserve spacing and punctuation exactly.
-- Replace ONLY grammar-bearing tokens:
-  * auxiliaries (be/am/is/are/was/were/been/being),
-  * perfect auxiliaries (have/has/had and contractions),
-  * modals (can/could/will/would/should/must/may/might),
-  * negation (not / n't),
-  * verb forms that carry tense/aspect inside the verb phrase (e.g., -ing participle, past participle).
-- Do NOT replace content words (nouns/adjectives/adverbs/determiners/prepositions/numerals).
-- Use exactly one [____] per replaced token; if multiple tokens in a verb phrase, replace each (e.g., "has been testing" -> "[____] [____] [____]").
-- If no reliable grammar token is identifiable, set hint exactly equal to text.
-Example:
-- text: "She has not done her homework yet."
-  hint: "She [____] [____] [____] her homework yet."
+3) HINT FIELD (MULTIPLE CHOICE QUESTION):
+For each sentence add a "hint" object that provides an interactive multiple-choice grammar question.
+Rules for the "hint" object:
+- "sentenceWithBlank": The original English sentence with key grammar tokens replaced IN-PLACE by EXACTLY ONE placeholder [____].
+  * Replace ONLY grammar-bearing tokens (e.g., auxiliaries, modals, pronouns, specific verb tenses).
+  * Do not reorder or remove other words.
+- "options": An array of EXACTLY 4 options (objects) for the blank.
+  * EXACTLY ONE option MUST be correct ("isCorrect": true), and its "text" must exactly match the replaced token(s) from the original sentence.
+  * The other 3 options MUST be incorrect ("isCorrect": false), representing common learner mistakes (e.g., wrong tense, wrong pronoun form, missing auxiliary).
+  * Each option must have a short "explanation" in '${targetLang}' explaining why it is correct or incorrect. Keep explanations brief (1-2 sentences).
 
 4) The JSON must follow this schema exactly (order inside each sentence object matters: lengthWords then text):
 {
   "count": integer,
   "settings": { "level": string, "grammarFocus": [string], "topics":[string], "lengthWords":[${min},${max}], "targetLang":"${targetLang}" },
   "sentences": [
-    { "id": "1", "lengthWords": integer, "text":"English sentence.", "translation":"Translation in ${targetLang}.", "hint":"Sentence with [____] blanks.", "tense":"", "topic":"" }
+    {
+      "id": "1",
+      "lengthWords": integer,
+      "text": "English sentence.",
+      "translation": "Translation in ${targetLang}.",
+      "hint": {
+        "sentenceWithBlank": "Sentence with [____] blank.",
+        "options": [
+          { "text": "correct word", "isCorrect": true, "explanation": "Why it's correct in ${targetLang}." },
+          { "text": "wrong word 1", "isCorrect": false, "explanation": "Why it's wrong in ${targetLang}." },
+          { "text": "wrong word 2", "isCorrect": false, "explanation": "Why it's wrong in ${targetLang}." },
+          { "text": "wrong word 3", "isCorrect": false, "explanation": "Why it's wrong in ${targetLang}." }
+        ]
+      },
+      "tense": "",
+      "topic": ""
+    }
   ]
 }
 
