@@ -1,9 +1,20 @@
 // Safe pack validator + normalizer
+export type HintOption = {
+  text: string
+  isCorrect: boolean
+  explanation: string
+}
+
+export type HintData = {
+  sentenceWithBlank: string
+  options: HintOption[]
+}
+
 export type Sentence = {
   id: string
   text: string
   translation: string
-  hint?: string
+  hint?: string | HintData
   tense?: string
   topic?: string
   lengthWords?: number
@@ -51,7 +62,28 @@ export function validateAndNormalizePack(raw: any, expectedSettings?: { lengthRa
     // Text, translation & hint
     const text = (s.text ?? '').toString().trim()
     const translation = (s.translation ?? '').toString().trim()
-    const hint = (s.hint ?? '').toString().trim()
+    
+    let hint: string | HintData = ''
+    if (s.hint && typeof s.hint === 'object' && typeof s.hint.sentenceWithBlank === 'string' && Array.isArray(s.hint.options)) {
+      const options = s.hint.options.map((opt: any) => ({
+        text: String(opt.text || '').trim(),
+        isCorrect: Boolean(opt.isCorrect),
+        explanation: String(opt.explanation || '').trim()
+      }))
+      
+      // Shuffle options to ensure the correct answer is not always first
+      for (let i = options.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [options[i], options[j]] = [options[j], options[i]];
+      }
+
+      hint = {
+        sentenceWithBlank: String(s.hint.sentenceWithBlank).trim(),
+        options
+      }
+    } else {
+      hint = (s.hint ?? '').toString().trim()
+    }
     if (!text) throw new Error(`Empty text for sentence at index ${idx}`)
 
     // id: accept if looks acceptable, otherwise generate local id
