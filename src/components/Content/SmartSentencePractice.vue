@@ -19,14 +19,54 @@
           {{ headerShowsOriginal ? current?.text : current?.translation }}
         </div>
 
-        <!-- hint: показываем только если включено в настройках и hint присутствует -->
-        <div v-if="showHints && current?.hint" class="hint muted" style="margin-top:8px;">
+        <!-- hint: показываем только если включено в настройках и hint является строкой -->
+        <div v-if="showHints && current?.hint && typeof current.hint === 'string'" class="hint muted" style="margin-top:8px;">
           {{ current.hint }}
         </div>
       </div>
 
-      <!-- Нижний блок: ввод/кнопки/счётчик -->
-      <div class="bottom-block meaning boxed" style="margin-top:12px;">
+      <!-- Если интерактивный хинт: показываем варианты (полностью заменяет нижний блок ввода) -->
+      <div v-if="hintData" class="interactive-hint-block boxed" style="margin-top:12px;">
+        <div class="hint-sentence">{{ hintData.sentenceWithBlank }}</div>
+        <div class="hint-options">
+          <div 
+            v-for="(opt, idx) in hintData.options" 
+            :key="idx"
+            class="hint-option"
+            :class="{ 
+              correct: clickedOptions.has(opt.text) && opt.isCorrect || (hintResolved && opt.isCorrect),
+              incorrect: clickedOptions.has(opt.text) && !opt.isCorrect,
+              disabled: hintResolved
+            }"
+            @click="onOptionClick(opt)"
+          >
+            <div class="opt-text">
+              <span class="opt-label">{{ ['1','2','3','4'][idx] || '•' }}.</span> 
+              <span>{{ opt.text }}</span>
+              <span v-if="clickedOptions.has(opt.text) || (hintResolved && opt.isCorrect)" style="margin-left:auto; font-size:1.1rem;">
+                {{ (clickedOptions.has(opt.text) && opt.isCorrect) || (hintResolved && opt.isCorrect) ? '✓' : '✕' }}
+              </span>
+            </div>
+            <div class="opt-explanation" v-if="clickedOptions.has(opt.text) || (hintResolved && opt.isCorrect)">
+              <div v-if="opt.isCorrect && clickedOptions.has(opt.text)" style="font-weight:600; margin-bottom:4px;">Правильно</div>
+              <div v-else-if="!opt.isCorrect && clickedOptions.has(opt.text)" style="font-weight:600; margin-bottom:4px;">Неправильно</div>
+              {{ opt.explanation }}
+            </div>
+          </div>
+        </div>
+
+        <div class="interactive-footer" v-if="hintResolved" style="margin-top:16px; display:flex; align-items:center; justify-content:space-between;">
+           <div class="tense-badge" aria-hidden="true">{{ current?.tense ?? '—' }}</div>
+           <button class="btn next" @click="onNextClick" ref="interactiveNextBtn">Next →</button>
+        </div>
+
+        <div class="counter" style="margin-top:12px; color: hsla(var(--color-raw),0.6); font-size:0.9rem;">
+          Sentence {{ indexDisplay }} of {{ pack.sentences.length }}
+        </div>
+      </div>
+
+      <!-- Нижний блок: ввод/кнопки/счётчик (классический режим) -->
+      <div v-else class="bottom-block meaning boxed" style="margin-top:12px;">
         <div style="display:flex; flex-direction:column; gap:10px;">
           <!-- input-wrap: контейнер с относительным позиционированием,
                внутри textarea (в потоке) и кнопки, позиционированные внизу -->
@@ -69,6 +109,7 @@ import { ref, computed, onMounted } from 'vue'
 import * as storage from '@/utils/storage'
 import TenseCardsPanel from './TenseCardsPanel.vue'
 import { builtInPack } from '@/data/smartSentences/builtInPack'
+import type { HintData, HintOption } from '@/utils/packValidator'
 
 const PACK_KEY = 'lastSmartPack'
 const STATE_KEY = 'smartDailyPracticeState'
@@ -85,6 +126,11 @@ const headerShowsOriginal = ref(false)
 const showHints = ref(false) // controls whether hint is shown
 
 const answerInput = ref<HTMLTextAreaElement | null>(null)
+const interactiveNextBtn = ref<HTMLButtonElement | null>(null)
+
+// Interactive hints state
+const hintAttempts = ref(0)
+const clickedOptions = ref<Set<string>>(new Set())
 
 const current = computed(() => {
   if (!pack.value || !Array.isArray(pack.value.sentences) || index.value < 0) return null
@@ -92,6 +138,38 @@ const current = computed(() => {
 })
 
 const indexDisplay = computed(() => (index.value >= 0 ? index.value + 1 : 0))
+
+const hintData = computed<HintData | null>(() => {
+  if (showHints.value && current.value?.hint && typeof current.value.hint === 'object') {
+    return current.value.hint as HintData
+  }
+  return null
+})
+
+const hintResolved = computed(() => {
+  if (!hintData.value) return false
+  const options = hintData.value.options || []
+  const hasClickedCorrect = options.some(o => o.isCorrect && clickedOptions.value.has(o.text))
+  return hasClickedCorrect || hintAttempts.value >= 2
+})
+
+function onOptionClick(option: HintOption) {
+  if (hintResolved.value) return
+  if (clickedOptions.value.has(option.text)) return
+
+  clickedOptions.value = new Set([...clickedOptions.value, option.text])
+
+  if (option.isCorrect) {
+    headerShowsOriginal.value = true
+    setTimeout(() => interactiveNextBtn.value?.focus(), 50)
+  } else {
+    hintAttempts.value++
+    if (hintAttempts.value >= 2) {
+      headerShowsOriginal.value = true
+      setTimeout(() => interactiveNextBtn.value?.focus(), 50)
+    }
+  }
+}
 
 async function loadPackAndState() {
   loading.value = true
@@ -132,6 +210,8 @@ async function loadPackAndState() {
     loading.value = false
     input.value = ''
     headerShowsOriginal.value = false
+    hintAttempts.value = 0
+    clickedOptions.value = new Set()
     // focus input when ready
     setTimeout(() => answerInput.value?.focus(), 0)
   }
@@ -189,6 +269,8 @@ async function next() {
   index.value = nextIndex
   input.value = ''
   headerShowsOriginal.value = false
+  hintAttempts.value = 0
+  clickedOptions.value = new Set()
   // persist lastIndex
   await storage.set({ [STATE_KEY]: { lastIndex: nextIndex } })
 }
@@ -255,6 +337,96 @@ function openSettings() {
 
 /* hint style (reused muted class for color) */
 .hint { font-size: 0.95rem; }
+
+/* Interactive Hint Styles */
+.interactive-hint-block {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hint-sentence {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.hint-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hint-option {
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: hsla(var(--color-raw), 0.05);
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.hint-option:hover:not(.disabled) {
+  background: hsla(var(--color-raw), 0.08);
+}
+
+.hint-option.disabled {
+  cursor: default;
+}
+
+.hint-option .opt-text {
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hint-option .opt-label {
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+/* Correct state */
+.hint-option.correct {
+  background: #143a1d;
+  border-color: #2e7d32;
+  color: #e8f5e9;
+}
+html[data-theme='light'] .hint-option.correct, body[data-theme='light'] .hint-option.correct,
+.light .hint-option.correct {
+  background: #e8f5e9;
+  border-color: #2e7d32;
+  color: #1b5e20;
+}
+
+/* Incorrect state */
+.hint-option.incorrect {
+  background: #3b1717;
+  border-color: #c62828;
+  color: #ffebee;
+}
+html[data-theme='light'] .hint-option.incorrect, body[data-theme='light'] .hint-option.incorrect,
+.light .hint-option.incorrect {
+  background: #ffebee;
+  border-color: #c62828;
+  color: #b71c1c;
+}
+
+.opt-explanation {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  opacity: 0.9;
+  line-height: 1.4;
+  padding-top: 8px;
+  border-top: 1px solid hsla(var(--color-raw), 0.1);
+}
+.hint-option.correct .opt-explanation {
+  border-top-color: rgba(46, 125, 50, 0.3);
+}
+.hint-option.incorrect .opt-explanation {
+  border-top-color: rgba(198, 40, 40, 0.3);
+}
 
 /* Define local CSS variables defaults for input appearance.
    These are used by .answer-input below. */
