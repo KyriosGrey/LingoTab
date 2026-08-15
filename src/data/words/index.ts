@@ -4,7 +4,6 @@ import LONGMAN_3000 from './LONGMAN_3000'
 import OXFORD_2000 from './OXFORD_2000'
 import OXFORD_3000 from './OXFORD_3000'
 import SAT from './SAT'
-import Simple100 from './Simple100'
 import TOEFL from './TOEFL'
 
 export type WordList = keyof typeof WORDS
@@ -38,11 +37,7 @@ const WORDS = {
     name: 'Longman',
     list: LONGMAN_3000,
   },
-  Simple100: {
-    name: 'Simple100',
-    list: Simple100,
-  },
-
+  
 }
 
 export default WORDS
