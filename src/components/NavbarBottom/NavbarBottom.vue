@@ -27,7 +27,7 @@ const backgroundClass = computed(() => ({
   right: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 16px;
 }
 
 .navbar--boxed {

@@ -98,29 +98,29 @@ export default defineComponent({
 
 <template>
   <form class="form" @submit.prevent="handleSubmit">
-    <label class="form__label">
+    <label class="form__label text-body-sm">
       Name
       <input
         ref="urlInputRef"
         v-model="formModel.name"
-        class="form__input"
+        class="form__input text-body"
         :class="{ 'form__input--error': isNameDuplicated }"
       >
-      <small v-if="isNameDuplicated" class="form__error">
+      <small v-if="isNameDuplicated" class="form__error text-body-sm-italic">
         Name is duplicated.
       </small>
     </label>
 
-    <label class="form__label">
+    <label class="form__label text-body-sm">
       URL
-      <input v-model="formModel.url" class="form__input">
+      <input v-model="formModel.url" class="form__input text-body">
     </label>
 
     <div class="form__footer">
-      <button type="button" class="form__cancel-btn" @click="handleCancel">
+      <button type="button" class="form__cancel-btn text-body-sm" @click="handleCancel">
         Cancel
       </button>
-      <button type="submit" class="form__submit-btn" :disabled="!isFormValid">
+      <button type="submit" class="form__submit-btn text-body-sm" :disabled="!isFormValid">
         Done
       </button>
     </div>
@@ -131,75 +131,72 @@ export default defineComponent({
 .form {
   display: flex;
   flex-direction: column;
+  gap: 16px;
 }
 .form__label {
   position: relative;
   display: flex;
   flex-direction: column;
-  margin-bottom: 25px;
-  font-size: 0.7rem;
-  font-weight: bold;
-  color: hsla(var(--color-raw), 0.7);
+  gap: 6px;
+  color: var(--text-secondary);
 }
 .form__input {
-  margin-top: 5px;
-  background-color: hsla(var(--color-raw), 0.1);
+  background-color: var(--bg-color);
   color: var(--color);
-  border: none;
+  border: 1px solid var(--overlay-weak);
   outline: none;
-  font-size: 1rem;
-  border-radius: 5px;
-  padding: 6px 8px;
+  height: 34px;
+  border-radius: 6px;
+  padding: 8px 10px;
+  transition: border-color 0.15s ease-in-out;
 }
 .form__input:focus {
-  outline: 1px solid hsla(var(--color-raw), 0.3);
+  border-color: var(--accent-color-hover);
 }
 .form__input--error,
 .form__input--error:focus {
-  outline: 1px solid #f44336;
+  border-color: var(--error-color);
 }
 
 .form__error {
   position: absolute;
-  bottom: -15px;
-  font-size: 0.6rem;
-  color: #f44336;
+  bottom: -18px;
+  color: var(--error-color);
 }
 
 .form__footer {
   display: flex;
   justify-content: flex-end;
-  margin-top: 15px;
+  gap: 8px;
 }
 .form__footer button {
-  padding: 7px 15px;
-  border-radius: 5px;
-  font-weight: bold;
-  font-size: 0.75rem;
+  border-radius: 4px;
   font-family: inherit;
 }
 
-.form__submit-btn {
-  margin-left: 10px;
-  border: 1px solid var(--color);
-  background-color: var(--color);
-  color: var(--bg-color);
-}
-.form__submit-btn:hover {
-  background-color: hsla(var(--color-raw), 0.9);
-}
-.form__submit-btn:disabled {
-  background-color: var(--color);
-  cursor: not-allowed;
-  opacity: 0.5;
-}
-
 .form__cancel-btn {
-  border: 1px solid hsla(var(--color-raw), 0.3);
-  background-color: transparent;
+  padding: 8px 12px;
+  border: 1px solid var(--overlay-strong);
+  background-color: var(--overlay-weak);
   color: var(--color);
 }
 .form__cancel-btn:hover {
-  background-color: hsla(var(--color-raw), 0.05);
+  background-color: var(--overlay-strong);
+}
+
+.form__submit-btn {
+  padding: 8px 16px;
+  height: 34px;
+  border: 1px solid var(--overlay-strong);
+  background-color: var(--accent-color-hover);
+  color: #fff;
+  transition: filter 0.15s ease-in-out;
+}
+.form__submit-btn:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+.form__submit-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 </style>
