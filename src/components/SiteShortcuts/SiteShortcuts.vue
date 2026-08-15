@@ -58,7 +58,7 @@ function hideShortcutContextMenuOnScroll() {
   position: fixed;
   height: 100%;
   padding: 10px 5px;
-  background-color: hsla(var(--color-raw), 0.1);
+  background-color: var(--surface-color);
   backdrop-filter: blur(5px);
   display: flex;
   flex-direction: column;

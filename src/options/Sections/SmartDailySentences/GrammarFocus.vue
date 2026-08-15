@@ -1,86 +1,20 @@
-<template>
-  <Section
-    title="Grammar focus"
-    description="Select grammar points to emphasize in generated sentences."
-  >
-    <!-- 1) Single 'All' line -->
-    <div class="all-row">
-      <label class="checkbox">
-        <input type="checkbox" :value="'All'" v-model="localValue" />
-        <b class="vocab-list__item__name">All</b>
-        <span class="checkmark" />
-      </label>
-    </div>
-
-    <!-- 2) Time groups: Present / Past / Future in three columns -->
-    <div class="time-groups">
-      <div class="time-col">
-        <div class="time-title">Present</div>
-        <ul class="time-list">
-          <li v-for="g in presentItems" :key="g">
-            <label class="checkbox">
-              <input type="checkbox" :value="g" v-model="localValue" />
-              <span class="vocab-list__item__name">{{ g }}</span>
-              <span class="checkmark" />
-            </label>
-          </li>
-        </ul>
-      </div>
-
-      <div class="time-col">
-        <div class="time-title">Past</div>
-        <ul class="time-list">
-          <li v-for="g in pastItems" :key="g">
-            <label class="checkbox">
-              <input type="checkbox" :value="g" v-model="localValue" />
-              <span class="vocab-list__item__name">{{ g }}</span>
-              <span class="checkmark" />
-            </label>
-          </li>
-        </ul>
-      </div>
-
-      <div class="time-col">
-        <div class="time-title">Future</div>
-        <ul class="time-list">
-          <li v-for="g in futureItems" :key="g">
-            <label class="checkbox">
-              <input type="checkbox" :value="g" v-model="localValue" />
-              <span class="vocab-list__item__name">{{ g }}</span>
-              <span class="checkmark" />
-            </label>
-          </li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- 3) Spacer and remaining grammar points (three columns) -->
-    <div class="other-section">
-      <div class="other-title">Other</div>
-      <ul class="other-grid">
-        <li v-for="g in otherItems" :key="g" class="vocab-list__item">
-          <label class="checkbox">
-            <input type="checkbox" :value="g" v-model="localValue" />
-            <span class="vocab-list__item__name">{{ g }}</span>
-            <span class="checkmark" />
-          </label>
-        </li>
-      </ul>
-    </div>
-  </Section>
-</template>
-
 <script setup lang="ts">
+import Checkbox from '@/components/shared/Checkbox.vue'
 import { computed } from 'vue'
-import Section from '@/options/components/Section.vue'
 
 const props = defineProps<{ modelValue?: string[], items: string[] }>()
 const emit = defineEmits(['update:modelValue'])
 
 const localValue = computed({
   get() { return props.modelValue ?? [] },
-  set(v: any) { emit('update:modelValue', v) }
+  set(v: any) { emit('update:modelValue', v) },
 })
+
+function toggle(value: string, checked: boolean) {
+  localValue.value = checked
+    ? [...localValue.value, value]
+    : localValue.value.filter((v: string) => v !== value)
+}
 
 const items = props.items || []
 
@@ -89,21 +23,21 @@ const presentLabels = [
   'Present Simple',
   'Present Continuous',
   'Present Perfect',
-  'Present Perfect Continuous'
+  'Present Perfect Continuous',
 ]
 
 const pastLabels = [
   'Past Simple',
   'Past Continuous',
   'Past Perfect',
-  'Past Perfect Continuous'
+  'Past Perfect Continuous',
 ]
 
 const futureLabels = [
   'Future Simple',
   'Future Continuous',
   'Future Perfect',
-  'Future Perfect Continuous'
+  'Future Perfect Continuous',
 ]
 
 // helper to preserve canonical order and only include items that exist
@@ -120,16 +54,99 @@ const otherItems = computed(() => {
     'All',
     ...presentLabels,
     ...pastLabels,
-    ...futureLabels
+    ...futureLabels,
   ])
   return items.filter(i => !used.has(i))
 })
 </script>
 
+<template>
+  <!-- 1) Single 'All' line -->
+  <div class="all-row">
+    <Checkbox
+      :model-value="localValue.includes('All')"
+      @update:model-value="toggle('All', $event)"
+    >
+      <span class="vocab-list__item__name text-body-sm">All</span>
+      <span class="text-body-sm-italic hint">(select all grammar points)</span>
+    </Checkbox>
+  </div>
+
+  <div class="tenses-section">
+    <!-- 2) Time groups: Present / Past / Future in three columns -->
+    <div class="time-groups">
+      <div class="time-col">
+        <div class="time-title">
+          Present
+        </div>
+        <ul class="time-list">
+          <li v-for="g in presentItems" :key="g">
+            <Checkbox :model-value="localValue.includes(g)" @update:model-value="toggle(g, $event)">
+              <span class="vocab-list__item__name">{{ g }}</span>
+            </Checkbox>
+          </li>
+        </ul>
+      </div>
+
+      <div class="time-col">
+        <div class="time-title">
+          Past
+        </div>
+        <ul class="time-list">
+          <li v-for="g in pastItems" :key="g">
+            <Checkbox :model-value="localValue.includes(g)" @update:model-value="toggle(g, $event)">
+              <span class="vocab-list__item__name">{{ g }}</span>
+            </Checkbox>
+          </li>
+        </ul>
+      </div>
+
+      <div class="time-col">
+        <div class="time-title">
+          Future
+        </div>
+        <ul class="time-list">
+          <li v-for="g in futureItems" :key="g">
+            <Checkbox :model-value="localValue.includes(g)" @update:model-value="toggle(g, $event)">
+              <span class="vocab-list__item__name">{{ g }}</span>
+            </Checkbox>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3) Remaining grammar points (three columns) -->
+  <div class="other-section">
+    <div class="other-title">
+      Other
+    </div>
+    <ul class="other-grid">
+      <li v-for="g in otherItems" :key="g" class="vocab-list__item">
+        <Checkbox :model-value="localValue.includes(g)" @update:model-value="toggle(g, $event)">
+          <span class="vocab-list__item__name">{{ g }}</span>
+        </Checkbox>
+      </li>
+    </ul>
+  </div>
+</template>
+
 <style scoped>
-/* All single row */
 .all-row {
-  margin-bottom: 8px;
+  display: flex;
+}
+
+.hint {
+  color: var(--text-secondary);
+  margin-left: 4px;
+}
+
+/* second and third top-level blocks get the same divider rhythm as Section.vue rows */
+.tenses-section,
+.other-section {
+  border-top: 1px solid var(--overlay-weak);
+  margin-top: 24px;
+  padding-top: 24px;
 }
 
 /* Time groups layout: three columns */
@@ -137,7 +154,6 @@ const otherItems = computed(() => {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px 16px;
-  margin-bottom: 12px;
 }
 
 .time-col {
@@ -146,12 +162,16 @@ const otherItems = computed(() => {
   gap: 6px;
 }
 
-/* time-title styled to match section description text */
+/* Figma "Headings/13-16" — uppercase, wide-tracking column label */
 .time-title {
-  color: hsla(var(--color-raw), 0.7);
-  font-size: 0.75rem;
-  margin: 0 0 5px;
-  font-weight: 400;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  font-family: var(--font-family-base);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 16px;
+  letter-spacing: 0.12em;
+  margin: 0 0 16px;
 }
 
 /* lists inside columns */
@@ -164,17 +184,15 @@ const otherItems = computed(() => {
   gap: 6px;
 }
 
-/* Remaining grammar points — three-column grid */
-.other-section {
-  margin-top: 8px;
-}
-
 .other-title {
-  /* match style used for time-title (section description look) */
-  color: hsla(var(--color-raw), 0.7);
-  font-size: 0.75rem;
-  margin: 0 0 6px;
-  font-weight: 400;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  font-family: var(--font-family-base);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 16px;
+  letter-spacing: 0.12em;
+  margin: 0 0 16px;
 }
 
 /* grid for other items */
@@ -216,74 +234,13 @@ const otherItems = computed(() => {
   min-width: 0;
 }
 
-/* item name bold like elsewhere */
 .vocab-list__item__name {
   margin-right: 6px;
-  font-weight: 600;
+  font-family: var(--font-family-base);
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+  letter-spacing: -0.05em;
   color: var(--color);
-}
-
-/* checkbox visuals (consistent with other option sections) */
-.checkbox {
-  display: flex;
-  position: relative;
-  padding-left: 25px;
-  cursor: pointer;
-  font-size: 0.8rem;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-.checkbox input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-}
-
-.checkmark {
-  position: absolute;
-  top: -3px;
-  left: 0;
-  height: 18px;
-  width: 18px;
-  background-color: hsla(var(--color-raw), 0.2);
-  border-radius: 5px;
-}
-
-.checkbox:hover input ~ .checkmark {
-  background-color: hsla(var(--color-raw), 0.3);
-}
-
-.checkbox input:checked ~ .checkmark {
-  background-color: var(--color);
-}
-
-/* tick mark */
-.checkmark:after {
-  content: '';
-  position: absolute;
-  display: none;
-}
-
-.checkbox input:checked ~ .checkmark:after {
-  display: block;
-}
-
-.checkbox .checkmark:after {
-  left: 7px;
-  top: 4px;
-  width: 5px;
-  height: 10px;
-  border: solid var(--bg-color);
-  border-width: 0 3px 3px 0;
-  transform: rotate(45deg);
-}
-
-.checkbox input:focus ~ .checkmark {
-  box-shadow: 0 0 3px var(--color);
 }
 </style>

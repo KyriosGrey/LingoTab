@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import PrimaryButton from '@/components/shared/PrimaryButton.vue'
+import Skeleton from '@/components/shared/Skeleton.vue'
 import ActionButton from '@/components/shared/WordList/ActionButton.vue'
 import useIgnoredWords from '@/composables/words/useIgnoredWords'
 import useLearnedWords from '@/composables/words/useLearnedWords'
 import useLearningWords from '@/composables/words/useLearningWords'
+import { computed, ref, watch } from 'vue'
 import Translation from './Translation.vue'
 
 const { learnedWords, removeLearnedWords } = useLearnedWords()
@@ -27,6 +29,9 @@ function resetSpoilerState() {
   isSpoilerRevealed.value = false
   spoilerMode.value = Math.random() < 0.5 ? 'translation' : 'word'
 }
+
+const isWordHidden = computed(() => spoilerMode.value === 'word' && !isSpoilerRevealed.value)
+const isTranslationHidden = computed(() => spoilerMode.value === 'translation' && !isSpoilerRevealed.value)
 
 // Reset state when word changes
 watch(randomWord, () => {
@@ -58,7 +63,7 @@ function handleRemove() {
 <template>
   <div v-if="randomWord" class="repetition-block">
     <div class="repetition-header">
-      <h3 class="repetition-title">
+      <h3 class="repetition-title text-body-sm">
         Review Learned Word
       </h3>
       <div class="repetition-actions">
@@ -80,43 +85,27 @@ function handleRemove() {
     </div>
 
     <div class="repetition-content">
-      <template v-if="spoilerMode === 'word'">
-        <button
-          v-if="!isSpoilerRevealed"
-          class="spoiler-btn"
-          @click="isSpoilerRevealed = true"
-        >
-          Show Word
-        </button>
-        <div v-else class="word">
-          {{ randomWord }}
-        </div>
+      <div v-if="isWordHidden" class="spoiler-slot">
+        <Skeleton width="230px" height="32px" />
+        <PrimaryButton class="spoiler-overlay-btn" @click="isSpoilerRevealed = true">
+          <i-ic-round-remove-red-eye /> Show word
+        </PrimaryButton>
+      </div>
+      <div v-else class="word">
+        {{ randomWord }}
+      </div>
 
-        <Translation
-          v-if="randomWord"
-          :text="randomWord"
-          class="word-translation"
-        />
-      </template>
-
-      <template v-else>
-        <div class="word">
-          {{ randomWord }}
-        </div>
-
-        <button
-          v-if="!isSpoilerRevealed"
-          class="spoiler-btn"
-          @click="isSpoilerRevealed = true"
-        >
-          Show Translation
-        </button>
-        <Translation
-          v-if="isSpoilerRevealed && randomWord"
-          :text="randomWord"
-          class="word-translation"
-        />
-      </template>
+      <div v-if="isTranslationHidden" class="spoiler-slot">
+        <Skeleton width="230px" height="24px" />
+        <PrimaryButton class="spoiler-overlay-btn" @click="isSpoilerRevealed = true">
+          <i-ic-round-remove-red-eye /> Show translation
+        </PrimaryButton>
+      </div>
+      <Translation
+        v-else-if="randomWord"
+        :text="randomWord"
+        variant="word"
+      />
     </div>
   </div>
 </template>
@@ -124,92 +113,74 @@ function handleRemove() {
 <style scoped>
 .repetition-block {
   margin-bottom: 20px;
-  padding: 15px 20px;
   border-radius: 10px;
-  background-color: hsla(var(--bg-color-raw), 0.9);
-  backdrop-filter: blur(5px);
-  border: 1px solid hsla(var(--color-raw), 0.2);
+  background-color: var(--surface-color);
+  border: 1px solid var(--overlay-strong);
 }
 
 .repetition-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid hsla(var(--color-raw), 0.15);
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--overlay-weak);
 }
 
 .repetition-title {
   margin: 0;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: hsla(var(--color-raw), 0.8);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  color: var(--text-secondary);
 }
 
 .repetition-actions {
   display: flex;
+  align-items: center;
   gap: 12px;
-  font-size: 1.2rem;
+}
+
+/* explicit px, not font-size: unplugin-icons renders these SVGs at a 1.2em
+   scale, so a font-size rule would come out 20% bigger than the number named */
+.repetition-actions :deep(button svg) {
+  width: 16px;
+  height: 16px;
 }
 
 .repetition-content {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
 }
 
 .word {
-  font-size: 2rem;
+  margin: 0;
+  font-family: var(--font-family-base);
   font-weight: 600;
+  font-size: 32px;
+  line-height: 32px;
+  letter-spacing: -0.05em;
   text-transform: capitalize;
-  margin-bottom: 5px;
+  color: var(--color);
 }
 
-.word-translation {
-  font-size: 1.1rem;
-  font-style: italic;
-  margin-top: 0.25rem;
+/* Figma "hidden word/translation" states — same pattern as Word.vue */
+.spoiler-slot {
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
-.spoiler-btn {
-  display: inline-block;
-  font-style: italic;
-  margin: 10px 0;
-  padding: 5px 12px;
-  border-radius: 4px;
-  background-color: #404040;
-  color: #e6e6e6;
-  font-size: 0.8rem;
-  font-weight: 500;
-  text-transform: capitalize;
-  cursor: pointer;
-  border: none;
-  transition: all 0.2s ease-in-out;
-}
-
-.spoiler-btn:hover {
-  background-color: #505050;
-  transform: translateY(-1px);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.spoiler-btn:active {
-  background-color: #333333;
-  transform: translateY(0);
-  box-shadow: none;
+.spoiler-overlay-btn {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 @media all and (max-width: 450px) {
   .word {
-    font-size: 1.5rem;
-  }
-
-  .repetition-actions {
-    font-size: 1rem;
-    gap: 8px;
+    font-size: 24px;
+    line-height: 28px;
   }
 }
 </style>

@@ -1,0 +1,1616 @@
+// Built-in sentences pack — available out-of-the-box
+// Structure matches the Pack type from packValidator.ts
+import type { Pack } from '@/utils/packValidator'
+
+export const builtInPack: Pack = {
+  "count": 100,
+  "settings": {
+    "level": "Mixed",
+    "grammarFocus": ["Mixed Grammar"],
+    "topics": ["General"],
+    "lengthWords": [4, 15],
+    "targetLang": "hi"
+  },
+  "sentences": [
+    {
+    id: "1",
+    text: "This is my book, and that one is yours.",
+    translation: "यह मेरी किताब है, और वह तुम्हारी है।",
+    hint: {
+      sentenceWithBlank: "This is my book, and that one is [____].",
+      options: [
+        { text: "yours", isCorrect: true, explanation: "यह possessive pronoun का स्वतंत्र रूप है — इसके बाद संज्ञा लगाने की ज़रूरत नहीं होती।" },
+        { text: "your", isCorrect: false, explanation: "इसके बाद संज्ञा आनी ज़रूरी है (your book)।" },
+        { text: "you", isCorrect: false, explanation: "यह personal pronoun है, स्वामित्व नहीं दर्शाता।" }
+      ]
+    },
+    tense: "Present Simple",
+    topic: "General",
+    lengthWords: 9
+  },
+  {
+    id: "2",
+    text: "He gave her his car because hers was broken.",
+    translation: "उसने उसे अपनी कार दे दी, क्योंकि उसकी अपनी कार खराब थी।",
+    hint: {
+      sentenceWithBlank: "He gave her his car because [____] was broken.",
+      options: [
+        { text: "hers", isCorrect: true, explanation: "यह स्वतंत्र possessive pronoun है और पूरे 'her car' की जगह लेता है।" },
+        { text: "her", isCorrect: false, explanation: "इसके बाद संज्ञा चाहिए (her car)।" },
+        { text: "she", isCorrect: false, explanation: "यह कर्ता के रूप में आने वाला personal pronoun है, स्वामित्व नहीं बताता।" }
+      ]
+    },
+    tense: "Past Simple",
+    topic: "General",
+    lengthWords: 9
+  },
+  {
+    id: "3",
+    text: "We did it ourselves without any help.",
+    translation: "हमने यह काम बिना किसी मदद के खुद किया।",
+    hint: {
+      sentenceWithBlank: "We [____] [____] ourselves without any help.",
+      options: [
+        { text: "did it", isCorrect: true, explanation: "'do' का सही past form 'did' है, और उसके बाद कर्म के रूप में 'it' आता है।" },
+        { text: "do it", isCorrect: false, explanation: "यह present form है, जबकि वाक्य बीती हुई बात के बारे में है।" },
+        { text: "made it", isCorrect: false, explanation: "'make' का अर्थ है बनाना, जबकि किसी काम को अंजाम देने के लिए 'do' आता है।" }
+      ]
+    },
+    tense: "Past Simple",
+    topic: "General",
+    lengthWords: 7
+  },
+  {
+    id: "4",
+    text: "Is there anybody in the office?",
+    translation: "क्या ऑफिस में कोई है?",
+    hint: {
+      sentenceWithBlank: "[____] there anybody in the office?",
+      options: [
+        { text: "Is", isCorrect: true, explanation: "'anybody' एकवचन माना जाता है, इसलिए there is/are संरचना में 'is' आएगा।" },
+        { text: "Are", isCorrect: false, explanation: "'are' बहुवचन के साथ प्रयोग होता है।" },
+        { text: "Does", isCorrect: false, explanation: "there is/are संरचना में सहायक क्रिया 'do/does' नहीं लगती।" }
+      ]
+    },
+    tense: "Present Simple",
+    topic: "Workplace",
+    lengthWords: 6
+  },
+  {
+    id: "5",
+    text: "Nobody told me about the changes.",
+    translation: "मुझे बदलावों के बारे में किसी ने नहीं बताया।",
+    hint: {
+      sentenceWithBlank: "Nobody [____] me about the changes.",
+      options: [
+        { text: "told", isCorrect: true, explanation: "Past Simple का सकारात्मक रूप — नकार पहले ही 'Nobody' में मौजूद है।" },
+        { text: "didn't tell", isCorrect: false, explanation: "अंग्रेज़ी में दोहरा नकार नहीं चलता (Nobody + didn't)।" },
+        { text: "said", isCorrect: false, explanation: "'say' के बाद सीधे 'me' नहीं आ सकता; कहना हो तो 'said to me' कहना पड़ेगा।" }
+      ]
+    },
+    tense: "Past Simple",
+    topic: "General",
+    lengthWords: 6
+  },
+  {
+    id: "6",
+    text: "This is the building whose roof was damaged.",
+    translation: "यह वही इमारत है जिसकी छत क्षतिग्रस्त हुई थी।",
+    hint: {
+      sentenceWithBlank: "This is the building [____] roof was damaged.",
+      options: [
+        { text: "whose", isCorrect: true, explanation: "यह relative pronoun स्वामित्व दर्शाता है — जिसका/जिसकी।" },
+        { text: "who", isCorrect: false, explanation: "'who' का अर्थ 'कौन/जो' है, 'जिसका' नहीं।" },
+        { text: "which", isCorrect: false, explanation: "'which' वस्तु की ओर संकेत करता है, पर स्वामित्व नहीं बताता।" }
+      ]
+    },
+    tense: "Passive Voice",
+    topic: "General",
+    lengthWords: 8
+  },
+  {
+    id: "7",
+    text: "Give it to him, not to them.",
+    translation: "यह उसे दो, उन लोगों को नहीं।",
+    hint: {
+      sentenceWithBlank: "Give it to him, not to [____].",
+      options: [
+        { text: "them", isCorrect: true, explanation: "'they' का object form, जो preposition 'to' के बाद आता है।" },
+        { text: "their", isCorrect: false, explanation: "यह possessive रूप है और इसके बाद संज्ञा चाहिए।" },
+        { text: "they", isCorrect: false, explanation: "यह कर्ता रूप है, preposition के बाद नहीं आ सकता।" }
+      ]
+    },
+    tense: "Imperative",
+    topic: "General",
+    lengthWords: 7
+  },
+  {
+    id: "8",
+    text: "Both of them are busy right now.",
+    translation: "वे दोनों इस वक़्त व्यस्त हैं।",
+    hint: {
+      sentenceWithBlank: "[____] of them are busy right now.",
+      options: [
+        { text: "Both", isCorrect: true, explanation: "इसका अर्थ है 'दोनों' — दो में से हर एक।" },
+        { text: "All", isCorrect: false, explanation: "'All' तीन या उससे अधिक लोगों/चीज़ों के लिए प्रयोग होता है।" },
+        { text: "Either", isCorrect: false, explanation: "'Either' का अर्थ 'दोनों में से कोई एक' है और इसके साथ एकवचन क्रिया आती है।" }
+      ]
+    },
+    tense: "Present Simple",
+    topic: "General",
+    lengthWords: 7
+  },
+  {
+    id: "9",
+    text: "Neither of the options is perfect.",
+    translation: "दोनों में से कोई भी विकल्प एकदम सही नहीं है।",
+    hint: {
+      sentenceWithBlank: "[____] of the options is perfect.",
+      options: [
+        { text: "Neither", isCorrect: true, explanation: "इसका अर्थ है 'दो में से कोई भी नहीं'।" },
+        { text: "None", isCorrect: false, explanation: "'None' तब आता है जब विकल्प तीन या उससे ज़्यादा हों।" },
+        { text: "Both", isCorrect: false, explanation: "इसका अर्थ 'दोनों' है और इसके साथ बहुवचन क्रिया (are) चाहिए।" }
+      ]
+    },
+    tense: "Present Simple",
+    topic: "General",
+    lengthWords: 6
+  },
+  {
+    id: "10",
+    text: "Each component has its own function.",
+    translation: "हर एक हिस्से का अपना अलग काम होता है।",
+    hint: {
+      sentenceWithBlank: "Each component [____] its own function.",
+      options: [
+        { text: "has", isCorrect: true, explanation: "'Each' हमेशा एकवचन माना जाता है, इसलिए क्रिया भी एकवचन होगी।" },
+        { text: "have", isCorrect: false, explanation: "'have' बहुवचन कर्ता के साथ आता है।" },
+        { text: "having", isCorrect: false, explanation: "यह -ing रूप है; यहाँ वाक्य की मुख्य क्रिया चाहिए।" }
+      ]
+    },
+    tense: "Present Simple",
+    topic: "General",
+    lengthWords: 6
+  },
+  {
+    id: "11",
+    text: "She usually goes to work by bus, but today she is driving.",
+    translation: "वह आमतौर पर बस से काम पर जाती है, लेकिन आज वह गाड़ी चला रही है।",
+    hint: {
+      sentenceWithBlank: "She usually goes to work by bus, but today she [____] [____].",
+      options: [
+        { text: "is driving", isCorrect: true, explanation: "Present Continuous उस अस्थायी काम को दिखाता है जो आज हो रहा है।" },
+        { text: "drives", isCorrect: false, explanation: "Present Simple नियमित आदत के लिए है (usually), आज की बात के लिए नहीं।" },
+        { text: "driving", isCorrect: false, explanation: "सहायक क्रिया 'is' छूट रही है।" }
+      ]
+    },
+    tense: "Present Continuous",
+    topic: "Daily Life",
+    lengthWords: 12
+  },
+  {
+    id: "12",
+    text: "Water boils at 100 degrees Celsius.",
+    translation: "पानी 100 डिग्री सेल्सियस पर उबलता है।",
+    hint: {
+      sentenceWithBlank: "Water [____] at 100 degrees Celsius.",
+      options: [
+        { text: "boils", isCorrect: true, explanation: "Present Simple सर्वमान्य तथ्यों और प्रकृति के नियमों के लिए प्रयोग होता है।" },
+        { text: "is boiling", isCorrect: false, explanation: "Present Continuous अभी इसी पल हो रही क्रिया बताता है, स्थायी तथ्य नहीं।" },
+        { text: "boiled", isCorrect: false, explanation: "Past Simple बीते समय की क्रिया के लिए है।" }
+      ]
+    },
+    tense: "Present Simple",
+    topic: "Science",
+    lengthWords: 6
+  },
+  {
+    id: "13",
+    text: "Does he know where the keys are?",
+    translation: "क्या उसे पता है कि चाबियाँ कहाँ हैं?",
+    hint: {
+      sentenceWithBlank: "[____] he know where the keys are?",
+      options: [
+        { text: "Does", isCorrect: true, explanation: "he/she/it के साथ Present Simple के प्रश्न में सहायक क्रिया 'does' आती है।" },
+        { text: "Do", isCorrect: false, explanation: "'Do' का प्रयोग I, you, we, they के साथ होता है।" },
+        { text: "Is", isCorrect: false, explanation: "'know' जैसी मुख्य क्रिया के साथ 'be' सहायक क्रिया के रूप में नहीं आती।" }
+      ]
+    },
+    tense: "Present Simple",
+    topic: "Daily Life",
+    lengthWords: 7
+  },
+  {
+    id: "14",
+    text: "Why didn't you call me yesterday?",
+    translation: "तुमने कल मुझे फ़ोन क्यों नहीं किया?",
+    hint: {
+      sentenceWithBlank: "Why [____] you call me yesterday?",
+      options: [
+        { text: "didn't", isCorrect: true, explanation: "Past Simple के नकारात्मक प्रश्न के लिए यही सहायक क्रिया चाहिए।" },
+        { text: "don't", isCorrect: false, explanation: "यह Present Simple का रूप है, जबकि वाक्य में 'yesterday' है।" },
+        { text: "weren't", isCorrect: false, explanation: "मुख्य क्रिया (call) के साथ simple tense में 'be' नहीं लगती।" }
+      ]
+    },
+    tense: "Past Simple",
+    topic: "General",
+    lengthWords: 6
+  },
+  {
+    id: "15",
+    text: "I saw a great movie last weekend.",
+    translation: "मैंने पिछले हफ़्ते के अंत में एक शानदार फ़िल्म देखी।",
+    hint: {
+      sentenceWithBlank: "I [____] a great movie last weekend.",
+      options: [
+        { text: "saw", isCorrect: true, explanation: "'see' की दूसरी फ़ॉर्म — बीते समय की पूरी हो चुकी क्रिया (last weekend) के लिए।" },
+        { text: "see", isCorrect: false, explanation: "यह वर्तमान रूप है और 'last weekend' के साथ मेल नहीं खाता।" },
+        { text: "have seen", isCorrect: false, explanation: "Present Perfect बीते समय के निश्चित संकेत के साथ नहीं आता।" }
+      ]
+    },
+    tense: "Past Simple",
+    topic: "Entertainment",
+    lengthWords: 7
+  },
+  {
+    id: "16",
+    text: "They didn't arrive on time because of the traffic.",
+    translation: "ट्रैफ़िक की वजह से वे समय पर नहीं पहुँचे।",
+    hint: {
+      sentenceWithBlank: "They didn't arrive on time [____] of the traffic.",
+      options: [
+        { text: "because", isCorrect: true, explanation: "'because of' संज्ञा से पहले आकर कारण बताता है।" },
+        { text: "why", isCorrect: false, explanation: "इसका अर्थ 'क्यों' है, यहाँ कारण जोड़ने वाला शब्द चाहिए।" },
+        { text: "as", isCorrect: false, explanation: "'as' के बाद कर्ता और क्रिया वाला पूरा उपवाक्य आना चाहिए।" }
+      ]
+    },
+    tense: "Past Simple",
+    topic: "Travel",
+    lengthWords: 9
+  },
+  {
+    id: "17",
+    text: "What will you do if they reject the plan?",
+    translation: "अगर उन्होंने योजना ठुकरा दी तो तुम क्या करोगे?",
+    hint: {
+      sentenceWithBlank: "What [____] you do if they reject the plan?",
+      options: [
+        { text: "will", isCorrect: true, explanation: "First Conditional में मुख्य उपवाक्य Future Simple में रहता है।" },
+        { text: "would", isCorrect: false, explanation: "'would' दूसरे प्रकार की शर्त (काल्पनिक स्थिति) में आता है।" },
+        { text: "do", isCorrect: false, explanation: "तब वाक्य का अर्थ वर्तमान की आदत बन जाएगा — 'तुम आम तौर पर क्या करते हो?'।" }
+      ]
+    },
+    tense: "Future Simple",
+    topic: "Workplace",
+    lengthWords: 9
+  },
+  {
+    id: "18",
+    text: "I think it will be a sunny day.",
+    translation: "मुझे लगता है कि आज धूप वाला दिन रहेगा।",
+    hint: {
+      sentenceWithBlank: "I think it [____] [____] a sunny day.",
+      options: [
+        { text: "will be", isCorrect: true, explanation: "अनुमान और अपनी राय (I think) बताने के लिए Future Simple आता है।" },
+        { text: "is being", isCorrect: false, explanation: "यह रूप इस समय के अस्थायी व्यवहार को बताता है, यहाँ अर्थ नहीं बैठता।" },
+        { text: "will", isCorrect: false, explanation: "मुख्य क्रिया 'be' छूट रही है।" }
+      ]
+    },
+    tense: "Future Simple",
+    topic: "General",
+    lengthWords: 8
+  },
+  {
+    id: "19",
+    text: "Are you going to update the layout this evening?",
+    translation: "क्या तुम आज शाम लेआउट अपडेट करने वाले हो?",
+    hint: {
+      sentenceWithBlank: "Are you [____] [____] update the layout this evening?",
+      options: [
+        { text: "going to", isCorrect: true, explanation: "'be going to' पहले से बनी योजना और इरादे के लिए प्रयोग होता है।" },
+        { text: "will to", isCorrect: false, explanation: "'will' के बाद 'to' कभी नहीं लगता।" },
+        { text: "want to", isCorrect: false, explanation: "इसका अर्थ 'चाहते हो' होगा, 'करने वाले हो' नहीं।" }
+      ]
+    },
+    tense: "Future (going to)",
+    topic: "IT",
+    lengthWords: 9
+  },
+  {
+    id: "20",
+    text: "The train leaves at 9 PM tonight.",
+    translation: "ट्रेन आज रात 9 बजे रवाना होती है।",
+    hint: {
+      sentenceWithBlank: "The train [____] at 9 PM tonight.",
+      options: [
+        { text: "leaves", isCorrect: true, explanation: "समय-सारणी के अनुसार तय भविष्य के लिए Present Simple इस्तेमाल होता है।" },
+        { text: "will leave", isCorrect: false, explanation: "टाइमटेबल की बात हो तो Present Simple ही स्वाभाविक है।" },
+        { text: "is leaving", isCorrect: false, explanation: "यह रूप निजी तय कार्यक्रम के लिए है, आधिकारिक समय-सारणी के लिए नहीं।" }
+      ]
+    },
+    tense: "Present Simple",
+    topic: "Travel",
+    lengthWords: 7
+  },
+  {
+    id: "21",
+    text: "How often do you practice your English?",
+    translation: "तुम अपनी अंग्रेज़ी का अभ्यास कितनी बार करते हो?",
+    hint: {
+      sentenceWithBlank: "How [____] do you practice your English?",
+      options: [
+        { text: "often", isCorrect: true, explanation: "'How often' से किसी काम की नियमितता या बारंबारता पूछी जाती है।" },
+        { text: "many", isCorrect: false, explanation: "'How many' गिनी जा सकने वाली संज्ञाओं की संख्या पूछता है।" },
+        { text: "much", isCorrect: false, explanation: "'How much' न गिनी जा सकने वाली चीज़ों की मात्रा पूछता है।" }
+      ]
+    },
+    tense: "Present Simple",
+    topic: "Education",
+    lengthWords: 7
+  },
+  {
+    id: "22",
+    text: "Who wrote this article?",
+    translation: "यह लेख किसने लिखा?",
+    hint: {
+      sentenceWithBlank: "Who [____] this article?",
+      options: [
+        { text: "wrote", isCorrect: true, explanation: "जब प्रश्न कर्ता से ही पूछा जाए, तो 'did' नहीं लगता और शब्द-क्रम सीधा रहता है।" },
+        { text: "did write", isCorrect: false, explanation: "कर्ता (Who) से पूछे गए प्रश्न में यह संरचना गलत है।" },
+        { text: "written", isCorrect: false, explanation: "यह तीसरी फ़ॉर्म है, जिसके साथ have/has या was/were चाहिए।" }
+      ]
+    },
+    tense: "Past Simple",
+    topic: "General",
+    lengthWords: 4
+  },
+  {
+    id: "23",
+    text: "Who did you invite to the presentation?",
+    translation: "तुमने प्रेजेंटेशन में किसे बुलाया था?",
+    hint: {
+      sentenceWithBlank: "Who [____] you invite to the presentation?",
+      options: [
+        { text: "did", isCorrect: true, explanation: "यहाँ प्रश्न कर्म से पूछा जा रहा है ('किसे?'), इसलिए Past Simple की सहायक क्रिया 'did' चाहिए।" },
+        { text: "do", isCorrect: false, explanation: "यह वर्तमान का अर्थ देगा — 'तुम आम तौर पर किसे बुलाते हो'।" },
+        { text: "were", isCorrect: false, explanation: "मुख्य क्रिया 'invite' के साथ simple tense में 'be' नहीं आती।" }
+      ]
+    },
+    tense: "Past Simple",
+    topic: "Workplace",
+    lengthWords: 7
+  },
+  {
+    id: "24",
+    text: "There used to be a cinema here.",
+    translation: "पहले यहाँ एक सिनेमाघर हुआ करता था।",
+    hint: {
+      sentenceWithBlank: "There [____] to be a cinema here.",
+      options: [
+        { text: "used", isCorrect: true, explanation: "'used to' उस बात के लिए आता है जो पहले होती थी पर अब नहीं है।" },
+        { text: "use", isCorrect: false, explanation: "यहाँ भूतकाल का रूप 'used' ही चाहिए।" },
+        { text: "was", isCorrect: false, explanation: "'was' के बाद 'to be' जैसा infinitive नहीं आ सकता।" }
+      ]
+    },
+    tense: "Past Habit",
+    topic: "General",
+    lengthWords: 7
+  },
+  {
+    id: "25",
+    text: "I am used to waking up early.",
+    translation: "मुझे जल्दी उठने की आदत है।",
+    hint: {
+      sentenceWithBlank: "I am [____] [____] waking up early.",
+      options: [
+        { text: "used to", isCorrect: true, explanation: "'be used to + V-ing' यानी अब तक बन चुकी आदत।" },
+        { text: "use to", isCorrect: false, explanation: "आदत बताने के लिए 'used' रूप ही सही है।" },
+        { text: "used", isCorrect: false, explanation: "इस संरचना में ज़रूरी preposition 'to' छूट रहा है।" }
+      ]
+    },
+    tense: "Present Habit",
+    topic: "Daily Life",
+    lengthWords: 7
+  },
+    {
+    id: "26",
+    text: "Look! It is snowing outside.",
+    translation: "देखो! बाहर बर्फ़ गिर रही है।",
+    hint: {
+      sentenceWithBlank: "Look! It [____] outside.",
+      options: [
+        { text: "is snowing", isCorrect: true, explanation: "Present Continuous अभी इसी वक़्त हो रही क्रिया बताता है, जिसका संकेत 'Look!' दे रहा है।" },
+        { text: "snows", isCorrect: false, explanation: "Present Simple नियमित बात बताता है, इस पल की नहीं।" },
+        { text: "snowing", isCorrect: false, explanation: "सहायक क्रिया 'is' छूट रही है।" }
+      ]
+    },
+    tense: "Present Continuous",
+    topic: "Nature",
+    lengthWords: 5
+  },
+  {
+    id: "27",
+    text: "What were you doing when I called you?",
+    translation: "जब मैंने तुम्हें फ़ोन किया, तब तुम क्या कर रहे थे?",
+    hint: {
+      sentenceWithBlank: "What [____] you [____] when I called you?",
+      options: [
+        { text: "were / doing", isCorrect: true, explanation: "Past Continuous वह चलती हुई क्रिया बताता है जो बीच में किसी और क्रिया से टूटी (जब मैंने फ़ोन किया)।" },
+        { text: "did / do", isCorrect: false, explanation: "Past Simple एक के बाद एक पूरी हुई क्रियाओं के लिए है, चल रही प्रक्रिया के लिए नहीं।" },
+        { text: "are / doing", isCorrect: false, explanation: "यह वर्तमान का रूप है, जबकि 'when I called' बीते समय की ओर इशारा करता है।" }
+      ]
+    },
+    tense: "Past Continuous",
+    topic: "General",
+    lengthWords: 8
+  },
+  {
+    id: "28",
+    text: "While she was cooking, he was reading a book.",
+    translation: "जब वह खाना बना रही थी, तब वह किताब पढ़ रहा था।",
+    hint: {
+      sentenceWithBlank: "While she [____], he was reading a book.",
+      options: [
+        { text: "was cooking", isCorrect: true, explanation: "बीते समय में साथ-साथ चल रही दो क्रियाओं के लिए Past Continuous आता है।" },
+        { text: "cooked", isCorrect: false, explanation: "Past Simple पूरी हो चुकी क्रिया बताता है, पर 'while' चल रही प्रक्रिया का संकेत देता है।" },
+        { text: "is cooking", isCorrect: false, explanation: "वाक्य का दूसरा हिस्सा भूतकाल में है ('was reading'), इसलिए पहला भी भूतकाल में होना चाहिए।" }
+      ]
+    },
+    tense: "Past Continuous",
+    topic: "Daily Life",
+    lengthWords: 9
+  },
+  {
+    id: "29",
+    text: "I have already finished the first task.",
+    translation: "मैं पहला काम पहले ही पूरा कर चुका हूँ।",
+    hint: {
+      sentenceWithBlank: "I [____] already [____] the first task.",
+      options: [
+        { text: "have / finished", isCorrect: true, explanation: "Present Perfect उस पूरी हो चुकी क्रिया के लिए है जिसका असर अभी भी है ('already' इसका संकेत है)।" },
+        { text: "am / finishing", isCorrect: false, explanation: "यह बताएगा कि काम अब भी चल रहा है, जबकि 'already' पूरा होने की बात कहता है।" },
+        { text: "had / finished", isCorrect: false, explanation: "Past Perfect तब चाहिए जब बीते समय की कोई दूसरी क्रिया भी हो।" }
+      ]
+    },
+    tense: "Present Perfect",
+    topic: "Workplace",
+    lengthWords: 7
+  },
+  {
+    id: "30",
+    text: "Have you ever been to London?",
+    translation: "क्या तुम कभी लंदन गए हो?",
+    hint: {
+      sentenceWithBlank: "Have you [____] been to London?",
+      options: [
+        { text: "ever", isCorrect: true, explanation: "जीवन के अनुभव के बारे में Present Perfect प्रश्नों में 'ever' (कभी) आता है।" },
+        { text: "never", isCorrect: false, explanation: "'never' का अर्थ 'कभी नहीं' है और यह सकारात्मक वाक्य में नकारात्मक अर्थ देता है।" },
+        { text: "yet", isCorrect: false, explanation: "'yet' वाक्य के अंत में लगता है।" }
+      ]
+    },
+    tense: "Present Perfect",
+    topic: "Travel",
+    lengthWords: 6
+  },
+  {
+    id: "31",
+    text: "She has lived here since 2015.",
+    translation: "वह 2015 से यहीं रह रही है।",
+    hint: {
+      sentenceWithBlank: "She has lived here [____] 2015.",
+      options: [
+        { text: "since", isCorrect: true, explanation: "'since' उस निश्चित समय-बिंदु को बताता है जब से क्रिया शुरू हुई।" },
+        { text: "for", isCorrect: false, explanation: "'for' समय की अवधि बताता है (जैसे for 5 years)।" },
+        { text: "from", isCorrect: false, explanation: "'from' के साथ आम तौर पर 'to' या 'until' भी चाहिए होता है।" }
+      ]
+    },
+    tense: "Present Perfect",
+    topic: "General",
+    lengthWords: 6
+  },
+  {
+    id: "32",
+    text: "We haven't seen each other for ages.",
+    translation: "हम एक-दूसरे से बहुत लंबे समय से नहीं मिले।",
+    hint: {
+      sentenceWithBlank: "We [____] each other for ages.",
+      options: [
+        { text: "haven't seen", isCorrect: true, explanation: "Present Perfect दिखाता है कि बीते समय से लेकर अब तक यह क्रिया नहीं हुई ('for ages')।" },
+        { text: "didn't see", isCorrect: false, explanation: "Past Simple बंद हो चुकी अवधि की बात करता है, जबकि यहाँ अवधि अब तक जारी है।" },
+        { text: "don't see", isCorrect: false, explanation: "Present Simple आदत बताता है, 'तब से अब तक' वाली स्थिति नहीं।" }
+      ]
+    },
+    tense: "Present Perfect",
+    topic: "General",
+    lengthWords: 7
+  },
+  {
+    id: "33",
+    text: "When I arrived, the meeting had already started.",
+    translation: "जब मैं पहुँचा, तब तक बैठक शुरू हो चुकी थी।",
+    hint: {
+      sentenceWithBlank: "When I arrived, the meeting [____] already [____].",
+      options: [
+        { text: "had / started", isCorrect: true, explanation: "Past Perfect वह क्रिया बताता है जो बीते समय की दूसरी क्रिया से पहले पूरी हो गई थी ('When I arrived')।" },
+        { text: "has / started", isCorrect: false, explanation: "मुख्य क्रिया भूतकाल में है ('arrived'), इसलिए Present Perfect नहीं चलेगा।" },
+        { text: "was / starting", isCorrect: false, explanation: "इसका अर्थ होगा कि बैठक शुरू ही हो रही थी, जबकि 'already' कहता है कि वह शुरू हो चुकी थी।" }
+      ]
+    },
+    tense: "Past Perfect",
+    topic: "Workplace",
+    lengthWords: 8
+  },
+  {
+    id: "34",
+    text: "He realized he had lost his wallet.",
+    translation: "उसे एहसास हुआ कि उसका बटुआ खो गया है।",
+    hint: {
+      sentenceWithBlank: "He realized he [____] his wallet.",
+      options: [
+        { text: "had lost", isCorrect: true, explanation: "बटुआ खोना 'एहसास होने' से पहले हुआ, इसलिए Past Perfect सही है।" },
+        { text: "loses", isCorrect: false, explanation: "मुख्य उपवाक्य भूतकाल में है, इसलिए Present Simple मेल नहीं खाता।" },
+        { text: "has lost", isCorrect: false, explanation: "Present Perfect वर्तमान से जोड़ता है, पर एहसास ('realized') बीते समय में हुआ था।" }
+      ]
+    },
+    tense: "Past Perfect",
+    topic: "General",
+    lengthWords: 7
+  },
+  {
+    id: "35",
+    text: "By next year, they will have completed the project.",
+    translation: "अगले साल तक वे यह प्रोजेक्ट पूरा कर चुके होंगे।",
+    hint: {
+      sentenceWithBlank: "By next year, they [____] the project.",
+      options: [
+        { text: "will have completed", isCorrect: true, explanation: "Future Perfect उस क्रिया के लिए है जो भविष्य के किसी तय समय तक पूरी हो जाएगी ('By next year')।" },
+        { text: "will complete", isCorrect: false, explanation: "यह भविष्य की सामान्य बात कहता है, पर 'by' के साथ Future Perfect चाहिए।" },
+        { text: "are completing", isCorrect: false, explanation: "यह योजना बताता है, पर किसी समय तक पूरा हो जाने का भाव नहीं देता।" }
+      ]
+    },
+    tense: "Future Perfect",
+    topic: "Workplace",
+    lengthWords: 9
+  },
+  {
+    id: "36",
+    text: "I will be flying to Paris this time tomorrow.",
+    translation: "कल इसी समय मैं पेरिस की उड़ान में रहूँगा।",
+    hint: {
+      sentenceWithBlank: "I [____] to Paris this time tomorrow.",
+      options: [
+        { text: "will be flying", isCorrect: true, explanation: "Future Continuous भविष्य के किसी निश्चित पल पर चल रही क्रिया बताता है ('this time tomorrow')।" },
+        { text: "will fly", isCorrect: false, explanation: "Future Simple सिर्फ़ तथ्य या फ़ैसला बताता है, किसी पल की चलती हुई क्रिया नहीं।" },
+        { text: "fly", isCorrect: false, explanation: "Present Simple समय-सारणी के लिए चल सकता है, पर यहाँ ज़ोर उड़ान की प्रक्रिया पर है।" }
+      ]
+    },
+    tense: "Future Continuous",
+    topic: "Travel",
+    lengthWords: 9
+  },
+  {
+    id: "37",
+    text: "This is the best coffee I have ever tasted.",
+    translation: "यह अब तक की सबसे बढ़िया कॉफ़ी है जो मैंने चखी है।",
+    hint: {
+      sentenceWithBlank: "This is the best coffee I have [____] tasted.",
+      options: [
+        { text: "ever", isCorrect: true, explanation: "'ever' जीवन-भर के अनुभव को दिखाता है, खासकर superlative ('the best') के बाद।" },
+        { text: "never", isCorrect: false, explanation: "इससे अर्थ बदलकर 'कभी नहीं चखी' हो जाएगा।" },
+        { text: "already", isCorrect: false, explanation: "'already' का अर्थ 'पहले ही' है, जो 'सबसे बढ़िया' वाले भाव के साथ नहीं बैठता।" }
+      ]
+    },
+    tense: "Present Perfect",
+    topic: "Daily Life",
+    lengthWords: 9
+  },
+  {
+    id: "38",
+    text: "It's the first time I have driven an electric car.",
+    translation: "यह पहली बार है जब मैंने इलेक्ट्रिक कार चलाई है।",
+    hint: {
+      sentenceWithBlank: "It's the first time I [____] an electric car.",
+      options: [
+        { text: "have driven", isCorrect: true, explanation: "'It's the first time...' के बाद हमेशा Present Perfect आता है।" },
+        { text: "drive", isCorrect: false, explanation: "यहाँ अनुभव की बात हो रही है, इसलिए Present Simple नहीं चलेगा।" },
+        { text: "drove", isCorrect: false, explanation: "Past Simple बीत चुकी घटना के लिए है, जबकि यह अनुभव अभी से जुड़ा है।" }
+      ]
+    },
+    tense: "Present Perfect",
+    topic: "General",
+    lengthWords: 10
+  },
+  {
+    id: "39",
+    text: "She was tired because she had worked all night.",
+    translation: "वह थकी हुई थी क्योंकि उसने पूरी रात काम किया था।",
+    hint: {
+      sentenceWithBlank: "She was tired because she [____] all night.",
+      options: [
+        { text: "had worked", isCorrect: true, explanation: "Past Perfect बीते समय की स्थिति ('थकी हुई थी') का पहले घटा कारण बताता है।" },
+        { text: "has worked", isCorrect: false, explanation: "नतीजा भी भूतकाल में है, इसलिए Present Perfect मेल नहीं खाता।" },
+        { text: "worked", isCorrect: false, explanation: "Past Simple चल तो सकता है, पर Past Perfect पहले घटने और कारण के भाव को ज़्यादा साफ़ करता है।" }
+      ]
+    },
+    tense: "Past Perfect",
+    topic: "Daily Life",
+    lengthWords: 9
+  },
+  {
+    id: "40",
+    text: "I had never seen such a beautiful sunset before.",
+    translation: "इससे पहले मैंने इतना सुंदर सूर्यास्त कभी नहीं देखा था।",
+    hint: {
+      sentenceWithBlank: "I [____] seen such a beautiful sunset before.",
+      options: [
+        { text: "had never", isCorrect: true, explanation: "Past Perfect बताता है कि बीते समय के किसी पल तक यह अनुभव नहीं हुआ था।" },
+        { text: "have never", isCorrect: false, explanation: "Present Perfect वर्तमान से जुड़ता है, पर 'before' भूतकाल के किसी पल की ओर इशारा करता है।" },
+        { text: "did never", isCorrect: false, explanation: "यह संरचना ही ग़लत है; और यहाँ तो Past Perfect ही चाहिए।" }
+      ]
+    },
+    tense: "Past Perfect",
+    topic: "Nature",
+    lengthWords: 9
+  },
+  {
+    id: "41",
+    text: "I have been learning English for three years.",
+    translation: "मैं तीन साल से अंग्रेज़ी सीख रहा हूँ।",
+    hint: {
+      sentenceWithBlank: "I [____] English for three years.",
+      options: [
+        { text: "have been learning", isCorrect: true, explanation: "Present Perfect Continuous उस क्रिया की अवधि पर ज़ोर देता है जो पहले शुरू हुई और अब भी जारी है।" },
+        { text: "am learning", isCorrect: false, explanation: "Present Continuous के साथ 'for three years' जैसी अवधि नहीं आती।" },
+        { text: "learn", isCorrect: false, explanation: "Present Simple सामान्य तथ्य बताता है, कुछ समय से चली आ रही प्रक्रिया नहीं।" }
+      ]
+    },
+    tense: "Present Perfect Continuous",
+    topic: "Education",
+    lengthWords: 8
+  },
+  {
+    id: "42",
+    text: "Why are your hands dirty? — I've been fixing my bike.",
+    translation: "तुम्हारे हाथ गंदे क्यों हैं? — मैं अपनी साइकिल ठीक कर रहा था।",
+    hint: {
+      sentenceWithBlank: "Why are your hands dirty? — I've [____] my bike.",
+      options: [
+        { text: "been fixing", isCorrect: true, explanation: "Present Perfect Continuous अभी दिख रहे नतीजे (गंदे हाथ) को अभी-अभी चली प्रक्रिया से जोड़ता है।" },
+        { text: "fixed", isCorrect: false, explanation: "Present Perfect काम पूरा होने पर ज़ोर देता है, पर यहाँ अहम है वह प्रक्रिया जिसके निशान बचे हैं।" },
+        { text: "fixing", isCorrect: false, explanation: "Present Perfect Continuous बनाने के लिए 'been' छूट रहा है।" }
+      ]
+    },
+    tense: "Present Perfect Continuous",
+    topic: "Daily Life",
+    lengthWords: 11
+  },
+  {
+    id: "43",
+    text: "It has been raining all day.",
+    translation: "दिन भर से बारिश हो रही है।",
+    hint: {
+      sentenceWithBlank: "It [____] all day.",
+      options: [
+        { text: "has been raining", isCorrect: true, explanation: "Present Perfect Continuous उस क्रिया के लिए है जो पहले से अब तक लगातार चल रही है ('all day')।" },
+        { text: "is raining", isCorrect: false, explanation: "Present Continuous सिर्फ़ 'इस वक़्त' की बात कहता है, अवधि नहीं बताता।" },
+        { text: "rains", isCorrect: false, explanation: "Present Simple का अर्थ होगा कि आम तौर पर बारिश होती है, दिन भर लगातार नहीं।" }
+      ]
+    },
+    tense: "Present Perfect Continuous",
+    topic: "Nature",
+    lengthWords: 6
+  },
+  {
+    id: "44",
+    text: "She had been waiting for two hours before the bus arrived.",
+    translation: "बस आने से पहले वह दो घंटे से इंतज़ार कर रही थी।",
+    hint: {
+      sentenceWithBlank: "She [____] for two hours before the bus arrived.",
+      options: [
+        { text: "had been waiting", isCorrect: true, explanation: "Past Perfect Continuous बताता है कि बीते समय की किसी घटना से पहले क्रिया कितनी देर चली।" },
+        { text: "has been waiting", isCorrect: false, explanation: "यह रूप वर्तमान से जुड़ता है, जबकि दूसरी क्रिया ('arrived') भूतकाल में है।" },
+        { text: "was waiting", isCorrect: false, explanation: "'for' के साथ अवधि बताते हुए, बीती किसी घटना से पहले की बात हो तो Past Perfect Continuous चाहिए।" }
+      ]
+    },
+    tense: "Past Perfect Continuous",
+    topic: "Travel",
+    lengthWords: 11
+  },
+  {
+    id: "45",
+    text: "They had been living there for five years when the company closed.",
+    translation: "जब कंपनी बंद हुई, तब तक वे पाँच साल से वहीं रह रहे थे।",
+    hint: {
+      sentenceWithBlank: "They [____] there for five years when the company closed.",
+      options: [
+        { text: "had been living", isCorrect: true, explanation: "Past Perfect Continuous दिखाता है कि बीते समय के किसी पल तक क्रिया कितने समय से चल रही थी।" },
+        { text: "were living", isCorrect: false, explanation: "अवधि बताई गई हो ('for five years') तो Past Continuous उपयुक्त नहीं होता।" },
+        { text: "have been living", isCorrect: false, explanation: "घटनाएँ भूतकाल की हैं ('closed'), इसलिए भूतकाल का रूप चाहिए।" }
+      ]
+    },
+    tense: "Past Perfect Continuous",
+    topic: "General",
+    lengthWords: 12
+  },
+  {
+    id: "46",
+    text: "His eyes were red because he had been staring at the screen for hours.",
+    translation: "उसकी आँखें लाल थीं क्योंकि वह घंटों से स्क्रीन पर नज़रें गड़ाए बैठा था।",
+    hint: {
+      sentenceWithBlank: "His eyes were red because he [____] at the screen for hours.",
+      options: [
+        { text: "had been staring", isCorrect: true, explanation: "Past Perfect Continuous उस लंबी प्रक्रिया को बताता है जो बीते समय की स्थिति का कारण बनी।" },
+        { text: "has been staring", isCorrect: false, explanation: "नतीजा भी भूतकाल में है ('were red'), इसलिए भूतकाल का रूप चाहिए।" },
+        { text: "was staring", isCorrect: false, explanation: "Past Continuous में पहले घटने और उससे नतीजा निकलने का भाव नहीं आता।" }
+      ]
+    },
+    tense: "Past Perfect Continuous",
+    topic: "Daily Life",
+    lengthWords: 14
+  },
+  {
+    id: "47",
+    text: "By midnight, I will have been working on this design for ten hours.",
+    translation: "आधी रात तक मुझे इस डिज़ाइन पर काम करते हुए दस घंटे हो चुके होंगे।",
+    hint: {
+      sentenceWithBlank: "By midnight, I [____] on this design for ten hours.",
+      options: [
+        { text: "will have been working", isCorrect: true, explanation: "Future Perfect Continuous बताता है कि भविष्य के किसी पल तक क्रिया कितनी देर से चल रही होगी।" },
+        { text: "will work", isCorrect: false, explanation: "Future Simple भविष्य के किसी पल तक की अवधि नहीं दिखाता।" },
+        { text: "will be working", isCorrect: false, explanation: "यह चल रही क्रिया तो बताता है, पर 'for ten hours' वाली अवधि पर ज़ोर नहीं देता।" }
+      ]
+    },
+    tense: "Future Perfect Continuous",
+    topic: "Workplace",
+    lengthWords: 13
+  },
+  {
+    id: "48",
+    text: "How long have you been looking for a job?",
+    translation: "तुम कब से नौकरी ढूँढ़ रहे हो?",
+    hint: {
+      sentenceWithBlank: "How long [____] you [____] for a job?",
+      options: [
+        { text: "have / been looking", isCorrect: true, explanation: "अब तक जारी क्रिया के बारे में 'How long' वाले प्रश्न में Present Perfect Continuous आता है।" },
+        { text: "are / looking", isCorrect: false, explanation: "यह इस वक़्त की बात पूछता है ('अभी क्या ढूँढ़ रहे हो'), 'कब से' नहीं।" },
+        { text: "do / look", isCorrect: false, explanation: "यह नियमित आदत की बात नहीं है, इसलिए Present Simple ठीक नहीं।" }
+      ]
+    },
+    tense: "Present Perfect Continuous",
+    topic: "General",
+    lengthWords: 9
+  },
+  {
+    id: "49",
+    text: "We had been driving for miles before we realized we were lost.",
+    translation: "कई मील गाड़ी चला लेने के बाद हमें एहसास हुआ कि हम रास्ता भटक गए हैं।",
+    hint: {
+      sentenceWithBlank: "We [____] for miles before we realized we were lost.",
+      options: [
+        { text: "had been driving", isCorrect: true, explanation: "Past Perfect Continuous उस प्रक्रिया के लिए है जो बीती किसी घटना तक चलती रही।" },
+        { text: "have been driving", isCorrect: false, explanation: "वाक्य की सारी घटनाएँ भूतकाल में हैं ('realized', 'were'), इसलिए Present Perfect नहीं चलेगा।" },
+        { text: "were driving", isCorrect: false, explanation: "Past Continuous किसी दूसरी क्रिया से पहले की अवधि और उसके जमा असर पर ज़ोर नहीं देता।" }
+      ]
+    },
+    tense: "Past Perfect Continuous",
+    topic: "Travel",
+    lengthWords: 12
+  },
+  {
+    id: "50",
+    text: "She has been running, so she is out of breath.",
+    translation: "वह दौड़कर आई है, इसलिए उसकी साँस फूली हुई है।",
+    hint: {
+      sentenceWithBlank: "She [____], so she is out of breath.",
+      options: [
+        { text: "has been running", isCorrect: true, explanation: "Present Perfect Continuous अभी की हालत ('out of breath') को हाल की प्रक्रिया से जोड़कर समझाता है।" },
+        { text: "is running", isCorrect: false, explanation: "इसका अर्थ होगा कि वह अभी इसी वक़्त दौड़ रही है।" },
+        { text: "ran", isCorrect: false, explanation: "Past Simple सिर्फ़ तथ्य बताता है; प्रक्रिया और नतीजे का जुड़ाव Present Perfect Continuous बेहतर दिखाता है।" }
+      ]
+    },
+    tense: "Present Perfect Continuous",
+    topic: "General",
+    lengthWords: 10
+  },
+    {
+    id: "51",
+    text: "You must wear a seatbelt while driving.",
+    translation: "गाड़ी चलाते समय सीट बेल्ट लगाना ज़रूरी है।",
+    hint: {
+      sentenceWithBlank: "You [____] wear a seatbelt while driving.",
+      options: [
+        { text: "must", isCorrect: true, explanation: "'must' कड़े नियम या अनिवार्य कर्तव्य को दर्शाता है।" },
+        { text: "have", isCorrect: false, explanation: "'have' के साथ 'to' लगाना ज़रूरी है (have to)।" },
+        { text: "can", isCorrect: false, explanation: "'can' क्षमता बताता है, जबकि यहाँ नियम की बात है।" }
+      ]
+    },
+    tense: "Modal Verbs",
+    topic: "Travel",
+    lengthWords: 7
+  },
+  {
+    id: "52",
+    text: "You don't have to pay for the tickets; they are free.",
+    translation: "तुम्हें टिकट के पैसे देने की ज़रूरत नहीं, वे मुफ़्त हैं।",
+    hint: {
+      sentenceWithBlank: "You [____] pay for the tickets; they are free.",
+      options: [
+        { text: "don't have to", isCorrect: true, explanation: "इसका अर्थ है कि ऐसा करना ज़रूरी नहीं है।" },
+        { text: "mustn't", isCorrect: false, explanation: "'mustn't' सख़्त मनाही बताता है — ऐसा करना मना है।" },
+        { text: "shouldn't", isCorrect: false, explanation: "'shouldn't' सलाह देता है, पर यहाँ बात ज़रूरत न होने की है।" }
+      ]
+    },
+    tense: "Modal Verbs",
+    topic: "General",
+    lengthWords: 11
+  },
+  {
+    id: "53",
+    text: "You shouldn't eat so much fast food.",
+    translation: "तुम्हें इतना ज़्यादा फ़ास्ट फ़ूड नहीं खाना चाहिए।",
+    hint: {
+      sentenceWithBlank: "You [____] eat so much fast food.",
+      options: [
+        { text: "shouldn't", isCorrect: true, explanation: "सलाह देने के लिए 'shouldn't' आता है — ऐसा नहीं करना चाहिए।" },
+        { text: "don't have to", isCorrect: false, explanation: "इसका अर्थ 'ज़रूरी नहीं' है, जो सलाह के भाव से मेल नहीं खाता।" },
+        { text: "can't", isCorrect: false, explanation: "'can't' मनाही या असमर्थता बताता है।" }
+      ]
+    },
+    tense: "Modal Verbs",
+    topic: "Daily Life",
+    lengthWords: 7
+  },
+  {
+    id: "54",
+    text: "He might come to the meeting, but he isn't sure.",
+    translation: "शायद वह बैठक में आए, पर उसे पक्का नहीं पता।",
+    hint: {
+      sentenceWithBlank: "He [____] come to the meeting, but he isn't sure.",
+      options: [
+        { text: "might", isCorrect: true, explanation: "'might' भविष्य की हल्की संभावना दिखाता है।" },
+        { text: "must", isCorrect: false, explanation: "'must' पक्का यक़ीन या अनिवार्यता बताता है।" },
+        { text: "can", isCorrect: false, explanation: "किसी एक भावी घटना की संभावना के लिए आम तौर पर 'can' नहीं आता।" }
+      ]
+    },
+    tense: "Modal Verbs",
+    topic: "Workplace",
+    lengthWords: 10
+  },
+  {
+    id: "55",
+    text: "May I borrow your pen for a moment?",
+    translation: "क्या मैं थोड़ी देर के लिए आपका पेन ले सकता हूँ?",
+    hint: {
+      sentenceWithBlank: "[____] I borrow your pen for a moment?",
+      options: [
+        { text: "May", isCorrect: true, explanation: "'May' विनम्रता से अनुमति माँगने के लिए प्रयोग होता है।" },
+        { text: "Must", isCorrect: false, explanation: "'Must' कर्तव्य बताता है, अनुमति नहीं माँगता।" },
+        { text: "Should", isCorrect: false, explanation: "'Should' सलाह के लिए है — 'क्या मुझे ऐसा करना चाहिए'।" }
+      ]
+    },
+    tense: "Modal Verbs",
+    topic: "General",
+    lengthWords: 8
+  },
+  {
+    id: "56",
+    text: "She can't be at home; I saw her at the office five minutes ago.",
+    translation: "वह घर पर नहीं हो सकती; मैंने उसे पाँच मिनट पहले ऑफिस में देखा था।",
+    hint: {
+      sentenceWithBlank: "She [____] be at home; I saw her at the office five minutes ago.",
+      options: [
+        { text: "can't", isCorrect: true, explanation: "'can't' यह पक्का निष्कर्ष बताता है कि कोई बात संभव ही नहीं है।" },
+        { text: "mustn't", isCorrect: false, explanation: "'mustn't' सख़्त मनाही बताता है, तर्क से निकाला निष्कर्ष नहीं।" },
+        { text: "might not", isCorrect: false, explanation: "'might not' सिर्फ़ हल्की संभावना बताता है, जबकि यहाँ पूरा यक़ीन है।" }
+      ]
+    },
+    tense: "Modal Verbs",
+    topic: "General",
+    lengthWords: 14
+  },
+  {
+    id: "57",
+    text: "He must have forgotten about our appointment.",
+    translation: "लगता है वह हमारी मुलाक़ात के बारे में भूल गया होगा।",
+    hint: {
+      sentenceWithBlank: "He [____] about our appointment.",
+      options: [
+        { text: "must have forgotten", isCorrect: true, explanation: "'must + have + V3' बीते समय की किसी बात के बारे में पक्का अनुमान बताता है।" },
+        { text: "must forget", isCorrect: false, explanation: "यह रूप वर्तमान या भविष्य की बात करता है।" },
+        { text: "should have forgotten", isCorrect: false, explanation: "इसका अर्थ होगा 'उसे भूल जाना चाहिए था'।" }
+      ]
+    },
+    tense: "Modal Verbs",
+    topic: "General",
+    lengthWords: 7
+  },
+  {
+    id: "58",
+    text: "You should have told me the truth earlier.",
+    translation: "तुम्हें मुझे सच पहले ही बता देना चाहिए था।",
+    hint: {
+      sentenceWithBlank: "You [____] me the truth earlier.",
+      options: [
+        { text: "should have told", isCorrect: true, explanation: "'should + have + V3' बीते समय में न किए गए काम पर उलाहना देने के लिए आता है।" },
+        { text: "should tell", isCorrect: false, explanation: "यह रूप वर्तमान या भविष्य से जुड़ा है।" },
+        { text: "must have told", isCorrect: false, explanation: "इसका अर्थ होगा 'तुमने ज़रूर बताया होगा' — यानी पक्का अनुमान।" }
+      ]
+    },
+    tense: "Modal Verbs",
+    topic: "General",
+    lengthWords: 8
+  },
+  {
+    id: "59",
+    text: "I could play the piano when I was a child.",
+    translation: "बचपन में मैं पियानो बजा लेता था।",
+    hint: {
+      sentenceWithBlank: "I [____] play the piano when I was a child.",
+      options: [
+        { text: "could", isCorrect: true, explanation: "'could' 'can' का भूतकाल रूप है और बीते समय की योग्यता बताता है।" },
+        { text: "can", isCorrect: false, explanation: "'can' वर्तमान की क्षमता बताता है।" },
+        { text: "must", isCorrect: false, explanation: "'must' कर्तव्य बताता है, हुनर या क्षमता नहीं।" }
+      ]
+    },
+    tense: "Modal Verbs",
+    topic: "General",
+    lengthWords: 10
+  },
+  {
+    id: "60",
+    text: "We had better leave now before it gets dark.",
+    translation: "अंधेरा होने से पहले हमें अभी निकल जाना चाहिए।",
+    hint: {
+      sentenceWithBlank: "We [____] leave now before it gets dark.",
+      options: [
+        { text: "had better", isCorrect: true, explanation: "'had better' ज़ोरदार सलाह या चेतावनी देने के लिए आता है।" },
+        { text: "would rather", isCorrect: false, explanation: "'would rather' पसंद बताता है — 'मैं इसके बजाय यह करना पसंद करूँगा'।" },
+        { text: "should to", isCorrect: false, explanation: "'should' के बाद 'to' कभी नहीं लगता।" }
+      ]
+    },
+    tense: "Modal Verbs",
+    topic: "General",
+    lengthWords: 9
+  },
+  {
+    id: "61",
+    text: "If you heat ice, it melts.",
+    translation: "अगर बर्फ़ को गर्म करो, तो वह पिघल जाती है।",
+    hint: {
+      sentenceWithBlank: "If you heat ice, it [____].",
+      options: [
+        { text: "melts", isCorrect: true, explanation: "Zero Conditional (सर्वमान्य तथ्य) में दोनों हिस्सों में Present Simple आता है।" },
+        { text: "will melt", isCorrect: false, explanation: "वैज्ञानिक तथ्यों के लिए Future नहीं, Present Simple चाहिए।" },
+        { text: "melted", isCorrect: false, explanation: "यहाँ भूतकाल का रूप नहीं बैठता।" }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "Science",
+    lengthWords: 6
+  },
+  {
+    id: "62",
+    text: "If I have time tonight, I will call you.",
+    translation: "अगर आज रात मेरे पास समय हुआ, तो मैं तुम्हें फ़ोन करूँगा।",
+    hint: {
+      sentenceWithBlank: "If I [____] time tonight, I [____] you.",
+      options: [
+        { text: "have / will call", isCorrect: true, explanation: "First Conditional: शर्त वाले हिस्से में Present Simple और नतीजे में Future Simple।" },
+        { text: "will have / call", isCorrect: false, explanation: "'if' वाले हिस्से में 'will' नहीं आता।" },
+        { text: "had / would call", isCorrect: false, explanation: "यह Second Conditional है, जो काल्पनिक स्थिति के लिए है; यहाँ शर्त असली है।" }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "General",
+    lengthWords: 9
+  },
+  {
+    id: "63",
+    text: "Unless you study hard, you won't pass the exam.",
+    translation: "अगर तुमने मन लगाकर नहीं पढ़ा, तो परीक्षा पास नहीं कर पाओगे।",
+    hint: {
+      sentenceWithBlank: "[____] you study hard, you won't pass the exam.",
+      options: [
+        { text: "Unless", isCorrect: true, explanation: "'Unless' का अर्थ 'अगर नहीं' (if not) होता है, यानी नकार इसी में शामिल है।" },
+        { text: "If", isCorrect: false, explanation: "'If' लगाने पर अर्थ बनेगा 'अगर तुम पढ़ोगे तो पास नहीं होगे', जो बेतुका है।" },
+        { text: "Without", isCorrect: false, explanation: "'Without' preposition है, इसके बाद संज्ञा या V-ing आना चाहिए।" }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "Education",
+    lengthWords: 9
+  },
+  {
+    id: "64",
+    text: "As soon as I arrive, I will let you know.",
+    translation: "मैं पहुँचते ही तुम्हें बता दूँगा।",
+    hint: {
+      sentenceWithBlank: "[____] I arrive, I will let you know.",
+      options: [
+        { text: "As soon as", isCorrect: true, explanation: "'As soon as' (जैसे ही) वाले समय-उपवाक्य में Present Simple आता है।" },
+        { text: "Until", isCorrect: false, explanation: "'Until' का अर्थ 'जब तक' है, जिससे वाक्य का मतलब बदल जाएगा।" },
+        { text: "While", isCorrect: false, explanation: "'While' साथ-साथ चलती हुई लंबी क्रियाओं के लिए आता है।" }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "General",
+    lengthWords: 10
+  },
+  {
+    id: "65",
+    text: "If I won the lottery, I would buy a house by the sea.",
+    translation: "अगर मेरी लॉटरी लग जाए, तो मैं समुद्र किनारे एक घर ख़रीदूँ।",
+    hint: {
+      sentenceWithBlank: "If I [____] the lottery, I [____] a house by the sea.",
+      options: [
+        { text: "won / would buy", isCorrect: true, explanation: "Second Conditional: शर्त Past Simple में (won) और नतीजा 'would + V1' में।" },
+        { text: "win / would buy", isCorrect: false, explanation: "'win' वर्तमान रूप है, जो मुख्य उपवाक्य के 'would' से मेल नहीं खाता।" },
+        { text: "won / will buy", isCorrect: false, explanation: "शर्त में Past Simple हो तो नतीजे में 'would' आता है, 'will' नहीं।" }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "General",
+    lengthWords: 13
+  },
+  {
+    id: "66",
+    text: "What would you do if you were in my shoes?",
+    translation: "मेरी जगह होते तो तुम क्या करते?",
+    hint: {
+      sentenceWithBlank: "What [____] if you [____] in my shoes?",
+      options: [
+        { text: "would you do / were", isCorrect: true, explanation: "Second Conditional: प्रश्न में 'would + V1', और शर्त में हर कर्ता के साथ 'were'।" },
+        { text: "will you do / are", isCorrect: false, explanation: "यह First Conditional है, जबकि 'in my shoes' काल्पनिक स्थिति बताता है।" },
+        { text: "do you do / was", isCorrect: false, explanation: "दूसरे प्रकार की शर्त के लिए यह संरचना व्याकरण की दृष्टि से ग़लत है।" }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "General",
+    lengthWords: 10
+  },
+  {
+    id: "67",
+    text: "If I had more free time, I would take up photography.",
+    translation: "अगर मेरे पास और खाली समय होता, तो मैं फ़ोटोग्राफ़ी सीखता।",
+    hint: {
+      sentenceWithBlank: "If I [____] more free time, I [____] take up photography.",
+      options: [
+        { text: "had / would", isCorrect: true, explanation: "Second Conditional: वर्तमान की काल्पनिक शर्त (had) और उसका नतीजा (would)।" },
+        { text: "have / will", isCorrect: false, explanation: "यह असली शर्त बताता है, जबकि यहाँ स्थिति काल्पनिक है।" },
+        { text: "had had / would have", isCorrect: false, explanation: "यह Third Conditional है, जो बीते समय से जुड़ा होता है।" }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "General",
+    lengthWords: 11
+  },
+  {
+    id: "68",
+    text: "If we had left earlier, we wouldn't have missed the flight.",
+    translation: "अगर हम जल्दी निकल गए होते, तो हमारी फ़्लाइट न छूटती।",
+    hint: {
+      sentenceWithBlank: "If we [____] earlier, we [____] the flight.",
+      options: [
+        { text: "had left / wouldn't have missed", isCorrect: true, explanation: "Third Conditional: बीते समय की काल्पनिक शर्त (Past Perfect) और बीते समय का नतीजा (would have + V3)।" },
+        { text: "left / wouldn't miss", isCorrect: false, explanation: "यह Second Conditional है, जो वर्तमान से जुड़ा है, बीत चुकी घटना से नहीं।" },
+        { text: "had left / wouldn't miss", isCorrect: false, explanation: "यह मिश्रित रूप है; यहाँ दोनों क्रियाएँ भूतकाल की हैं, इसलिए यह ठीक नहीं बैठता।" }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "Travel",
+    lengthWords: 11
+  },
+  {
+    id: "69",
+    text: "I wouldn't have known about the project if you hadn't told me.",
+    translation: "अगर तुमने मुझे न बताया होता, तो मुझे इस प्रोजेक्ट के बारे में पता ही न चलता।",
+    hint: {
+      sentenceWithBlank: "I wouldn't [____] about the project if you hadn't told me.",
+      options: [
+        { text: "have known", isCorrect: true, explanation: "Third Conditional में बीते समय की बात के लिए मुख्य उपवाक्य 'would have + V3' से बनता है।" },
+        { text: "know", isCorrect: false, explanation: "'wouldn't know' वर्तमान की काल्पनिक स्थिति बताता।" },
+        { text: "knew", isCorrect: false, explanation: "'would have' के बाद तीसरी फ़ॉर्म (known) आती है, दूसरी नहीं।" }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "General",
+    lengthWords: 12
+  },
+  {
+    id: "70",
+    text: "If I had studied harder at university, I would have a better job now.",
+    translation: "अगर मैंने यूनिवर्सिटी में और मेहनत से पढ़ाई की होती, तो आज मेरी नौकरी बेहतर होती।",
+    hint: {
+      sentenceWithBlank: "If I [____] harder at university, I [____] a better job now.",
+      options: [
+        { text: "had studied / would have", isCorrect: true, explanation: "Mixed Conditional: शर्त बीते समय की (Past Perfect) और नतीजा वर्तमान का (would + V1)।" },
+        { text: "studied / would have", isCorrect: false, explanation: "यूनिवर्सिटी की पढ़ाई बीत चुकी है, इसलिए Past Perfect चाहिए।" },
+        { text: "had studied / would have had", isCorrect: false, explanation: "नतीजा अभी से जुड़ा है ('now'), इसलिए 'would have' सही है, 'would have had' नहीं।" }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "Education",
+    lengthWords: 14
+  },
+  {
+    id: "71",
+    text: "If he spoke French, he would have translated that document yesterday.",
+    translation: "अगर उसे फ़्रेंच आती, तो वह कल वह दस्तावेज़ अनुवाद कर देता।",
+    hint: {
+      sentenceWithBlank: "If he [____] French, he [____] that document yesterday.",
+      options: [
+        { text: "spoke / would have translated", isCorrect: true, explanation: "Mixed Conditional: शर्त हमेशा से जुड़ी स्थिति है (Past Simple), पर नतीजा बीते समय का (would have + V3)।" },
+        { text: "had spoken / would translate", isCorrect: false, explanation: "भाषा जानना एक स्थायी बात है, जबकि अनुवाद कल होना था।" },
+        { text: "spoke / would translate", isCorrect: false, explanation: "अनुवाद की बात कल की है ('yesterday'), इसलिए 'would have + V3' चाहिए।" }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "Workplace",
+    lengthWords: 11
+  },
+  {
+    id: "72",
+    text: "I wish I had more money.",
+    translation: "काश मेरे पास और पैसे होते।",
+    hint: {
+      sentenceWithBlank: "I [____] I [____] more money.",
+      options: [
+        { text: "wish / had", isCorrect: true, explanation: "'I wish + Past Simple' वर्तमान की स्थिति पर अफ़सोस जताता है।" },
+        { text: "wish / have", isCorrect: false, explanation: "'I wish' के बाद वर्तमान की बात के लिए Past Simple लगता है।" },
+        { text: "hope / had", isCorrect: false, explanation: "'hope' के बाद असली वर्तमान या भविष्य का रूप आता है।" }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "General",
+    lengthWords: 6
+  },
+  {
+    id: "73",
+    text: "I wish you wouldn't make so much noise.",
+    translation: "काश तुम इतना शोर न मचाते।",
+    hint: {
+      sentenceWithBlank: "I wish you [____] make so much noise.",
+      options: [
+        { text: "wouldn't", isCorrect: true, explanation: "'I wish + would/wouldn't' किसी के मौजूदा व्यवहार से होने वाली खीझ दिखाता है।" },
+        { text: "don't", isCorrect: false, explanation: "'I wish' के बाद Present Simple नहीं आता।" },
+        { text: "didn't", isCorrect: false, explanation: "'didn't' चल सकता है, पर दूसरे के व्यवहार पर झुंझलाहट 'wouldn't' से बेहतर झलकती है।" }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "General",
+    lengthWords: 8
+  },
+  {
+    id: "74",
+    text: "If only I hadn't said that to her yesterday.",
+    translation: "काश मैंने कल उससे वह बात न कही होती।",
+    hint: {
+      sentenceWithBlank: "If [____] I [____] said that to her yesterday.",
+      options: [
+        { text: "only / hadn't", isCorrect: true, explanation: "'If only + Past Perfect' बीते समय को लेकर गहरा पछतावा जताता है।" },
+        { text: "only / didn't", isCorrect: false, explanation: "बात कल की है, इसलिए Past Simple नहीं, Past Perfect चाहिए।" },
+        { text: "just / haven't", isCorrect: false, explanation: "'If just' चलन में नहीं है, और 'haven't' (Present Perfect) कल की बात के लिए सही नहीं।" }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "General",
+    lengthWords: 9
+  },
+  {
+    id: "75",
+    text: "It's time we went home.",
+    translation: "अब हमें घर चलना चाहिए।",
+    hint: {
+      sentenceWithBlank: "It's time we [____] home.",
+      options: [
+        { text: "went", isCorrect: true, explanation: "'It's time' के बाद कर्ता आए तो क्रिया Past Simple में रखी जाती है।" },
+        { text: "go", isCorrect: false, explanation: "'It's time + कर्ता' वाली संरचना में क्रिया की पहली फ़ॉर्म नहीं आती।" },
+        { text: "are going", isCorrect: false, explanation: "यहाँ Present Continuous का प्रयोग नहीं होता।" }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "General",
+    lengthWords: 5
+  },
+    {
+    "id": "76",
+    "text": "This house was built in 1920.",
+    "translation": "यह घर 1920 में बनाया गया था।",
+    "hint": {
+      "sentenceWithBlank": "This house [____] in 1920.",
+      "options": [
+        { "text": "was built", "isCorrect": true, "explanation": "Past Simple Passive तब आता है जब बीते समय में किसी वस्तु पर कोई काम किया गया हो।" },
+        { "text": "built", "isCorrect": false, "explanation": "घर ने खुद को नहीं बनाया, इसलिए यहाँ passive रूप चाहिए।" },
+        { "text": "is built", "isCorrect": false, "explanation": "काम बीते समय में हुआ (1920 में), इसलिए भूतकाल का रूप चाहिए।" }
+      ]
+    },
+    "tense": "Passive Voice",
+    "topic": "General",
+    "lengthWords": 6
+  },
+  {
+    "id": "77",
+    "text": "The interface is being redesigned at the moment.",
+    "translation": "इंटरफ़ेस को इस समय नए सिरे से डिज़ाइन किया जा रहा है।",
+    "hint": {
+      "sentenceWithBlank": "The interface [____] at the moment.",
+      "options": [
+        { "text": "is being redesigned", "isCorrect": true, "explanation": "Present Continuous Passive उस काम के लिए है जो अभी इसी वक़्त हो रहा है (at the moment)।" },
+        { "text": "is redesigned", "isCorrect": false, "explanation": "Present Simple Passive नियमित रूप से होने वाले काम को बताता है, इस पल के काम को नहीं।" },
+        { "text": "has been redesigned", "isCorrect": false, "explanation": "यह Present Perfect Passive है, जो काम पूरा हो जाने की बात कहता है।" }
+      ]
+    },
+    "tense": "Passive Voice",
+    "topic": "IT",
+    "lengthWords": 8
+  },
+  {
+    "id": "78",
+    "text": "The new software has just been installed.",
+    "translation": "नया सॉफ़्टवेयर अभी-अभी इंस्टॉल किया गया है।",
+    "hint": {
+      "sentenceWithBlank": "The new software [____].",
+      "options": [
+        { "text": "has just been installed", "isCorrect": true, "explanation": "अभी-अभी पूरे हुए काम के लिए Present Perfect Passive आता है ('just' के साथ)।" },
+        { "text": "has just installed", "isCorrect": false, "explanation": "सॉफ़्टवेयर खुद को इंस्टॉल नहीं कर सकता, इसलिए passive रूप चाहिए।" },
+        { "text": "was just installed", "isCorrect": false, "explanation": "'just' के साथ आम तौर पर Present Perfect चलता है, Past Simple नहीं।" }
+      ]
+    },
+    "tense": "Passive Voice",
+    "topic": "IT",
+    "lengthWords": 7
+  },
+  {
+    "id": "79",
+    "text": "English is spoken all over the world.",
+    "translation": "अंग्रेज़ी पूरी दुनिया में बोली जाती है।",
+    "hint": {
+      "sentenceWithBlank": "English [____] all over the world.",
+      "options": [
+        { "text": "is spoken", "isCorrect": true, "explanation": "सर्वमान्य तथ्य बताने के लिए Present Simple Passive आता है।" },
+        { "text": "is speaking", "isCorrect": false, "explanation": "भाषा खुद नहीं बोलती, इसलिए passive रूप चाहिए।" },
+        { "text": "spoke", "isCorrect": false, "explanation": "यह भूतकाल का active रूप है।" }
+      ]
+    },
+    "tense": "Passive Voice",
+    "topic": "General",
+    "lengthWords": 7
+  },
+  {
+    "id": "80",
+    "text": "The letters will be sent tomorrow morning.",
+    "translation": "चिट्ठियाँ कल सुबह भेजी जाएँगी।",
+    "hint": {
+      "sentenceWithBlank": "The letters [____] tomorrow morning.",
+      "options": [
+        { "text": "will be sent", "isCorrect": true, "explanation": "भविष्य में किसी वस्तु पर होने वाले काम के लिए Future Simple Passive आता है।" },
+        { "text": "will send", "isCorrect": false, "explanation": "चिट्ठियाँ खुद को नहीं भेज सकतीं, इसलिए passive चाहिए।" },
+        { "text": "are sent", "isCorrect": false, "explanation": "यह Present Simple Passive है, जबकि काम कल होगा।" }
+      ]
+    },
+    "tense": "Passive Voice",
+    "topic": "General",
+    "lengthWords": 7
+  },
+  {
+    "id": "81",
+    "text": "I need to get my hair cut this week.",
+    "translation": "मुझे इस हफ़्ते बाल कटवाने हैं।",
+    "hint": {
+      "sentenceWithBlank": "I need to [____] this week.",
+      "options": [
+        { "text": "get my hair cut", "isCorrect": true, "explanation": "'get/have something done' का मतलब है कि काम कोई और आपके लिए करता है।" },
+        { "text": "cut my hair", "isCorrect": false, "explanation": "इसका अर्थ होगा कि आप अपने बाल खुद काटेंगे।" },
+        { "text": "get cutting my hair", "isCorrect": false, "explanation": "यह संरचना व्याकरण की दृष्टि से ग़लत है।" }
+      ]
+    },
+    "tense": "Passive Voice",
+    "topic": "Daily Life",
+    "lengthWords": 9
+  },
+  {
+    "id": "82",
+    "text": "He had his laptop stolen while he was traveling.",
+    "translation": "सफ़र के दौरान उसका लैपटॉप चोरी हो गया।",
+    "hint": {
+      "sentenceWithBlank": "He [____] while he was traveling.",
+      "options": [
+        { "text": "had his laptop stolen", "isCorrect": true, "explanation": "'have something done' का प्रयोग ऐसे बुरे अनुभव के लिए भी होता है जो किसी और की वजह से हुआ (किसी ने उसका लैपटॉप चुरा लिया)।" },
+        { "text": "stole his laptop", "isCorrect": false, "explanation": "इसका अर्थ होगा कि उसने खुद अपना लैपटॉप चुराया।" },
+        { "text": "had stolen his laptop", "isCorrect": false, "explanation": "यह active का Past Perfect है — यानी उसने पहले अपना लैपटॉप चुरा लिया था।" }
+      ]
+    },
+    "tense": "Passive Voice",
+    "topic": "General",
+    "lengthWords": 9
+  },
+  {
+    "id": "83",
+    "text": "She was made to clean the whole room by her mother.",
+    "translation": "उसकी माँ ने उससे पूरा कमरा साफ़ करवाया।",
+    "hint": {
+      "sentenceWithBlank": "She [____] to clean the whole room by her mother.",
+      "options": [
+        { "text": "was made", "isCorrect": true, "explanation": "'make' (मजबूर करना) जब passive में आता है, तो अगली क्रिया से पहले 'to' लगाना ज़रूरी हो जाता है।" },
+        { "text": "made", "isCorrect": false, "explanation": "Active रूप से अर्थ बदल जाएगा — 'उसने किसी से करवाया'।" },
+        { "text": "has made", "isCorrect": false, "explanation": "यह भी active है, बस Present Perfect में।" }
+      ]
+    },
+    "tense": "Passive Voice",
+    "topic": "Daily Life",
+    "lengthWords": 11
+  },
+  {
+    "id": "84",
+    "text": "He is said to be the richest man in the city.",
+    "translation": "कहा जाता है कि वह शहर का सबसे अमीर आदमी है।",
+    "hint": {
+      "sentenceWithBlank": "He [____] to be the richest man in the city.",
+      "options": [
+        { "text": "is said", "isCorrect": true, "explanation": "'is said to' वाली passive संरचना का अर्थ है 'कहा जाता है कि वह...'।" },
+        { "text": "says", "isCorrect": false, "explanation": "इसका अर्थ होगा 'वह कहता है कि वह सबसे अमीर है'।" },
+        { "text": "said", "isCorrect": false, "explanation": "'उसने कहा' — इससे वाक्य की बनावट ही टूट जाती है।" }
+      ]
+    },
+    "tense": "Passive Voice",
+    "topic": "General",
+    "lengthWords": 11
+  },
+  {
+    "id": "85",
+    "text": "It is expected that the prices will drop soon.",
+    "translation": "उम्मीद है कि कीमतें जल्द ही गिरेंगी।",
+    "hint": {
+      "sentenceWithBlank": "[____] that the prices will drop soon.",
+      "options": [
+        { "text": "It is expected", "isCorrect": true, "explanation": "आम राय या उम्मीद जताने के लिए यह अवैयक्तिक passive संरचना प्रयोग होती है।" },
+        { "text": "It expects", "isCorrect": false, "explanation": "'It' खुद कोई उम्मीद नहीं कर सकता, इसलिए passive चाहिए।" },
+        { "text": "They is expected", "isCorrect": false, "explanation": "यह ग़लत है: 'They' के साथ 'are' आता, पर यहाँ अवैयक्तिक 'It' ही चाहिए।" }
+      ]
+    },
+    "tense": "Passive Voice",
+    "topic": "General",
+    "lengthWords": 9
+  },
+  {
+    "id": "86",
+    "text": "He said that he was working on a new project.",
+    "translation": "उसने कहा कि वह एक नए प्रोजेक्ट पर काम कर रहा है।",
+    "hint": {
+      "sentenceWithBlank": "He said that he [____] on a new project.",
+      "options": [
+        { "text": "was working", "isCorrect": true, "explanation": "काल-संगति (sequence of tenses) के नियम से सीधे कथन का Present Continuous, अप्रत्यक्ष कथन में Past Continuous बन जाता है।" },
+        { "text": "is working", "isCorrect": false, "explanation": "मुख्य उपवाक्य भूतकाल में है ('said'), इसलिए आश्रित उपवाक्य भी उसी के अनुसार बदलेगा।" },
+        { "text": "works", "isCorrect": false, "explanation": "यह नियमित काम बताता है और काल-संगति के नियम को तोड़ता है।" }
+      ]
+    },
+    "tense": "Reported Speech",
+    "topic": "Workplace",
+    "lengthWords": 10
+  },
+  {
+    "id": "87",
+    "text": "She told me she had already seen that movie.",
+    "translation": "उसने मुझे बताया कि वह फ़िल्म वह पहले ही देख चुकी है।",
+    "hint": {
+      "sentenceWithBlank": "She [____] me she had already seen that movie.",
+      "options": [
+        { "text": "told", "isCorrect": true, "explanation": "'tell' के बाद सीधे यह बताना पड़ता है कि किससे कहा गया ('me')।" },
+        { "text": "said", "isCorrect": false, "explanation": "'said' के बाद यदि व्यक्ति बताना हो तो 'to' चाहिए: 'said to me'।" },
+        { "text": "spoke", "isCorrect": false, "explanation": "'speak' का अर्थ भाषा बोलना या किसी से बातचीत करना है; इससे अप्रत्यक्ष कथन शुरू नहीं होता।" }
+      ]
+    },
+    "tense": "Reported Speech",
+    "topic": "Entertainment",
+    "lengthWords": 9
+  },
+  {
+    "id": "88",
+    "text": "They said they would help us the following week.",
+    "translation": "उन्होंने कहा कि वे अगले हफ़्ते हमारी मदद करेंगे।",
+    "hint": {
+      "sentenceWithBlank": "They said they [____] help us the following week.",
+      "options": [
+        { "text": "would", "isCorrect": true, "explanation": "काल-संगति में भविष्य का 'will' बदलकर 'would' हो जाता है।" },
+        { "text": "will", "isCorrect": false, "explanation": "मुख्य उपवाक्य भूतकाल में है, इसलिए 'will' रखना नियम का उल्लंघन है।" },
+        { "text": "should", "isCorrect": false, "explanation": "इससे अर्थ 'मदद करनी चाहिए' बन जाएगा, न कि आगे होने वाला काम।" }
+      ]
+    },
+    "tense": "Reported Speech",
+    "topic": "General",
+    "lengthWords": 9
+  },
+  {
+    "id": "89",
+    "text": "He asked me where I lived.",
+    "translation": "उसने मुझसे पूछा कि मैं कहाँ रहता हूँ।",
+    "hint": {
+      "sentenceWithBlank": "He asked me where [____].",
+      "options": [
+        { "text": "I lived", "isCorrect": true, "explanation": "अप्रत्यक्ष प्रश्न में शब्द-क्रम सीधे वाक्य जैसा रहता है और काल भी बदल जाता है।" },
+        { "text": "did I live", "isCorrect": false, "explanation": "यह अप्रत्यक्ष प्रश्न है, सीधा प्रश्न नहीं, इसलिए सहायक क्रिया नहीं लगती।" },
+        { "text": "I live", "isCorrect": false, "explanation": "मुख्य क्रिया भूतकाल में है (asked), इसलिए काल-संगति टूट रही है।" }
+      ]
+    },
+    "tense": "Reported Speech",
+    "topic": "General",
+    "lengthWords": 6
+  },
+  {
+    "id": "90",
+    "text": "She asked if I could help her with the task.",
+    "translation": "उसने पूछा कि क्या मैं उस काम में उसकी मदद कर सकता हूँ।",
+    "hint": {
+      "sentenceWithBlank": "She asked [____] I could help her with the task.",
+      "options": [
+        { "text": "if", "isCorrect": true, "explanation": "जिन प्रश्नों में wh-शब्द न हो, उन्हें अप्रत्यक्ष कथन में 'if' या 'whether' से जोड़ा जाता है।" },
+        { "text": "that", "isCorrect": false, "explanation": "'that' कथनों के लिए आता है, प्रश्नों के लिए नहीं।" },
+        { "text": "can", "isCorrect": false, "explanation": "वाक्य की बनावट के हिसाब से यह यहाँ फ़िट नहीं बैठता।" }
+      ]
+    },
+    "tense": "Reported Speech",
+    "topic": "General",
+    "lengthWords": 10
+  },
+  {
+    "id": "91",
+    "text": "The manager advised me to review the guidelines.",
+    "translation": "मैनेजर ने मुझे दिशा-निर्देश पढ़ लेने की सलाह दी।",
+    "hint": {
+      "sentenceWithBlank": "The manager advised me [____] the guidelines.",
+      "options": [
+        { "text": "to review", "isCorrect": true, "explanation": "'advise', 'ask', 'tell' जैसी क्रियाओं के बाद 'to' वाला infinitive आता है।" },
+        { "text": "reviewing", "isCorrect": false, "explanation": "'advise + व्यक्ति' के बाद V-ing रूप नहीं आता।" },
+        { "text": "review", "isCorrect": false, "explanation": "infinitive के लिए ज़रूरी 'to' छूट रहा है।" }
+      ]
+    },
+    "tense": "Reported Speech",
+    "topic": "Workplace",
+    "lengthWords": 8
+  },
+  {
+    "id": "92",
+    "text": "He denied making that mistake.",
+    "translation": "उसने वह ग़लती करने से इनकार किया।",
+    "hint": {
+      "sentenceWithBlank": "He denied [____] that mistake.",
+      "options": [
+        { "text": "making", "isCorrect": true, "explanation": "'deny' के बाद हमेशा gerund (V-ing) आता है।" },
+        { "text": "to make", "isCorrect": false, "explanation": "'deny' के बाद infinitive का प्रयोग नहीं होता।" },
+        { "text": "make", "isCorrect": false, "explanation": "यह रूप यहाँ व्याकरण की दृष्टि से ग़लत है।" }
+      ]
+    },
+    "tense": "Reported Speech",
+    "topic": "General",
+    "lengthWords": 5
+  },
+  {
+    "id": "93",
+    "text": "She promised not to tell anyone his secret.",
+    "translation": "उसने वादा किया कि वह उसका राज़ किसी को नहीं बताएगी।",
+    "hint": {
+      "sentenceWithBlank": "She promised [____] anyone his secret.",
+      "options": [
+        { "text": "not to tell", "isCorrect": true, "explanation": "infinitive का नकारात्मक रूप 'to' से पहले 'not' लगाकर बनता है।" },
+        { "text": "to not tell", "isCorrect": false, "explanation": "मानक व्याकरण में यह शब्द-क्रम उपयुक्त नहीं माना जाता।" },
+        { "text": "don't tell", "isCorrect": false, "explanation": "यहाँ आदेश नहीं, infinitive चाहिए।" }
+      ]
+    },
+    "tense": "Reported Speech",
+    "topic": "General",
+    "lengthWords": 8
+  },
+  {
+    "id": "94",
+    "text": "Although it was raining, we went for a walk.",
+    "translation": "बारिश हो रही थी, फिर भी हम टहलने निकले।",
+    "hint": {
+      "sentenceWithBlank": "[____] it was raining, we went for a walk.",
+      "options": [
+        { "text": "Although", "isCorrect": true, "explanation": "'although' के बाद कर्ता और क्रिया वाला पूरा उपवाक्य आता है।" },
+        { "text": "Despite", "isCorrect": false, "explanation": "'despite' के बाद संज्ञा या V-ing चाहिए, पूरा वाक्य नहीं (it was raining)।" },
+        { "text": "However", "isCorrect": false, "explanation": "यह आम तौर पर जोड़ने वाले शब्द के रूप में आता है और अल्पविराम से अलग किया जाता है।" }
+      ]
+    },
+    "tense": "Conjunctions",
+    "topic": "General",
+    "lengthWords": 9
+  },
+  {
+    "id": "95",
+    "text": "Despite the heavy traffic, we arrived on time.",
+    "translation": "भारी ट्रैफ़िक के बावजूद हम समय पर पहुँच गए।",
+    "hint": {
+      "sentenceWithBlank": "[____] the heavy traffic, we arrived on time.",
+      "options": [
+        { "text": "Despite", "isCorrect": true, "explanation": "'Despite' (के बावजूद) के बाद संज्ञा या gerund आता है।" },
+        { "text": "Although", "isCorrect": false, "explanation": "'although' के बाद कर्ता और क्रिया वाला पूरा उपवाक्य चाहिए।" },
+        { "text": "In spite", "isCorrect": false, "explanation": "इसके साथ 'of' लगाना ज़रूरी है (In spite of)।" }
+      ]
+    },
+    "tense": "Conjunctions",
+    "topic": "Travel",
+    "lengthWords": 8
+  },
+  {
+    "id": "96",
+    "text": "Seldom have I seen such a beautiful piece of art.",
+    "translation": "मैंने कला का इतना सुंदर नमूना कम ही देखा है।",
+    "hint": {
+      "sentenceWithBlank": "[____] such a beautiful piece of art.",
+      "options": [
+        { "text": "Seldom have I seen", "isCorrect": true, "explanation": "वाक्य के शुरू में seldom जैसे नकारात्मक/सीमित अर्थ वाले क्रिया-विशेषण आने पर inversion (उलटा शब्द-क्रम) ज़रूरी होता है।" },
+        { "text": "Seldom I have seen", "isCorrect": false, "explanation": "शुरुआत में 'seldom' आने पर प्रश्न जैसा शब्द-क्रम चाहिए।" },
+        { "text": "Have I seldom seen", "isCorrect": false, "explanation": "'seldom' को सबसे पहले आना चाहिए।" }
+      ]
+    },
+    "tense": "Inversion",
+    "topic": "General",
+    "lengthWords": 10
+  },
+  {
+    "id": "97",
+    "text": "No sooner had I closed the door than the phone rang.",
+    "translation": "मैंने दरवाज़ा बंद ही किया था कि फ़ोन बज उठा।",
+    "hint": {
+      "sentenceWithBlank": "[____] closed the door than the phone rang.",
+      "options": [
+        { "text": "No sooner had I", "isCorrect": true, "explanation": "'No sooner + inversion (had I) ... than' का अर्थ है 'अभी यह किया ही था कि...'।" },
+        { "text": "No sooner I had", "isCorrect": false, "explanation": "'No sooner' के बाद सहायक क्रिया और कर्ता का क्रम उलटना ज़रूरी है।" },
+        { "text": "As soon as I had", "isCorrect": false, "explanation": "'As soon as' के साथ दूसरे हिस्से में 'than' नहीं आता।" }
+      ]
+    },
+    "tense": "Inversion",
+    "topic": "General",
+    "lengthWords": 11
+  },
+  {
+    "id": "98",
+    "text": "I look forward to hearing from you soon.",
+    "translation": "मुझे जल्द ही आपके जवाब का इंतज़ार रहेगा।",
+    "hint": {
+      "sentenceWithBlank": "I look forward [____] from you soon.",
+      "options": [
+        { "text": "to hearing", "isCorrect": true, "explanation": "'look forward to' में 'to' preposition है, इसलिए उसके बाद gerund (V-ing) आता है।" },
+        { "text": "to hear", "isCorrect": false, "explanation": "यहाँ 'to' infinitive का हिस्सा नहीं, preposition है — इसलिए V-ing चाहिए।" },
+        { "text": "hearing", "isCorrect": false, "explanation": "ज़रूरी preposition 'to' छूट रहा है।" }
+      ]
+    },
+    "tense": "Gerund",
+    "topic": "Workplace",
+    "lengthWords": 8
+  },
+  {
+    "id": "99",
+    "text": "It's no use crying over spilled milk.",
+    "translation": "अब पछताए होत क्या, जब चिड़िया चुग गई खेत। / बिखरे दूध पर रोने से कोई फ़ायदा नहीं।",
+    "hint": {
+      "sentenceWithBlank": "It's no use [____] over spilled milk.",
+      "options": [
+        { "text": "crying", "isCorrect": true, "explanation": "'it's no use' (कोई फ़ायदा नहीं) के बाद हमेशा gerund आता है।" },
+        { "text": "to cry", "isCorrect": false, "explanation": "इस मुहावरे में infinitive का प्रयोग नहीं होता।" },
+        { "text": "cry", "isCorrect": false, "explanation": "यह रूप यहाँ ग़लत है; gerund चाहिए।" }
+      ]
+    },
+    "tense": "Gerund",
+    "topic": "General",
+    "lengthWords": 7
+  },
+  {
+    "id": "100",
+    "text": "Not only did he design the layout, but he also wrote the code.",
+    "translation": "उसने न सिर्फ़ लेआउट डिज़ाइन किया, बल्कि कोड भी लिखा।",
+    "hint": {
+      "sentenceWithBlank": "Not only [____] the layout, but he also wrote the code.",
+      "options": [
+        { "text": "did he design", "isCorrect": true, "explanation": "वाक्य 'Not only' से शुरू हो तो प्रश्न जैसा उलटा शब्द-क्रम (inversion) लगता है।" },
+        { "text": "he designed", "isCorrect": false, "explanation": "शुरुआत में 'Not only' आने पर inversion ज़रूरी है, जो यहाँ नहीं है।" },
+        { "text": "designed he", "isCorrect": false, "explanation": "Inversion सहायक क्रिया 'did' से बनता है, मुख्य क्रिया से नहीं।" }
+      ]
+    },
+    "tense": "Inversion",
+    "topic": "IT",
+    "lengthWords": 13
+  }
+  ]
+}

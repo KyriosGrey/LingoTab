@@ -49,11 +49,11 @@ function handleClose() {
       <div v-if="modelValue" class="overlay" @click.self="handleCloseOnOverlay">
         <div class="modal" :style="{ maxWidth }">
           <div class="modal__header">
-            <div>
-              <h3 v-if="title" class="title">
+            <div class="title-stack">
+              <h3 v-if="title" class="title text-heading-18">
                 {{ title }}
               </h3>
-              <small v-if="subtitle" class="subtitle">{{ subtitle }}</small>
+              <small v-if="subtitle" class="subtitle text-body-sm">{{ subtitle }}</small>
             </div>
 
             <button v-if="showClose" class="close-btn" @click="handleClose">
@@ -96,10 +96,13 @@ function handleClose() {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 95%;
-  padding: 20px;
-  border: 1px solid hsla(var(--color-raw), 0.1);
-  border-radius: 10px;
-  background: var(--bg-color);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+  border: 1px solid var(--overlay-strong);
+  border-radius: 8px;
+  background: var(--surface-color);
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 8px 10px -6px rgba(0, 0, 0, 0.1);
 }
@@ -107,31 +110,37 @@ function handleClose() {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 20px;
+  gap: 16px;
+}
+
+.title-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
 }
 
 .title {
   margin: 0;
-  font-size: 1rem;
+  color: var(--color);
 }
 .subtitle {
   display: inline-block;
-  margin-top: 5px;
-  font-size: 0.75rem;
-  color: hsla(var(--color-raw), 0.5);
+  color: var(--text-secondary);
 }
 
 .close-btn {
   display: inline-flex;
-  padding: 2px;
+  flex-shrink: 0;
+  padding: 6px;
   border: none;
-  font-size: 1rem;
+  font-size: 24px;
   border-radius: 4px;
-  background-color: hsla(var(--color-raw), 0.1);
-  color: hsla(var(--color-raw), 0.4);
+  background-color: var(--overlay-weak);
+  color: var(--color);
   transition: background-color 0.13s ease-in-out;
 }
 .close-btn:hover {
-  background-color: hsla(var(--color-raw), 0.2);
+  background-color: var(--overlay-strong);
 }
 </style>

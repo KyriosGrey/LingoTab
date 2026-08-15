@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref, watch, computed } from 'vue'
+import ActionButton from '@/components/shared/ActionButton.vue'
+import SearchInput from '@/components/shared/SearchInput.vue'
 import Section from '@/options/components/Section.vue'
 import * as storage from '@/utils/storage'
+import { computed, ref, watch } from 'vue'
 
 const props = defineProps<{ modelValue?: string, testing?: boolean }>()
 const emit = defineEmits(['update:modelValue', 'save', 'test'])
@@ -9,7 +11,7 @@ const emit = defineEmits(['update:modelValue', 'save', 'test'])
 const localKey = ref(props.modelValue ?? '')
 const status = ref('')
 
-watch(() => props.modelValue, v => { localKey.value = v ?? '' })
+watch(() => props.modelValue, (v) => { localKey.value = v ?? '' })
 
 function onInput() {
   // Immediately propagate the value to parent so parent can use it (Test/Generate)
@@ -46,7 +48,8 @@ function test() {
 const statusType = computed(() => {
   const sRaw = status.value ?? ''
   const s = sRaw.trim().toLowerCase()
-  if (!s) return ''
+  if (!s)
+    return ''
 
   // Exact mappings for known messages (add new messages here)
   const exactMap: Record<string, 'success' | 'error'> = {
@@ -57,11 +60,14 @@ const statusType = computed(() => {
     'connection failed or invalid response': 'error',
   }
 
-  if (exactMap[s]) return exactMap[s]
+  if (exactMap[s])
+    return exactMap[s]
 
   // Fallback keyword checks
-  if (s.includes('ok') || s.includes('success') || s.includes('saved') || s.includes('done')) return 'success'
-  if (s.includes('error') || s.includes('fail') || s.includes('invalid')) return 'error'
+  if (s.includes('ok') || s.includes('success') || s.includes('saved') || s.includes('done'))
+    return 'success'
+  if (s.includes('error') || s.includes('fail') || s.includes('invalid'))
+    return 'error'
 
   return ''
 })
@@ -74,25 +80,27 @@ const statusType = computed(() => {
   >
     <div class="input-with-actions">
       <!-- show key as plain text so user sees what they paste -->
-      <input
+      <SearchInput
         v-model="localKey"
-        @input="onInput"
         class="input"
-        type="text"
         placeholder="Paste your Groq API key"
-        aria-label="Groq API Key"
+        @update:model-value="onInput"
       />
       <div class="actions">
-        <button class="btn" @click="save" :disabled="!localKey">Save</button>
-        <button class="btn ghost" @click="clearKey" :disabled="!localKey">Clear</button>
-        <button class="btn" @click="test" :disabled="!localKey || testing">
+        <ActionButton :disabled="!localKey" @click="save">
+          Save
+        </ActionButton>
+        <ActionButton :disabled="!localKey" @click="clearKey">
+          Clear
+        </ActionButton>
+        <ActionButton :disabled="!localKey || testing" @click="test">
           {{ testing ? 'Testing…' : 'Test connection' }}
-        </button>
+        </ActionButton>
       </div>
     </div>
 
     <!-- small instructional note under the field/buttons — same visual tone as Section description -->
-    <div class="hint">
+    <div class="hint text-body-sm">
       Where to get a key:
       <ol>
         <li>Visit the Groq account page: <a href="https://console.groq.com" target="_blank" rel="noopener">console.groq.com</a></li>
@@ -103,7 +111,7 @@ const statusType = computed(() => {
     </div>
 
     <!-- status badge (button-like look, single-state color depending on message) -->
-    <div v-if="status" :class="['status-badge', statusType]">
+    <div v-if="status" class="status-badge text-body-sm" :class="[statusType]">
       {{ status }}
     </div>
   </Section>
@@ -118,38 +126,13 @@ const statusType = computed(() => {
   width: 100%;
 }
 
-/* input styling aligned with WordList filter field */
 .input {
   flex: 1 1 auto;
-  background-color: hsla(var(--color-raw), 0.15);
-  border: none;
-  border-radius: 4px;
-  padding: 6px 10px;
-  color: var(--color);
-  font-size: 1rem;
-  outline: none;
-  transition: background-color ease-in-out 0.13s, box-shadow 0.13s;
-}
-
-.input:focus,
-.input:hover:not(:disabled) {
-  background-color: hsla(var(--color-raw), 0.2);
-  box-shadow: 0 0 0 3px hsla(var(--color-raw), 0.06);
-}
-
-.input::placeholder {
-  color: hsla(var(--color-raw), 0.6);
-}
-
-.input[disabled] {
-  cursor: not-allowed;
-  opacity: 0.5;
 }
 
 /* small instructional hint under the field/buttons — same visual tone as description */
 .hint {
-  color: hsla(var(--color-raw), 0.7);
-  font-size: 0.75rem;
+  color: var(--text-secondary);
   margin-top: 8px;
   line-height: 1.3;
 }
@@ -170,26 +153,6 @@ const statusType = computed(() => {
   gap: 8px;
 }
 
-/* ensure buttons align with input height */
-/* Button baseline */
-.btn {
-  padding: 8px 10px;
-  border-radius: 4px;
-  font-weight: 700;
-  font-size: 0.8rem;
-  border: none;
-  color: var(--color);
-  background-color: hsla(var(--color-raw), 0.08);
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.13s ease-in-out, box-shadow 0.13s;
-  line-height: 1;
-}
-.btn[disabled] { opacity: 0.5; pointer-events: none; }
-.btn.ghost { background: transparent; border: 1px solid hsla(var(--color-raw), 0.08); }
-
 /* status badge: button-like static element, no hover states */
 .status-badge {
   display: inline-flex;
@@ -197,31 +160,24 @@ const statusType = computed(() => {
   justify-content: center;
   padding: 8px 10px;
   border-radius: 4px;
-  font-weight: 700;     /* same as buttons */
-  font-size: 0.8rem;    /* same as buttons */
   color: var(--color);
   line-height: 1;
   user-select: none;
   pointer-events: none;  /* non-interactive */
   margin-top: 8px;
-  background: hsla(var(--color-raw), 0.04);
+  background: var(--overlay-weak);
   border: 1px solid transparent;
 }
 
 /* success state — green translucent */
 .status-badge.success {
-  background: rgba(46, 204, 113, 0.12);  /* soft green */
-  border-color: rgba(46, 204, 113, 0.22);
-  color: var(--color);
+  background: hsla(150, 42.6%, 50.8%, 0.12);
+  border-color: hsla(150, 42.6%, 50.8%, 0.3);
 }
 
 /* error/other state — red translucent */
 .status-badge.error {
-  background: rgba(204, 67, 67, 0.10); /* soft red */
-  border-color: rgba(204, 67, 67, 0.18);
-  color: var(--color);
+  background: hsla(0, 78.7%, 63.1%, 0.1);
+  border-color: hsla(0, 78.7%, 63.1%, 0.25);
 }
-
-/* muted text */
-.muted { color: hsla(var(--color-raw), 0.6); margin-top:6px; }
 </style>

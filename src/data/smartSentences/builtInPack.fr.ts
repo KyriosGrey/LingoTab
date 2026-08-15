@@ -1,0 +1,1616 @@
+// Built-in sentences pack — available out-of-the-box
+// Structure matches the Pack type from packValidator.ts
+import type { Pack } from '@/utils/packValidator'
+
+export const builtInPack: Pack = {
+  "count": 100,
+  "settings": {
+    "level": "Mixed",
+    "grammarFocus": ["Mixed Grammar"],
+    "topics": ["General"],
+    "lengthWords": [4, 15],
+    "targetLang": "fr"
+  },
+  "sentences": [
+    {
+    id: "1",
+    text: "This is my book, and that one is yours.",
+    translation: "C'est mon livre, et celui-là est le tien.",
+    hint: {
+      sentenceWithBlank: "This is my book, and that one is [____].",
+      options: [
+        { text: "yours", isCorrect: true, explanation: "Forme absolue du pronom possessif : elle s'emploie seule, sans nom après elle." },
+        { text: "your", isCorrect: false, explanation: "« Your » est un adjectif possessif : il doit être suivi d'un nom (your book)." },
+        { text: "you", isCorrect: false, explanation: "« You » est un pronom personnel : il n'exprime pas la possession." }
+      ]
+    },
+    tense: "Present Simple",
+    topic: "General",
+    lengthWords: 9
+  },
+  {
+    id: "2",
+    text: "He gave her his car because hers was broken.",
+    translation: "Il lui a donné sa voiture parce que la sienne était en panne.",
+    hint: {
+      sentenceWithBlank: "He gave her his car because [____] was broken.",
+      options: [
+        { text: "hers", isCorrect: true, explanation: "Forme absolue du pronom possessif : « hers » remplace « her car »." },
+        { text: "her", isCorrect: false, explanation: "« Her » est un adjectif possessif : il doit être suivi d'un nom (her car)." },
+        { text: "she", isCorrect: false, explanation: "« She » est un pronom personnel sujet : il n'exprime pas l'appartenance." }
+      ]
+    },
+    tense: "Past Simple",
+    topic: "General",
+    lengthWords: 9
+  },
+  {
+    id: "3",
+    text: "We did it ourselves without any help.",
+    translation: "Nous l'avons fait nous-mêmes, sans aucune aide.",
+    hint: {
+      sentenceWithBlank: "We [____] [____] ourselves without any help.",
+      options: [
+        { text: "did it", isCorrect: true, explanation: "« Did » est la forme passée de « do », suivie du pronom complément « it »." },
+        { text: "do it", isCorrect: false, explanation: "Verbe au présent, alors que la phrase parle du passé." },
+        { text: "made it", isCorrect: false, explanation: "« Make » signifie « fabriquer, créer », tandis que « do » exprime le fait d'accomplir une action." }
+      ]
+    },
+    tense: "Past Simple",
+    topic: "General",
+    lengthWords: 7
+  },
+  {
+    id: "4",
+    text: "Is there anybody in the office?",
+    translation: "Y a-t-il quelqu'un au bureau ?",
+    hint: {
+      sentenceWithBlank: "[____] there anybody in the office?",
+      options: [
+        { text: "Is", isCorrect: true, explanation: "Dans la structure there is / there are, « anybody » compte comme un singulier : on emploie « is »." },
+        { text: "Are", isCorrect: false, explanation: "« Are » s'emploie avec un sujet au pluriel." },
+        { text: "Does", isCorrect: false, explanation: "« Does » ne s'utilise pas dans la structure there is / there are." }
+      ]
+    },
+    tense: "Present Simple",
+    topic: "Workplace",
+    lengthWords: 6
+  },
+  {
+    id: "5",
+    text: "Nobody told me about the changes.",
+    translation: "Personne ne m'a parlé des changements.",
+    hint: {
+      sentenceWithBlank: "Nobody [____] me about the changes.",
+      options: [
+        { text: "told", isCorrect: true, explanation: "Le verbe reste à la forme affirmative au prétérit : la négation est déjà contenue dans « nobody »." },
+        { text: "didn't tell", isCorrect: false, explanation: "L'anglais n'admet pas la double négation (nobody + didn't)." },
+        { text: "said", isCorrect: false, explanation: "« Say » ne se construit pas avec un complément de personne sans préposition : il faudrait « said to me »." }
+      ]
+    },
+    tense: "Past Simple",
+    topic: "General",
+    lengthWords: 6
+  },
+  {
+    id: "6",
+    text: "This is the building whose roof was damaged.",
+    translation: "C'est le bâtiment dont le toit a été endommagé.",
+    hint: {
+      sentenceWithBlank: "This is the building [____] roof was damaged.",
+      options: [
+        { text: "whose", isCorrect: true, explanation: "Pronom relatif exprimant l'appartenance (dont le, dont la, dont les)." },
+        { text: "who", isCorrect: false, explanation: "« Who » signifie « qui » et désigne une personne, sans idée de possession." },
+        { text: "which", isCorrect: false, explanation: "« Which » (qui, que) n'exprime pas l'appartenance." }
+      ]
+    },
+    tense: "Passive Voice",
+    topic: "General",
+    lengthWords: 8
+  },
+  {
+    id: "7",
+    text: "Give it to him, not to them.",
+    translation: "Donne-le-lui, pas à eux.",
+    hint: {
+      sentenceWithBlank: "Give it to him, not to [____].",
+      options: [
+        { text: "them", isCorrect: true, explanation: "Forme complément du pronom « they » (à eux, à elles)." },
+        { text: "their", isCorrect: false, explanation: "« Their » est un adjectif possessif : il doit être suivi d'un nom." },
+        { text: "they", isCorrect: false, explanation: "« They » est la forme sujet : elle ne peut pas suivre une préposition." }
+      ]
+    },
+    tense: "Imperative",
+    topic: "General",
+    lengthWords: 7
+  },
+  {
+    id: "8",
+    text: "Both of them are busy right now.",
+    translation: "Ils sont tous les deux occupés en ce moment.",
+    hint: {
+      sentenceWithBlank: "[____] of them are busy right now.",
+      options: [
+        { text: "Both", isCorrect: true, explanation: "« Both » signifie « les deux, tous les deux »." },
+        { text: "All", isCorrect: false, explanation: "« All » s'emploie à partir de trois personnes ou de trois objets." },
+        { text: "Either", isCorrect: false, explanation: "« Either » (l'un ou l'autre des deux) demande un verbe au singulier." }
+      ]
+    },
+    tense: "Present Simple",
+    topic: "General",
+    lengthWords: 7
+  },
+  {
+    id: "9",
+    text: "Neither of the options is perfect.",
+    translation: "Aucune des deux options n'est parfaite.",
+    hint: {
+      sentenceWithBlank: "[____] of the options is perfect.",
+      options: [
+        { text: "Neither", isCorrect: true, explanation: "« Neither » signifie « ni l'un ni l'autre », en parlant de deux éléments." },
+        { text: "None", isCorrect: false, explanation: "« None » s'emploie quand il y a trois éléments ou plus." },
+        { text: "Both", isCorrect: false, explanation: "« Both » signifie « les deux » et exige un verbe au pluriel (are)." }
+      ]
+    },
+    tense: "Present Simple",
+    topic: "General",
+    lengthWords: 6
+  },
+  {
+    id: "10",
+    text: "Each component has its own function.",
+    translation: "Chaque composant a sa propre fonction.",
+    hint: {
+      sentenceWithBlank: "Each component [____] its own function.",
+      options: [
+        { text: "has", isCorrect: true, explanation: "« Each » (chaque) est toujours suivi d'un verbe au singulier : has." },
+        { text: "have", isCorrect: false, explanation: "« Have » s'emploie avec un sujet au pluriel." },
+        { text: "having", isCorrect: false, explanation: "« Having » est une forme en -ing : ici il faut un verbe conjugué." }
+      ]
+    },
+    tense: "Present Simple",
+    topic: "General",
+    lengthWords: 6
+  },
+  {
+    id: "11",
+    text: "She usually goes to work by bus, but today she is driving.",
+    translation: "D'habitude, elle va au travail en bus, mais aujourd'hui elle prend la voiture.",
+    hint: {
+      sentenceWithBlank: "She usually goes to work by bus, but today she [____] [____].",
+      options: [
+        { text: "is driving", isCorrect: true, explanation: "Le présent en be + -ing marque une action temporaire, valable seulement aujourd'hui." },
+        { text: "drives", isCorrect: false, explanation: "Le présent simple sert aux actions régulières (usually), pas à l'exception d'aujourd'hui." },
+        { text: "driving", isCorrect: false, explanation: "Il manque l'auxiliaire « is » devant la forme en -ing." }
+      ]
+    },
+    tense: "Present Continuous",
+    topic: "Daily Life",
+    lengthWords: 12
+  },
+  {
+    id: "12",
+    text: "Water boils at 100 degrees Celsius.",
+    translation: "L'eau bout à 100 degrés Celsius.",
+    hint: {
+      sentenceWithBlank: "Water [____] at 100 degrees Celsius.",
+      options: [
+        { text: "boils", isCorrect: true, explanation: "Le présent simple s'emploie pour les vérités générales et les lois de la nature." },
+        { text: "is boiling", isCorrect: false, explanation: "Le présent en be + -ing décrit ce qui se passe en ce moment, et non un fait général." },
+        { text: "boiled", isCorrect: false, explanation: "Le prétérit renvoie à une action passée." }
+      ]
+    },
+    tense: "Present Simple",
+    topic: "Science",
+    lengthWords: 6
+  },
+  {
+    id: "13",
+    text: "Does he know where the keys are?",
+    translation: "Est-ce qu'il sait où sont les clés ?",
+    hint: {
+      sentenceWithBlank: "[____] he know where the keys are?",
+      options: [
+        { text: "Does", isCorrect: true, explanation: "« Does » est l'auxiliaire du présent simple à la 3e personne du singulier (he, she, it)." },
+        { text: "Do", isCorrect: false, explanation: "« Do » s'emploie avec I, you, we, they." },
+        { text: "Is", isCorrect: false, explanation: "Le verbe « be » ne sert pas d'auxiliaire avec un verbe lexical comme « know »." }
+      ]
+    },
+    tense: "Present Simple",
+    topic: "Daily Life",
+    lengthWords: 7
+  },
+  {
+    id: "14",
+    text: "Why didn't you call me yesterday?",
+    translation: "Pourquoi ne m'as-tu pas appelé hier ?",
+    hint: {
+      sentenceWithBlank: "Why [____] you call me yesterday?",
+      options: [
+        { text: "didn't", isCorrect: true, explanation: "« Didn't » est l'auxiliaire de la question négative au prétérit." },
+        { text: "don't", isCorrect: false, explanation: "« Don't » relève du présent, alors que la phrase contient le repère passé « yesterday »." },
+        { text: "weren't", isCorrect: false, explanation: "Le verbe « be » ne s'emploie pas comme auxiliaire avec un verbe lexical (call) aux temps simples." }
+      ]
+    },
+    tense: "Past Simple",
+    topic: "General",
+    lengthWords: 6
+  },
+  {
+    id: "15",
+    text: "I saw a great movie last weekend.",
+    translation: "J'ai vu un très bon film le week-end dernier.",
+    hint: {
+      sentenceWithBlank: "I [____] a great movie last weekend.",
+      options: [
+        { text: "saw", isCorrect: true, explanation: "Prétérit (forme passée de « see ») pour une action terminée dans le passé (last weekend)." },
+        { text: "see", isCorrect: false, explanation: "« See » est au présent, ce qui est incompatible avec « last weekend »." },
+        { text: "have seen", isCorrect: false, explanation: "Le present perfect ne s'emploie pas avec un repère temporel passé précis." }
+      ]
+    },
+    tense: "Past Simple",
+    topic: "Entertainment",
+    lengthWords: 7
+  },
+  {
+    id: "16",
+    text: "They didn't arrive on time because of the traffic.",
+    translation: "Ils ne sont pas arrivés à l'heure à cause des embouteillages.",
+    hint: {
+      sentenceWithBlank: "They didn't arrive on time [____] of the traffic.",
+      options: [
+        { text: "because", isCorrect: true, explanation: "« Because of » (à cause de) se place devant un nom." },
+        { text: "why", isCorrect: false, explanation: "« Why » signifie « pourquoi » et sert à poser une question." },
+        { text: "as", isCorrect: false, explanation: "« As » (puisque, comme) doit être suivi d'une proposition complète avec sujet et verbe." }
+      ]
+    },
+    tense: "Past Simple",
+    topic: "Travel",
+    lengthWords: 9
+  },
+  {
+    id: "17",
+    text: "What will you do if they reject the plan?",
+    translation: "Que feras-tu s'ils rejettent le projet ?",
+    hint: {
+      sentenceWithBlank: "What [____] you do if they reject the plan?",
+      options: [
+        { text: "will", isCorrect: true, explanation: "Futur avec « will » dans la principale d'une conditionnelle de type 1 (hypothèse réelle)." },
+        { text: "would", isCorrect: false, explanation: "« Would » appartient à la conditionnelle de type 2 (hypothèse irréelle)." },
+        { text: "do", isCorrect: false, explanation: "« Do » donnerait une question au présent : « qu'est-ce que tu fais en général ? »." }
+      ]
+    },
+    tense: "Future Simple",
+    topic: "Workplace",
+    lengthWords: 9
+  },
+  {
+    id: "18",
+    text: "I think it will be a sunny day.",
+    translation: "Je pense que la journée sera ensoleillée.",
+    hint: {
+      sentenceWithBlank: "I think it [____] [____] a sunny day.",
+      options: [
+        { text: "will be", isCorrect: true, explanation: "Le futur avec « will » exprime une prédiction ou une opinion personnelle (I think)." },
+        { text: "is being", isCorrect: false, explanation: "« Is being » exprimerait un comportement passager, ce qui n'a pas de sens ici." },
+        { text: "will", isCorrect: false, explanation: "Il manque le verbe « be » après « will »." }
+      ]
+    },
+    tense: "Future Simple",
+    topic: "General",
+    lengthWords: 8
+  },
+  {
+    id: "19",
+    text: "Are you going to update the layout this evening?",
+    translation: "Est-ce que tu vas mettre à jour la maquette ce soir ?",
+    hint: {
+      sentenceWithBlank: "Are you [____] [____] update the layout this evening?",
+      options: [
+        { text: "going to", isCorrect: true, explanation: "La structure « be going to » exprime un projet ou une intention." },
+        { text: "will to", isCorrect: false, explanation: "Après « will », on ne met jamais la particule « to »." },
+        { text: "want to", isCorrect: false, explanation: "« Want to » signifierait « est-ce que tu veux… », et non « est-ce que tu comptes… »." }
+      ]
+    },
+    tense: "Future (going to)",
+    topic: "IT",
+    lengthWords: 9
+  },
+  {
+    id: "20",
+    text: "The train leaves at 9 PM tonight.",
+    translation: "Le train part à 21 h ce soir.",
+    hint: {
+      sentenceWithBlank: "The train [____] at 9 PM tonight.",
+      options: [
+        { text: "leaves", isCorrect: true, explanation: "On emploie le présent simple pour les horaires de transport, même quand ils renvoient au futur." },
+        { text: "will leave", isCorrect: false, explanation: "Pour un horaire officiel, l'anglais préfère le présent simple." },
+        { text: "is leaving", isCorrect: false, explanation: "Le présent en be + -ing s'emploie pour un rendez-vous personnel, pas pour un horaire." }
+      ]
+    },
+    tense: "Present Simple",
+    topic: "Travel",
+    lengthWords: 7
+  },
+  {
+    id: "21",
+    text: "How often do you practice your English?",
+    translation: "À quelle fréquence pratiques-tu ton anglais ?",
+    hint: {
+      sentenceWithBlank: "How [____] do you practice your English?",
+      options: [
+        { text: "often", isCorrect: true, explanation: "« How often » (à quelle fréquence) interroge sur la régularité d'une action." },
+        { text: "many", isCorrect: false, explanation: "« How many » signifie « combien » devant un nom dénombrable." },
+        { text: "much", isCorrect: false, explanation: "« How much » signifie « combien » devant un nom indénombrable." }
+      ]
+    },
+    tense: "Present Simple",
+    topic: "Education",
+    lengthWords: 7
+  },
+  {
+    id: "22",
+    text: "Who wrote this article?",
+    translation: "Qui a écrit cet article ?",
+    hint: {
+      sentenceWithBlank: "Who [____] this article?",
+      options: [
+        { text: "wrote", isCorrect: true, explanation: "Quand « who » est sujet, l'auxiliaire « did » disparaît : on garde l'ordre des mots d'une phrase affirmative." },
+        { text: "did write", isCorrect: false, explanation: "Construction incorrecte dans une question portant sur le sujet (who)." },
+        { text: "written", isCorrect: false, explanation: "« Written » est le participe passé : il exige l'auxiliaire have / has." }
+      ]
+    },
+    tense: "Past Simple",
+    topic: "General",
+    lengthWords: 4
+  },
+  {
+    id: "23",
+    text: "Who did you invite to the presentation?",
+    translation: "Qui as-tu invité à la présentation ?",
+    hint: {
+      sentenceWithBlank: "Who [____] you invite to the presentation?",
+      options: [
+        { text: "did", isCorrect: true, explanation: "« Did » est l'auxiliaire du prétérit ; ici la question porte sur le complément (qui as-tu invité ?)." },
+        { text: "do", isCorrect: false, explanation: "« Do » renvoie au présent : qui invites-tu d'habitude ?" },
+        { text: "were", isCorrect: false, explanation: "Le verbe « be » ne s'emploie pas comme auxiliaire avec le verbe « invite » à un temps simple." }
+      ]
+    },
+    tense: "Past Simple",
+    topic: "Workplace",
+    lengthWords: 7
+  },
+  {
+    id: "24",
+    text: "There used to be a cinema here.",
+    translation: "Il y avait autrefois un cinéma ici.",
+    hint: {
+      sentenceWithBlank: "There [____] to be a cinema here.",
+      options: [
+        { text: "used", isCorrect: true, explanation: "La structure « used to » décrit ce qui existait autrefois et n'existe plus." },
+        { text: "use", isCorrect: false, explanation: "Il faut la forme passée « used »." },
+        { text: "was", isCorrect: false, explanation: "Après « was », on ne peut pas placer l'infinitif « to be »." }
+      ]
+    },
+    tense: "Past Habit",
+    topic: "General",
+    lengthWords: 7
+  },
+  {
+    id: "25",
+    text: "I am used to waking up early.",
+    translation: "J'ai l'habitude de me lever tôt.",
+    hint: {
+      sentenceWithBlank: "I am [____] [____] waking up early.",
+      options: [
+        { text: "used to", isCorrect: true, explanation: "La structure « be used to + V-ing » exprime une habitude désormais acquise." },
+        { text: "use to", isCorrect: false, explanation: "Pour exprimer l'habitude, il faut la forme « used »." },
+        { text: "used", isCorrect: false, explanation: "Il manque la préposition « to », obligatoire dans cette structure." }
+      ]
+    },
+    tense: "Present Habit",
+    topic: "Daily Life",
+    lengthWords: 7
+  },
+    {
+    id: "26",
+    text: "Look! It is snowing outside.",
+    translation: "Regarde ! Il neige dehors.",
+    hint: {
+      sentenceWithBlank: "Look! It [____] outside.",
+      options: [
+        { text: "is snowing", isCorrect: true, explanation: "Le présent en be + -ing décrit une action en cours au moment où l'on parle (d'où « Look! »)." },
+        { text: "snows", isCorrect: false, explanation: "Le présent simple exprimerait une action habituelle, pas ce qui se passe maintenant." },
+        { text: "snowing", isCorrect: false, explanation: "Il manque l'auxiliaire « is »." }
+      ]
+    },
+    tense: "Present Continuous",
+    topic: "Nature",
+    lengthWords: 5
+  },
+  {
+    id: "27",
+    text: "What were you doing when I called you?",
+    translation: "Qu'est-ce que tu faisais quand je t'ai appelé ?",
+    hint: {
+      sentenceWithBlank: "What [____] you [____] when I called you?",
+      options: [
+        { text: "were / doing", isCorrect: true, explanation: "Le prétérit en be + -ing décrit une action en cours dans le passé, interrompue par une autre (when I called)." },
+        { text: "did / do", isCorrect: false, explanation: "Le prétérit simple exprime des actions ponctuelles et achevées, pas un processus en cours." },
+        { text: "are / doing", isCorrect: false, explanation: "Le présent en be + -ing renvoie au présent, alors qu'il s'agit ici du passé (when I called)." }
+      ]
+    },
+    tense: "Past Continuous",
+    topic: "General",
+    lengthWords: 8
+  },
+  {
+    id: "28",
+    text: "While she was cooking, he was reading a book.",
+    translation: "Pendant qu'elle cuisinait, il lisait un livre.",
+    hint: {
+      sentenceWithBlank: "While she [____], he was reading a book.",
+      options: [
+        { text: "was cooking", isCorrect: true, explanation: "Le prétérit en be + -ing s'emploie pour deux actions qui se déroulent en parallèle dans le passé." },
+        { text: "cooked", isCorrect: false, explanation: "Le prétérit simple marque une action achevée, alors que « while » insiste sur le déroulement." },
+        { text: "is cooking", isCorrect: false, explanation: "La seconde partie de la phrase est au passé (was reading) : la première doit l'être aussi." }
+      ]
+    },
+    tense: "Past Continuous",
+    topic: "Daily Life",
+    lengthWords: 9
+  },
+  {
+    id: "29",
+    text: "I have already finished the first task.",
+    translation: "J'ai déjà terminé la première tâche.",
+    hint: {
+      sentenceWithBlank: "I [____] already [____] the first task.",
+      options: [
+        { text: "have / finished", isCorrect: true, explanation: "Le present perfect s'emploie pour une action achevée dont le résultat compte maintenant (marqueur « already »)." },
+        { text: "am / finishing", isCorrect: false, explanation: "Cette forme indiquerait que l'action est encore en cours, alors que « already » signale qu'elle est finie." },
+        { text: "had / finished", isCorrect: false, explanation: "Le past perfect suppose une autre action passée servant de repère." }
+      ]
+    },
+    tense: "Present Perfect",
+    topic: "Workplace",
+    lengthWords: 7
+  },
+  {
+    id: "30",
+    text: "Have you ever been to London?",
+    translation: "Es-tu déjà allé à Londres ?",
+    hint: {
+      sentenceWithBlank: "Have you [____] been to London?",
+      options: [
+        { text: "ever", isCorrect: true, explanation: "« Ever » s'emploie souvent dans les questions au present perfect pour parler d'une expérience de vie." },
+        { text: "never", isCorrect: false, explanation: "« Never » signifie « jamais » et s'emploie dans une phrase affirmative à sens négatif." },
+        { text: "yet", isCorrect: false, explanation: "« Yet » se place en fin de phrase." }
+      ]
+    },
+    tense: "Present Perfect",
+    topic: "Travel",
+    lengthWords: 6
+  },
+  {
+    id: "31",
+    text: "She has lived here since 2015.",
+    translation: "Elle habite ici depuis 2015.",
+    hint: {
+      sentenceWithBlank: "She has lived here [____] 2015.",
+      options: [
+        { text: "since", isCorrect: true, explanation: "« Since » introduit le point de départ précis de l'action dans le passé." },
+        { text: "for", isCorrect: false, explanation: "« For » introduit une durée (for 5 years)." },
+        { text: "from", isCorrect: false, explanation: "« From » appelle normalement un second repère : from… to / until." }
+      ]
+    },
+    tense: "Present Perfect",
+    topic: "General",
+    lengthWords: 6
+  },
+  {
+    id: "32",
+    text: "We haven't seen each other for ages.",
+    translation: "Cela fait une éternité que nous ne nous sommes pas vus.",
+    hint: {
+      sentenceWithBlank: "We [____] each other for ages.",
+      options: [
+        { text: "haven't seen", isCorrect: true, explanation: "Le present perfect exprime l'absence d'action depuis le passé jusqu'à maintenant (for ages)." },
+        { text: "didn't see", isCorrect: false, explanation: "Le prétérit renvoie à une période terminée, alors qu'ici la période dure encore." },
+        { text: "don't see", isCorrect: false, explanation: "Le présent simple décrit une habitude, pas un bilan depuis un moment donné." }
+      ]
+    },
+    tense: "Present Perfect",
+    topic: "General",
+    lengthWords: 7
+  },
+  {
+    id: "33",
+    text: "When I arrived, the meeting had already started.",
+    translation: "Quand je suis arrivé, la réunion avait déjà commencé.",
+    hint: {
+      sentenceWithBlank: "When I arrived, the meeting [____] already [____].",
+      options: [
+        { text: "had / started", isCorrect: true, explanation: "Le past perfect marque une action antérieure à une autre action passée (when I arrived)." },
+        { text: "has / started", isCorrect: false, explanation: "Le present perfect est exclu, car l'action de repère est au passé (arrived)." },
+        { text: "was / starting", isCorrect: false, explanation: "Cette forme signifierait que la réunion était en train de commencer, alors que « already » indique qu'elle avait déjà commencé." }
+      ]
+    },
+    tense: "Past Perfect",
+    topic: "Workplace",
+    lengthWords: 8
+  },
+  {
+    id: "34",
+    text: "He realized he had lost his wallet.",
+    translation: "Il s'est rendu compte qu'il avait perdu son portefeuille.",
+    hint: {
+      sentenceWithBlank: "He realized he [____] his wallet.",
+      options: [
+        { text: "had lost", isCorrect: true, explanation: "Le past perfect exprime l'action antérieure (perdre) à une autre action passée (se rendre compte)." },
+        { text: "loses", isCorrect: false, explanation: "Le présent ne convient pas : la principale est au passé." },
+        { text: "has lost", isCorrect: false, explanation: "Le present perfect fait le lien avec le présent, mais la prise de conscience (realized) appartient au passé." }
+      ]
+    },
+    tense: "Past Perfect",
+    topic: "General",
+    lengthWords: 7
+  },
+  {
+    id: "35",
+    text: "By next year, they will have completed the project.",
+    translation: "D'ici l'année prochaine, ils auront terminé le projet.",
+    hint: {
+      sentenceWithBlank: "By next year, they [____] the project.",
+      options: [
+        { text: "will have completed", isCorrect: true, explanation: "Le futur antérieur (will have + participe passé) indique une action achevée avant un moment futur (by next year)." },
+        { text: "will complete", isCorrect: false, explanation: "Cette forme énonce un simple fait futur, mais « by » impose le futur antérieur." },
+        { text: "are completing", isCorrect: false, explanation: "Le présent en be + -ing exprime un projet, sans l'idée d'achèvement à une date donnée." }
+      ]
+    },
+    tense: "Future Perfect",
+    topic: "Workplace",
+    lengthWords: 9
+  },
+  {
+    id: "36",
+    text: "I will be flying to Paris this time tomorrow.",
+    translation: "Demain à cette heure-ci, je serai dans l'avion pour Paris.",
+    hint: {
+      sentenceWithBlank: "I [____] to Paris this time tomorrow.",
+      options: [
+        { text: "will be flying", isCorrect: true, explanation: "Le futur en be + -ing décrit une action en cours à un moment précis du futur (this time tomorrow)." },
+        { text: "will fly", isCorrect: false, explanation: "Le futur simple énonce un fait ou une décision, pas une action en déroulement." },
+        { text: "fly", isCorrect: false, explanation: "Le présent simple conviendrait à un horaire, mais ici on insiste sur le déroulement du vol." }
+      ]
+    },
+    tense: "Future Continuous",
+    topic: "Travel",
+    lengthWords: 9
+  },
+  {
+    id: "37",
+    text: "This is the best coffee I have ever tasted.",
+    translation: "C'est le meilleur café que j'aie jamais goûté.",
+    hint: {
+      sentenceWithBlank: "This is the best coffee I have [____] tasted.",
+      options: [
+        { text: "ever", isCorrect: true, explanation: "« Ever » sert à parler d'une expérience de vie, en particulier après un superlatif (the best)." },
+        { text: "never", isCorrect: false, explanation: "« Never » changerait le sens en « que je n'ai jamais goûté »." },
+        { text: "already", isCorrect: false, explanation: "« Already » (déjà) ne convient pas au sens « le meilleur de tous »." }
+      ]
+    },
+    tense: "Present Perfect",
+    topic: "Daily Life",
+    lengthWords: 9
+  },
+  {
+    id: "38",
+    text: "It's the first time I have driven an electric car.",
+    translation: "C'est la première fois que je conduis une voiture électrique.",
+    hint: {
+      sentenceWithBlank: "It's the first time I [____] an electric car.",
+      options: [
+        { text: "have driven", isCorrect: true, explanation: "La structure « It's the first time… » appelle toujours le present perfect." },
+        { text: "drive", isCorrect: false, explanation: "Le présent simple ne convient pas : il s'agit d'une expérience faite jusqu'à maintenant." },
+        { text: "drove", isCorrect: false, explanation: "Le prétérit s'emploie pour des faits achevés, or l'expérience compte au moment présent." }
+      ]
+    },
+    tense: "Present Perfect",
+    topic: "General",
+    lengthWords: 10
+  },
+  {
+    id: "39",
+    text: "She was tired because she had worked all night.",
+    translation: "Elle était fatiguée parce qu'elle avait travaillé toute la nuit.",
+    hint: {
+      sentenceWithBlank: "She was tired because she [____] all night.",
+      options: [
+        { text: "had worked", isCorrect: true, explanation: "Le past perfect explique la cause (avoir travaillé) d'un état passé (être fatiguée)." },
+        { text: "has worked", isCorrect: false, explanation: "Le present perfect ne convient pas, car le résultat (la fatigue) se situe dans le passé." },
+        { text: "worked", isCorrect: false, explanation: "Le prétérit est possible, mais le past perfect marque bien mieux l'antériorité et la cause." }
+      ]
+    },
+    tense: "Past Perfect",
+    topic: "Daily Life",
+    lengthWords: 9
+  },
+  {
+    id: "40",
+    text: "I had never seen such a beautiful sunset before.",
+    translation: "Je n'avais jamais vu un coucher de soleil aussi beau.",
+    hint: {
+      sentenceWithBlank: "I [____] seen such a beautiful sunset before.",
+      options: [
+        { text: "had never", isCorrect: true, explanation: "Le past perfect souligne qu'une expérience n'avait pas encore eu lieu avant un moment du passé." },
+        { text: "have never", isCorrect: false, explanation: "Le present perfect renvoie au présent, alors que « before » situe le repère dans le passé." },
+        { text: "did never", isCorrect: false, explanation: "Construction incorrecte : « did » ne se combine pas ainsi ; il faut ici le past perfect." }
+      ]
+    },
+    tense: "Past Perfect",
+    topic: "Nature",
+    lengthWords: 9
+  },
+  {
+    id: "41",
+    text: "I have been learning English for three years.",
+    translation: "J'apprends l'anglais depuis trois ans.",
+    hint: {
+      sentenceWithBlank: "I [____] English for three years.",
+      options: [
+        { text: "have been learning", isCorrect: true, explanation: "Le present perfect en be + -ing souligne la durée d'une action commencée dans le passé et toujours en cours." },
+        { text: "am learning", isCorrect: false, explanation: "Le présent en be + -ing ne s'emploie pas avec une durée du type « for three years »." },
+        { text: "learn", isCorrect: false, explanation: "Le présent simple décrit un fait, pas un processus qui dure depuis un certain temps." }
+      ]
+    },
+    tense: "Present Perfect Continuous",
+    topic: "Education",
+    lengthWords: 8
+  },
+  {
+    id: "42",
+    text: "Why are your hands dirty? — I've been fixing my bike.",
+    translation: "Pourquoi as-tu les mains sales ? — Je réparais mon vélo.",
+    hint: {
+      sentenceWithBlank: "Why are your hands dirty? — I've [____] my bike.",
+      options: [
+        { text: "been fixing", isCorrect: true, explanation: "Le present perfect en be + -ing explique un résultat visible aujourd'hui (les mains sales) par une activité récente et prolongée." },
+        { text: "fixed", isCorrect: false, explanation: "Cette forme insiste sur l'achèvement, alors qu'ici c'est l'activité qui a laissé des traces." },
+        { text: "fixing", isCorrect: false, explanation: "Il manque « been », indispensable pour former le present perfect en be + -ing." }
+      ]
+    },
+    tense: "Present Perfect Continuous",
+    topic: "Daily Life",
+    lengthWords: 11
+  },
+  {
+    id: "43",
+    text: "It has been raining all day.",
+    translation: "Il pleut depuis ce matin.",
+    hint: {
+      sentenceWithBlank: "It [____] all day.",
+      options: [
+        { text: "has been raining", isCorrect: true, explanation: "Le present perfect en be + -ing exprime une action qui dure du passé jusqu'à maintenant (all day)." },
+        { text: "is raining", isCorrect: false, explanation: "Le présent en be + -ing décrit le moment présent, sans idée de durée." },
+        { text: "rains", isCorrect: false, explanation: "Le présent simple signifierait qu'il pleut en général, et non sans interruption toute la journée." }
+      ]
+    },
+    tense: "Present Perfect Continuous",
+    topic: "Nature",
+    lengthWords: 6
+  },
+  {
+    id: "44",
+    text: "She had been waiting for two hours before the bus arrived.",
+    translation: "Elle attendait depuis deux heures quand le bus est arrivé.",
+    hint: {
+      sentenceWithBlank: "She [____] for two hours before the bus arrived.",
+      options: [
+        { text: "had been waiting", isCorrect: true, explanation: "Le past perfect en be + -ing indique la durée d'une action avant un autre événement passé." },
+        { text: "has been waiting", isCorrect: false, explanation: "Cette forme renvoie au présent, alors que le second événement (arrived) est au passé." },
+        { text: "was waiting", isCorrect: false, explanation: "Avec une durée introduite par « for » et suivie d'une autre action passée, il faut le past perfect en be + -ing." }
+      ]
+    },
+    tense: "Past Perfect Continuous",
+    topic: "Travel",
+    lengthWords: 11
+  },
+  {
+    id: "45",
+    text: "They had been living there for five years when the company closed.",
+    translation: "Ils vivaient là depuis cinq ans quand l'entreprise a fermé.",
+    hint: {
+      sentenceWithBlank: "They [____] there for five years when the company closed.",
+      options: [
+        { text: "had been living", isCorrect: true, explanation: "Le past perfect en be + -ing indique combien de temps l'action a duré avant un moment du passé." },
+        { text: "were living", isCorrect: false, explanation: "Le prétérit en be + -ing ne s'emploie pas quand la durée est précisée (for five years)." },
+        { text: "have been living", isCorrect: false, explanation: "Les événements se situent dans le passé (closed) : il faut donc une forme du passé." }
+      ]
+    },
+    tense: "Past Perfect Continuous",
+    topic: "General",
+    lengthWords: 12
+  },
+  {
+    id: "46",
+    text: "His eyes were red because he had been staring at the screen for hours.",
+    translation: "Il avait les yeux rouges parce qu'il fixait l'écran depuis des heures.",
+    hint: {
+      sentenceWithBlank: "His eyes were red because he [____] at the screen for hours.",
+      options: [
+        { text: "had been staring", isCorrect: true, explanation: "Le past perfect en be + -ing décrit une activité prolongée qui explique un état passé." },
+        { text: "has been staring", isCorrect: false, explanation: "La conséquence (were red) est au passé : il faut donc une forme du passé." },
+        { text: "was staring", isCorrect: false, explanation: "Le prétérit en be + -ing ne rend pas l'idée d'antériorité ni de durée à l'origine du résultat." }
+      ]
+    },
+    tense: "Past Perfect Continuous",
+    topic: "Daily Life",
+    lengthWords: 14
+  },
+  {
+    id: "47",
+    text: "By midnight, I will have been working on this design for ten hours.",
+    translation: "D'ici minuit, cela fera dix heures que je travaille sur ce design.",
+    hint: {
+      sentenceWithBlank: "By midnight, I [____] on this design for ten hours.",
+      options: [
+        { text: "will have been working", isCorrect: true, explanation: "Le futur antérieur en be + -ing indique combien de temps l'action aura duré à un moment futur." },
+        { text: "will work", isCorrect: false, explanation: "Le futur simple ne rend pas l'idée de durée jusqu'à un moment futur." },
+        { text: "will be working", isCorrect: false, explanation: "Le futur en be + -ing décrit une action en cours, mais sans insister sur sa durée (for ten hours)." }
+      ]
+    },
+    tense: "Future Perfect Continuous",
+    topic: "Workplace",
+    lengthWords: 13
+  },
+  {
+    id: "48",
+    text: "How long have you been looking for a job?",
+    translation: "Depuis combien de temps cherches-tu du travail ?",
+    hint: {
+      sentenceWithBlank: "How long [____] you [____] for a job?",
+      options: [
+        { text: "have / been looking", isCorrect: true, explanation: "Les questions en « How long » sur une action non terminée appellent le present perfect en be + -ing." },
+        { text: "are / looking", isCorrect: false, explanation: "Le présent en be + -ing interroge sur le moment présent (que cherches-tu maintenant ?), pas sur la durée." },
+        { text: "do / look", isCorrect: false, explanation: "Le présent simple ne convient pas ici : il ne s'agit pas d'une action habituelle." }
+      ]
+    },
+    tense: "Present Perfect Continuous",
+    topic: "General",
+    lengthWords: 9
+  },
+  {
+    id: "49",
+    text: "We had been driving for miles before we realized we were lost.",
+    translation: "Nous avions roulé des kilomètres avant de nous rendre compte que nous étions perdus.",
+    hint: {
+      sentenceWithBlank: "We [____] for miles before we realized we were lost.",
+      options: [
+        { text: "had been driving", isCorrect: true, explanation: "Le past perfect en be + -ing décrit une activité qui a duré jusqu'à un événement passé." },
+        { text: "have been driving", isCorrect: false, explanation: "Tous les faits de la phrase sont au passé (realized, were) : le present perfect est donc exclu." },
+        { text: "were driving", isCorrect: false, explanation: "Le prétérit en be + -ing ne rend pas l'idée de résultat accumulé avant une autre action." }
+      ]
+    },
+    tense: "Past Perfect Continuous",
+    topic: "Travel",
+    lengthWords: 12
+  },
+  {
+    id: "50",
+    text: "She has been running, so she is out of breath.",
+    translation: "Elle a couru, c'est pourquoi elle est essoufflée.",
+    hint: {
+      sentenceWithBlank: "She [____], so she is out of breath.",
+      options: [
+        { text: "has been running", isCorrect: true, explanation: "Le present perfect en be + -ing explique un état actuel (out of breath) par une activité récente." },
+        { text: "is running", isCorrect: false, explanation: "Cette forme signifierait qu'elle est en train de courir en ce moment." },
+        { text: "ran", isCorrect: false, explanation: "Le prétérit met l'accent sur le fait de courir, alors que le present perfect en be + -ing relie l'activité à son résultat." }
+      ]
+    },
+    tense: "Present Perfect Continuous",
+    topic: "General",
+    lengthWords: 10
+  },
+    {
+    id: "51",
+    text: "You must wear a seatbelt while driving.",
+    translation: "Vous devez porter la ceinture de sécurité au volant.",
+    hint: {
+      sentenceWithBlank: "You [____] wear a seatbelt while driving.",
+      options: [
+        { text: "must", isCorrect: true, explanation: "« Must » exprime une obligation stricte ou une règle." },
+        { text: "have", isCorrect: false, explanation: "Après « have », il faut la particule « to » : have to." },
+        { text: "can", isCorrect: false, explanation: "« Can » exprime une capacité ou une possibilité, alors qu'il s'agit ici d'une règle." }
+      ]
+    },
+    tense: "Modal Verbs",
+    topic: "Travel",
+    lengthWords: 7
+  },
+  {
+    id: "52",
+    text: "You don't have to pay for the tickets; they are free.",
+    translation: "Tu n'es pas obligé de payer les billets, ils sont gratuits.",
+    hint: {
+      sentenceWithBlank: "You [____] pay for the tickets; they are free.",
+      options: [
+        { text: "don't have to", isCorrect: true, explanation: "« Don't have to » exprime l'absence d'obligation (ce n'est pas nécessaire)." },
+        { text: "mustn't", isCorrect: false, explanation: "« Mustn't » exprime une interdiction stricte (il ne faut pas)." },
+        { text: "shouldn't", isCorrect: false, explanation: "« Shouldn't » donne un conseil, alors qu'ici on constate simplement qu'il n'y a pas besoin de payer." }
+      ]
+    },
+    tense: "Modal Verbs",
+    topic: "General",
+    lengthWords: 11
+  },
+  {
+    id: "53",
+    text: "You shouldn't eat so much fast food.",
+    translation: "Tu ne devrais pas manger autant de fast-food.",
+    hint: {
+      sentenceWithBlank: "You [____] eat so much fast food.",
+      options: [
+        { text: "shouldn't", isCorrect: true, explanation: "« Shouldn't » sert à donner un conseil (tu ne devrais pas)." },
+        { text: "don't have to", isCorrect: false, explanation: "« Don't have to » signifie « tu n'es pas obligé », ce qui ne correspond pas à un conseil." },
+        { text: "can't", isCorrect: false, explanation: "« Can't » exprime une interdiction ou une impossibilité." }
+      ]
+    },
+    tense: "Modal Verbs",
+    topic: "Daily Life",
+    lengthWords: 7
+  },
+  {
+    id: "54",
+    text: "He might come to the meeting, but he isn't sure.",
+    translation: "Il viendra peut-être à la réunion, mais il n'en est pas sûr.",
+    hint: {
+      sentenceWithBlank: "He [____] come to the meeting, but he isn't sure.",
+      options: [
+        { text: "might", isCorrect: true, explanation: "« Might » exprime une faible probabilité dans le futur." },
+        { text: "must", isCorrect: false, explanation: "« Must » exprime la certitude ou l'obligation." },
+        { text: "can", isCorrect: false, explanation: "« Can » ne s'emploie généralement pas pour la probabilité d'un fait futur ponctuel." }
+      ]
+    },
+    tense: "Modal Verbs",
+    topic: "Workplace",
+    lengthWords: 10
+  },
+  {
+    id: "55",
+    text: "May I borrow your pen for a moment?",
+    translation: "Puis-je t'emprunter ton stylo un instant ?",
+    hint: {
+      sentenceWithBlank: "[____] I borrow your pen for a moment?",
+      options: [
+        { text: "May", isCorrect: true, explanation: "« May » sert à demander la permission de façon polie." },
+        { text: "Must", isCorrect: false, explanation: "« Must » exprime une obligation, pas une demande." },
+        { text: "Should", isCorrect: false, explanation: "« Should » sert à demander un conseil (devrais-je… ?)." }
+      ]
+    },
+    tense: "Modal Verbs",
+    topic: "General",
+    lengthWords: 8
+  },
+  {
+    id: "56",
+    text: "She can't be at home; I saw her at the office five minutes ago.",
+    translation: "Elle ne peut pas être chez elle : je l'ai vue au bureau il y a cinq minutes.",
+    hint: {
+      sentenceWithBlank: "She [____] be at home; I saw her at the office five minutes ago.",
+      options: [
+        { text: "can't", isCorrect: true, explanation: "« Can't » exprime la certitude que quelque chose est impossible." },
+        { text: "mustn't", isCorrect: false, explanation: "« Mustn't » exprime une interdiction stricte, et non une déduction logique." },
+        { text: "might not", isCorrect: false, explanation: "« Might not » n'exprime qu'une faible probabilité, alors qu'ici la conclusion est certaine." }
+      ]
+    },
+    tense: "Modal Verbs",
+    topic: "General",
+    lengthWords: 14
+  },
+  {
+    id: "57",
+    text: "He must have forgotten about our appointment.",
+    translation: "Il a dû oublier notre rendez-vous.",
+    hint: {
+      sentenceWithBlank: "He [____] about our appointment.",
+      options: [
+        { text: "must have forgotten", isCorrect: true, explanation: "« Must have + participe passé » exprime une déduction certaine sur une action passée." },
+        { text: "must forget", isCorrect: false, explanation: "Cette forme renvoie au présent ou au futur." },
+        { text: "should have forgotten", isCorrect: false, explanation: "Cette forme signifierait « il aurait dû oublier »." }
+      ]
+    },
+    tense: "Modal Verbs",
+    topic: "General",
+    lengthWords: 7
+  },
+  {
+    id: "58",
+    text: "You should have told me the truth earlier.",
+    translation: "Tu aurais dû me dire la vérité plus tôt.",
+    hint: {
+      sentenceWithBlank: "You [____] me the truth earlier.",
+      options: [
+        { text: "should have told", isCorrect: true, explanation: "« Should have + participe passé » exprime le reproche à propos d'une action non accomplie dans le passé." },
+        { text: "should tell", isCorrect: false, explanation: "Cette forme renvoie au présent ou au futur." },
+        { text: "must have told", isCorrect: false, explanation: "Cette forme exprimerait une déduction : « tu as dû me le dire »." }
+      ]
+    },
+    tense: "Modal Verbs",
+    topic: "General",
+    lengthWords: 8
+  },
+  {
+    id: "59",
+    text: "I could play the piano when I was a child.",
+    translation: "Je savais jouer du piano quand j'étais enfant.",
+    hint: {
+      sentenceWithBlank: "I [____] play the piano when I was a child.",
+      options: [
+        { text: "could", isCorrect: true, explanation: "« Could » est la forme passée de « can » : elle sert à parler d'une capacité passée." },
+        { text: "can", isCorrect: false, explanation: "« Can » renvoie au présent." },
+        { text: "must", isCorrect: false, explanation: "« Must » exprime une obligation, pas une capacité." }
+      ]
+    },
+    tense: "Modal Verbs",
+    topic: "General",
+    lengthWords: 10
+  },
+  {
+    id: "60",
+    text: "We had better leave now before it gets dark.",
+    translation: "Nous ferions mieux de partir maintenant, avant la tombée de la nuit.",
+    hint: {
+      sentenceWithBlank: "We [____] leave now before it gets dark.",
+      options: [
+        { text: "had better", isCorrect: true, explanation: "« Had better » sert à donner un conseil pressant ou un avertissement." },
+        { text: "would rather", isCorrect: false, explanation: "« Would rather » exprime une préférence (je préférerais)." },
+        { text: "should to", isCorrect: false, explanation: "Après « should », on ne met jamais la particule « to »." }
+      ]
+    },
+    tense: "Modal Verbs",
+    topic: "General",
+    lengthWords: 9
+  },
+  {
+    id: "61",
+    text: "If you heat ice, it melts.",
+    translation: "Si on chauffe de la glace, elle fond.",
+    hint: {
+      sentenceWithBlank: "If you heat ice, it [____].",
+      options: [
+        { text: "melts", isCorrect: true, explanation: "Dans la conditionnelle de type 0 (vérités générales), les deux parties sont au présent simple." },
+        { text: "will melt", isCorrect: false, explanation: "Pour un fait scientifique, on emploie le présent simple, pas le futur." },
+        { text: "melted", isCorrect: false, explanation: "Le passé ne convient pas ici." }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "Science",
+    lengthWords: 6
+  },
+  {
+    id: "62",
+    text: "If I have time tonight, I will call you.",
+    translation: "Si j'ai le temps ce soir, je t'appellerai.",
+    hint: {
+      sentenceWithBlank: "If I [____] time tonight, I [____] you.",
+      options: [
+        { text: "have / will call", isCorrect: true, explanation: "Conditionnelle de type 1 : présent simple dans la subordonnée (have), futur avec will dans la principale (will call)." },
+        { text: "will have / call", isCorrect: false, explanation: "Après « if », on n'emploie pas le futur avec « will »." },
+        { text: "had / would call", isCorrect: false, explanation: "Cette combinaison relève de la conditionnelle de type 2 (situation irréelle), alors qu'ici la condition est réelle." }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "General",
+    lengthWords: 9
+  },
+  {
+    id: "63",
+    text: "Unless you study hard, you won't pass the exam.",
+    translation: "Si tu ne travailles pas dur, tu ne réussiras pas l'examen.",
+    hint: {
+      sentenceWithBlank: "[____] you study hard, you won't pass the exam.",
+      options: [
+        { text: "Unless", isCorrect: true, explanation: "« Unless » signifie « à moins que, si… ne… pas » : la négation y est déjà contenue." },
+        { text: "If", isCorrect: false, explanation: "Avec « if », la phrase signifierait « si tu travailles dur, tu échoueras », ce qui est illogique." },
+        { text: "Without", isCorrect: false, explanation: "« Without » est une préposition (sans) : elle doit être suivie d'un nom ou d'une forme en -ing." }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "Education",
+    lengthWords: 9
+  },
+  {
+    id: "64",
+    text: "As soon as I arrive, I will let you know.",
+    translation: "Dès que j'arriverai, je te préviendrai.",
+    hint: {
+      sentenceWithBlank: "[____] I arrive, I will let you know.",
+      options: [
+        { text: "As soon as", isCorrect: true, explanation: "« As soon as » (dès que) introduit une subordonnée de temps au présent simple." },
+        { text: "Until", isCorrect: false, explanation: "« Until » signifie « jusqu'à ce que », ce qui change le sens de la phrase." },
+        { text: "While", isCorrect: false, explanation: "« While » (pendant que) s'emploie pour des actions qui durent." }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "General",
+    lengthWords: 10
+  },
+  {
+    id: "65",
+    text: "If I won the lottery, I would buy a house by the sea.",
+    translation: "Si je gagnais à la loterie, j'achèterais une maison au bord de la mer.",
+    hint: {
+      sentenceWithBlank: "If I [____] the lottery, I [____] a house by the sea.",
+      options: [
+        { text: "won / would buy", isCorrect: true, explanation: "Conditionnelle de type 2 : prétérit dans la subordonnée (won), would + base verbale dans la principale." },
+        { text: "win / would buy", isCorrect: false, explanation: "« Win » est au présent, ce qui ne s'accorde pas avec « would » dans la principale." },
+        { text: "won / will buy", isCorrect: false, explanation: "Après un prétérit dans la subordonnée, on emploie « would », pas « will »." }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "General",
+    lengthWords: 13
+  },
+  {
+    id: "66",
+    text: "What would you do if you were in my shoes?",
+    translation: "Que ferais-tu à ma place ?",
+    hint: {
+      sentenceWithBlank: "What [____] if you [____] in my shoes?",
+      options: [
+        { text: "would you do / were", isCorrect: true, explanation: "Conditionnelle de type 2 : would + base verbale dans la question, et « were » à toutes les personnes après if." },
+        { text: "will you do / are", isCorrect: false, explanation: "Cette combinaison relève du type 1, alors que « in my shoes » introduit une situation hypothétique." },
+        { text: "do you do / was", isCorrect: false, explanation: "Construction incorrecte pour une conditionnelle de type 2." }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "General",
+    lengthWords: 10
+  },
+  {
+    id: "67",
+    text: "If I had more free time, I would take up photography.",
+    translation: "Si j'avais plus de temps libre, je me mettrais à la photographie.",
+    hint: {
+      sentenceWithBlank: "If I [____] more free time, I [____] take up photography.",
+      options: [
+        { text: "had / would", isCorrect: true, explanation: "Conditionnelle de type 2 : condition irréelle au présent (had), résultat avec would." },
+        { text: "have / will", isCorrect: false, explanation: "Cette combinaison exprime une condition réelle, alors qu'ici la situation est présentée comme irréelle." },
+        { text: "had had / would have", isCorrect: false, explanation: "Cette combinaison relève du type 3 et renvoie au passé." }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "General",
+    lengthWords: 11
+  },
+  {
+    id: "68",
+    text: "If we had left earlier, we wouldn't have missed the flight.",
+    translation: "Si nous étions partis plus tôt, nous n'aurions pas raté l'avion.",
+    hint: {
+      sentenceWithBlank: "If we [____] earlier, we [____] the flight.",
+      options: [
+        { text: "had left / wouldn't have missed", isCorrect: true, explanation: "Conditionnelle de type 3 : condition irréelle au past perfect et résultat en would have + participe passé." },
+        { text: "left / wouldn't miss", isCorrect: false, explanation: "Cette combinaison relève du type 2 : elle renvoie au présent, pas à un passé révolu." },
+        { text: "had left / wouldn't miss", isCorrect: false, explanation: "Type mixte : il ne convient pas ici, puisque les deux actions se situent dans le passé." }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "Travel",
+    lengthWords: 11
+  },
+  {
+    id: "69",
+    text: "I wouldn't have known about the project if you hadn't told me.",
+    translation: "Je n'aurais pas été au courant du projet si tu ne me l'avais pas dit.",
+    hint: {
+      sentenceWithBlank: "I wouldn't [____] about the project if you hadn't told me.",
+      options: [
+        { text: "have known", isCorrect: true, explanation: "Conditionnelle de type 3 : la principale se construit avec would have + participe passé pour une situation passée." },
+        { text: "know", isCorrect: false, explanation: "« Know » renvoie au présent." },
+        { text: "knew", isCorrect: false, explanation: "Après « would have », il faut le participe passé (known), pas le prétérit." }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "General",
+    lengthWords: 12
+  },
+  {
+    id: "70",
+    text: "If I had studied harder at university, I would have a better job now.",
+    translation: "Si j'avais travaillé plus dur à l'université, j'aurais un meilleur emploi aujourd'hui.",
+    hint: {
+      sentenceWithBlank: "If I [____] harder at university, I [____] a better job now.",
+      options: [
+        { text: "had studied / would have", isCorrect: true, explanation: "Conditionnelle mixte : condition dans le passé (past perfect), conséquence dans le présent (would + base verbale)." },
+        { text: "studied / would have", isCorrect: false, explanation: "Les études sont déjà terminées : il faut le past perfect." },
+        { text: "had studied / would have had", isCorrect: false, explanation: "La conséquence porte sur le présent (now) : on dit donc « would have », et non « would have had »." }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "Education",
+    lengthWords: 14
+  },
+  {
+    id: "71",
+    text: "If he spoke French, he would have translated that document yesterday.",
+    translation: "S'il parlait français, il aurait traduit ce document hier.",
+    hint: {
+      sentenceWithBlank: "If he [____] French, he [____] that document yesterday.",
+      options: [
+        { text: "spoke / would have translated", isCorrect: true, explanation: "Conditionnelle mixte : condition permanente (prétérit), conséquence située dans le passé (would have + participe passé)." },
+        { text: "had spoken / would translate", isCorrect: false, explanation: "Connaître une langue est un fait permanent, alors que la traduction devait avoir lieu hier." },
+        { text: "spoke / would translate", isCorrect: false, explanation: "La traduction concerne hier (yesterday) : il faut donc would have + participe passé." }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "Workplace",
+    lengthWords: 11
+  },
+  {
+    id: "72",
+    text: "I wish I had more money.",
+    translation: "J'aimerais avoir plus d'argent.",
+    hint: {
+      sentenceWithBlank: "I [____] I [____] more money.",
+      options: [
+        { text: "wish / had", isCorrect: true, explanation: "La structure « I wish + prétérit » exprime un regret portant sur le présent." },
+        { text: "wish / have", isCorrect: false, explanation: "Après « I wish », pour parler du présent, il faut le prétérit." },
+        { text: "hope / had", isCorrect: false, explanation: "Après « hope », on emploie un temps réel (présent ou futur)." }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "General",
+    lengthWords: 6
+  },
+  {
+    id: "73",
+    text: "I wish you wouldn't make so much noise.",
+    translation: "J'aimerais que tu ne fasses pas autant de bruit.",
+    hint: {
+      sentenceWithBlank: "I wish you [____] make so much noise.",
+      options: [
+        { text: "wouldn't", isCorrect: true, explanation: "« I wish + would / wouldn't » exprime l'agacement face au comportement de quelqu'un." },
+        { text: "don't", isCorrect: false, explanation: "Après « I wish », on n'emploie pas le présent simple." },
+        { text: "didn't", isCorrect: false, explanation: "« Didn't » est possible, mais « wouldn't » rend bien mieux l'agacement causé par le comportement de l'autre." }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "General",
+    lengthWords: 8
+  },
+  {
+    id: "74",
+    text: "If only I hadn't said that to her yesterday.",
+    translation: "Si seulement je ne lui avais pas dit ça hier.",
+    hint: {
+      sentenceWithBlank: "If [____] I [____] said that to her yesterday.",
+      options: [
+        { text: "only / hadn't", isCorrect: true, explanation: "« If only + past perfect » exprime un regret intense à propos du passé." },
+        { text: "only / didn't", isCorrect: false, explanation: "L'action se situe hier : il faut le past perfect, pas le prétérit." },
+        { text: "just / haven't", isCorrect: false, explanation: "« If just » ne se dit pas, et « haven't » relève du present perfect, incompatible avec « yesterday »." }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "General",
+    lengthWords: 9
+  },
+  {
+    id: "75",
+    text: "It's time we went home.",
+    translation: "Il est temps que nous rentrions à la maison.",
+    hint: {
+      sentenceWithBlank: "It's time we [____] home.",
+      options: [
+        { text: "went", isCorrect: true, explanation: "Après la structure « It's time » (il est grand temps), on emploie le prétérit." },
+        { text: "go", isCorrect: false, explanation: "Dans « It's time + sujet », le verbe se met au prétérit, et non à la base verbale." },
+        { text: "are going", isCorrect: false, explanation: "Le présent en be + -ing ne s'emploie pas dans cette structure." }
+      ]
+    },
+    tense: "Conditionals",
+    topic: "General",
+    lengthWords: 5
+  },
+    {
+    "id": "76",
+    "text": "This house was built in 1920.",
+    "translation": "Cette maison a été construite en 1920.",
+    "hint": {
+      "sentenceWithBlank": "This house [____] in 1920.",
+      "options": [
+        { "text": "was built", "isCorrect": true, "explanation": "Le passif au prétérit sert à décrire une action subie par l'objet dans le passé." },
+        { "text": "built", "isCorrect": false, "explanation": "Il faut le passif : la maison ne s'est pas construite toute seule." },
+        { "text": "is built", "isCorrect": false, "explanation": "L'action a eu lieu dans le passé (en 1920) : il faut donc une forme du passé." }
+      ]
+    },
+    "tense": "Passive Voice",
+    "topic": "General",
+    "lengthWords": 6
+  },
+  {
+    "id": "77",
+    "text": "The interface is being redesigned at the moment.",
+    "translation": "L'interface est en cours de refonte en ce moment.",
+    "hint": {
+      "sentenceWithBlank": "The interface [____] at the moment.",
+      "options": [
+        { "text": "is being redesigned", "isCorrect": true, "explanation": "Le passif au présent en be + -ing décrit une action en cours au moment où l'on parle (at the moment)." },
+        { "text": "is redesigned", "isCorrect": false, "explanation": "Le passif au présent simple indique une action régulière, et non ce qui se passe maintenant." },
+        { "text": "has been redesigned", "isCorrect": false, "explanation": "Le passif au present perfect présente l'action comme déjà terminée." }
+      ]
+    },
+    "tense": "Passive Voice",
+    "topic": "IT",
+    "lengthWords": 8
+  },
+  {
+    "id": "78",
+    "text": "The new software has just been installed.",
+    "translation": "Le nouveau logiciel vient d'être installé.",
+    "hint": {
+      "sentenceWithBlank": "The new software [____].",
+      "options": [
+        { "text": "has just been installed", "isCorrect": true, "explanation": "Le passif au present perfect s'emploie pour une action tout juste achevée (avec « just »)." },
+        { "text": "has just installed", "isCorrect": false, "explanation": "Le logiciel ne peut pas s'installer lui-même : il faut le passif." },
+        { "text": "was just installed", "isCorrect": false, "explanation": "Avec l'adverbe « just », on emploie normalement le present perfect, pas le prétérit." }
+      ]
+    },
+    "tense": "Passive Voice",
+    "topic": "IT",
+    "lengthWords": 7
+  },
+  {
+    "id": "79",
+    "text": "English is spoken all over the world.",
+    "translation": "L'anglais est parlé dans le monde entier.",
+    "hint": {
+      "sentenceWithBlank": "English [____] all over the world.",
+      "options": [
+        { "text": "is spoken", "isCorrect": true, "explanation": "Le passif au présent simple s'emploie pour les faits d'ordre général." },
+        { "text": "is speaking", "isCorrect": false, "explanation": "Une langue ne parle pas d'elle-même : il faut le passif." },
+        { "text": "spoke", "isCorrect": false, "explanation": "Il s'agit de la voix active au passé." }
+      ]
+    },
+    "tense": "Passive Voice",
+    "topic": "General",
+    "lengthWords": 7
+  },
+  {
+    "id": "80",
+    "text": "The letters will be sent tomorrow morning.",
+    "translation": "Les lettres seront envoyées demain matin.",
+    "hint": {
+      "sentenceWithBlank": "The letters [____] tomorrow morning.",
+      "options": [
+        { "text": "will be sent", "isCorrect": true, "explanation": "Le passif au futur décrit une action que l'objet subira plus tard." },
+        { "text": "will send", "isCorrect": false, "explanation": "Les lettres ne peuvent pas s'envoyer elles-mêmes : il faut le passif." },
+        { "text": "are sent", "isCorrect": false, "explanation": "Cette forme est un passif au présent, alors que l'action aura lieu demain." }
+      ]
+    },
+    "tense": "Passive Voice",
+    "topic": "General",
+    "lengthWords": 7
+  },
+  {
+    "id": "81",
+    "text": "I need to get my hair cut this week.",
+    "translation": "Je dois me faire couper les cheveux cette semaine.",
+    "hint": {
+      "sentenceWithBlank": "I need to [____] this week.",
+      "options": [
+        { "text": "get my hair cut", "isCorrect": true, "explanation": "La structure « get / have something done » indique que l'action est réalisée par quelqu'un d'autre pour vous." },
+        { "text": "cut my hair", "isCorrect": false, "explanation": "Cette formulation signifierait que vous allez vous couper les cheveux vous-même." },
+        { "text": "get cutting my hair", "isCorrect": false, "explanation": "Construction grammaticalement incorrecte." }
+      ]
+    },
+    "tense": "Passive Voice",
+    "topic": "Daily Life",
+    "lengthWords": 9
+  },
+  {
+    "id": "82",
+    "text": "He had his laptop stolen while he was traveling.",
+    "translation": "Il s'est fait voler son ordinateur portable pendant son voyage.",
+    "hint": {
+      "sentenceWithBlank": "He [____] while he was traveling.",
+      "options": [
+        { "text": "had his laptop stolen", "isCorrect": true, "explanation": "La structure « have something done » peut aussi décrire une expérience subie (quelqu'un lui a volé son ordinateur)." },
+        { "text": "stole his laptop", "isCorrect": false, "explanation": "Cette formulation signifierait qu'il a volé lui-même son ordinateur." },
+        { "text": "had stolen his laptop", "isCorrect": false, "explanation": "Past perfect à la voix active : cela voudrait dire qu'il avait volé son propre ordinateur." }
+      ]
+    },
+    "tense": "Passive Voice",
+    "topic": "General",
+    "lengthWords": 9
+  },
+  {
+    "id": "83",
+    "text": "She was made to clean the whole room by her mother.",
+    "translation": "Sa mère l'a obligée à ranger toute la chambre.",
+    "hint": {
+      "sentenceWithBlank": "She [____] to clean the whole room by her mother.",
+      "options": [
+        { "text": "was made", "isCorrect": true, "explanation": "Au passif, le verbe « make » (obliger) exige la particule « to » devant le verbe suivant." },
+        { "text": "made", "isCorrect": false, "explanation": "La voix active changerait le sens : ce serait elle qui obligerait quelqu'un." },
+        { "text": "has made", "isCorrect": false, "explanation": "Là encore, il s'agit de la voix active, cette fois au present perfect." }
+      ]
+    },
+    "tense": "Passive Voice",
+    "topic": "Daily Life",
+    "lengthWords": 11
+  },
+  {
+    "id": "84",
+    "text": "He is said to be the richest man in the city.",
+    "translation": "On dit qu'il est l'homme le plus riche de la ville.",
+    "hint": {
+      "sentenceWithBlank": "He [____] to be the richest man in the city.",
+      "options": [
+        { "text": "is said", "isCorrect": true, "explanation": "La structure passive « is said to » correspond au français « on dit que… »." },
+        { "text": "says", "isCorrect": false, "explanation": "Cette formulation signifierait « il dit qu'il est le plus riche… »." },
+        { "text": "said", "isCorrect": false, "explanation": "Le prétérit « il a dit » casse la structure de la phrase." }
+      ]
+    },
+    "tense": "Passive Voice",
+    "topic": "General",
+    "lengthWords": 11
+  },
+  {
+    "id": "85",
+    "text": "It is expected that the prices will drop soon.",
+    "translation": "On s'attend à ce que les prix baissent bientôt.",
+    "hint": {
+      "sentenceWithBlank": "[____] that the prices will drop soon.",
+      "options": [
+        { "text": "It is expected", "isCorrect": true, "explanation": "Cette structure passive impersonnelle exprime une opinion ou une attente générale." },
+        { "text": "It expects", "isCorrect": false, "explanation": "« It » ne peut rien « attendre » par lui-même : il faut le passif." },
+        { "text": "They is expected", "isCorrect": false, "explanation": "Construction incorrecte : avec « they » on emploierait « are », mais il faut ici le « it » impersonnel." }
+      ]
+    },
+    "tense": "Passive Voice",
+    "topic": "General",
+    "lengthWords": 9
+  },
+  {
+    "id": "86",
+    "text": "He said that he was working on a new project.",
+    "translation": "Il a dit qu'il travaillait sur un nouveau projet.",
+    "hint": {
+      "sentenceWithBlank": "He said that he [____] on a new project.",
+      "options": [
+        { "text": "was working", "isCorrect": true, "explanation": "Par la concordance des temps, le présent en be + -ing du discours direct devient le prétérit en be + -ing." },
+        { "text": "is working", "isCorrect": false, "explanation": "Comme la principale est au passé (said), la subordonnée doit suivre la concordance des temps." },
+        { "text": "works", "isCorrect": false, "explanation": "Cette forme exprime une action habituelle et ne respecte pas la concordance des temps." }
+      ]
+    },
+    "tense": "Reported Speech",
+    "topic": "Workplace",
+    "lengthWords": 10
+  },
+  {
+    "id": "87",
+    "text": "She told me she had already seen that movie.",
+    "translation": "Elle m'a dit qu'elle avait déjà vu ce film.",
+    "hint": {
+      "sentenceWithBlank": "She [____] me she had already seen that movie.",
+      "options": [
+        { "text": "told", "isCorrect": true, "explanation": "Le verbe « tell » exige toujours un complément de personne (à qui l'on parle : me)." },
+        { "text": "said", "isCorrect": false, "explanation": "Après « said », il faut la préposition « to » quand on précise le destinataire : said to me." },
+        { "text": "spoke", "isCorrect": false, "explanation": "« Speak » signifie « parler une langue » ou « parler avec quelqu'un » : il n'introduit pas le discours indirect." }
+      ]
+    },
+    "tense": "Reported Speech",
+    "topic": "Entertainment",
+    "lengthWords": 9
+  },
+  {
+    "id": "88",
+    "text": "They said they would help us the following week.",
+    "translation": "Ils ont dit qu'ils nous aideraient la semaine suivante.",
+    "hint": {
+      "sentenceWithBlank": "They said they [____] help us the following week.",
+      "options": [
+        { "text": "would", "isCorrect": true, "explanation": "Dans la concordance des temps, « will » devient « would »." },
+        { "text": "will", "isCorrect": false, "explanation": "Cette forme ne respecte pas la concordance des temps, puisque la principale est au passé." },
+        { "text": "should", "isCorrect": false, "explanation": "« Should » changerait le sens en « ils devraient nous aider », au lieu d'une simple action future." }
+      ]
+    },
+    "tense": "Reported Speech",
+    "topic": "General",
+    "lengthWords": 9
+  },
+  {
+    "id": "89",
+    "text": "He asked me where I lived.",
+    "translation": "Il m'a demandé où j'habitais.",
+    "hint": {
+      "sentenceWithBlank": "He asked me where [____].",
+      "options": [
+        { "text": "I lived", "isCorrect": true, "explanation": "Dans une question indirecte, on garde l'ordre des mots d'une affirmation et on applique la concordance des temps." },
+        { "text": "did I live", "isCorrect": false, "explanation": "L'auxiliaire est inutile : il s'agit d'une question indirecte, pas d'une question directe." },
+        { "text": "I live", "isCorrect": false, "explanation": "La concordance des temps n'est pas respectée (la principale est au passé : asked)." }
+      ]
+    },
+    "tense": "Reported Speech",
+    "topic": "General",
+    "lengthWords": 6
+  },
+  {
+    "id": "90",
+    "text": "She asked if I could help her with the task.",
+    "translation": "Elle m'a demandé si je pouvais l'aider pour ce travail.",
+    "hint": {
+      "sentenceWithBlank": "She asked [____] I could help her with the task.",
+      "options": [
+        { "text": "if", "isCorrect": true, "explanation": "Au discours indirect, les questions fermées (sans mot interrogatif) s'introduisent par « if » ou « whether »." },
+        { "text": "that", "isCorrect": false, "explanation": "« That » introduit une affirmation, pas une question." },
+        { "text": "can", "isCorrect": false, "explanation": "Cette forme ne convient pas à la structure de la phrase." }
+      ]
+    },
+    "tense": "Reported Speech",
+    "topic": "General",
+    "lengthWords": 10
+  },
+  {
+    "id": "91",
+    "text": "The manager advised me to review the guidelines.",
+    "translation": "Le responsable m'a conseillé de relire les consignes.",
+    "hint": {
+      "sentenceWithBlank": "The manager advised me [____] the guidelines.",
+      "options": [
+        { "text": "to review", "isCorrect": true, "explanation": "Après des verbes comme « advise », « ask » ou « tell », on emploie l'infinitif avec « to »." },
+        { "text": "reviewing", "isCorrect": false, "explanation": "La forme en -ing ne s'emploie pas après « advise » suivi d'un complément de personne." },
+        { "text": "review", "isCorrect": false, "explanation": "Il manque la particule « to » de l'infinitif." }
+      ]
+    },
+    "tense": "Reported Speech",
+    "topic": "Workplace",
+    "lengthWords": 8
+  },
+  {
+    "id": "92",
+    "text": "He denied making that mistake.",
+    "translation": "Il a nié avoir commis cette erreur.",
+    "hint": {
+      "sentenceWithBlank": "He denied [____] that mistake.",
+      "options": [
+        { "text": "making", "isCorrect": true, "explanation": "Après le verbe « deny », on emploie la forme en -ing." },
+        { "text": "to make", "isCorrect": false, "explanation": "L'infinitif ne s'emploie pas après « deny »." },
+        { "text": "make", "isCorrect": false, "explanation": "Forme grammaticalement incorrecte." }
+      ]
+    },
+    "tense": "Reported Speech",
+    "topic": "General",
+    "lengthWords": 5
+  },
+  {
+    "id": "93",
+    "text": "She promised not to tell anyone his secret.",
+    "translation": "Elle a promis de ne révéler son secret à personne.",
+    "hint": {
+      "sentenceWithBlank": "She promised [____] anyone his secret.",
+      "options": [
+        { "text": "not to tell", "isCorrect": true, "explanation": "La forme négative de l'infinitif se construit en plaçant « not » devant « to »." },
+        { "text": "to not tell", "isCorrect": false, "explanation": "Cet ordre des mots n'est pas conforme à la grammaire standard." },
+        { "text": "don't tell", "isCorrect": false, "explanation": "Il faut ici un infinitif, et non un impératif." }
+      ]
+    },
+    "tense": "Reported Speech",
+    "topic": "General",
+    "lengthWords": 8
+  },
+  {
+    "id": "94",
+    "text": "Although it was raining, we went for a walk.",
+    "translation": "Bien qu'il ait plu, nous sommes allés nous promener.",
+    "hint": {
+      "sentenceWithBlank": "[____] it was raining, we went for a walk.",
+      "options": [
+        { "text": "Although", "isCorrect": true, "explanation": "La conjonction « although » (bien que) s'emploie devant un sujet et un verbe." },
+        { "text": "Despite", "isCorrect": false, "explanation": "Après « despite », il faut un nom ou une forme en -ing, pas une proposition complète (it was raining)." },
+        { "text": "However", "isCorrect": false, "explanation": "« However » s'emploie comme mot de liaison et se détache par une virgule." }
+      ]
+    },
+    "tense": "Conjunctions",
+    "topic": "General",
+    "lengthWords": 9
+  },
+  {
+    "id": "95",
+    "text": "Despite the heavy traffic, we arrived on time.",
+    "translation": "Malgré les embouteillages, nous sommes arrivés à l'heure.",
+    "hint": {
+      "sentenceWithBlank": "[____] the heavy traffic, we arrived on time.",
+      "options": [
+        { "text": "Despite", "isCorrect": true, "explanation": "« Despite » (malgré) s'emploie devant un nom ou une forme en -ing." },
+        { "text": "Although", "isCorrect": false, "explanation": "Après « although », il faut une proposition complète (sujet + verbe)." },
+        { "text": "In spite", "isCorrect": false, "explanation": "Cette forme exige la préposition « of » : in spite of." }
+      ]
+    },
+    "tense": "Conjunctions",
+    "topic": "Travel",
+    "lengthWords": 8
+  },
+  {
+    "id": "96",
+    "text": "Seldom have I seen such a beautiful piece of art.",
+    "translation": "J'ai rarement vu une œuvre d'art aussi belle.",
+    "hint": {
+      "sentenceWithBlank": "[____] such a beautiful piece of art.",
+      "options": [
+        { "text": "Seldom have I seen", "isCorrect": true, "explanation": "En tête de phrase, les adverbes négatifs ou restrictifs (seldom) entraînent l'inversion du sujet et de l'auxiliaire." },
+        { "text": "Seldom I have seen", "isCorrect": false, "explanation": "Après « seldom » en tête de phrase, l'inversion est obligatoire (ordre des mots d'une question)." },
+        { "text": "Have I seldom seen", "isCorrect": false, "explanation": "L'adverbe « seldom » doit occuper la première place." }
+      ]
+    },
+    "tense": "Inversion",
+    "topic": "General",
+    "lengthWords": 10
+  },
+  {
+    "id": "97",
+    "text": "No sooner had I closed the door than the phone rang.",
+    "translation": "À peine avais-je fermé la porte que le téléphone a sonné.",
+    "hint": {
+      "sentenceWithBlank": "[____] closed the door than the phone rang.",
+      "options": [
+        { "text": "No sooner had I", "isCorrect": true, "explanation": "La structure « No sooner + inversion (had I)… than » correspond à « à peine… que… »." },
+        { "text": "No sooner I had", "isCorrect": false, "explanation": "Après « No sooner », l'inversion de l'auxiliaire et du sujet est obligatoire." },
+        { "text": "As soon as I had", "isCorrect": false, "explanation": "« As soon as » ne se combine pas avec « than » dans la seconde partie de la phrase." }
+      ]
+    },
+    "tense": "Inversion",
+    "topic": "General",
+    "lengthWords": 11
+  },
+  {
+    "id": "98",
+    "text": "I look forward to hearing from you soon.",
+    "translation": "Dans l'attente de votre réponse prochaine.",
+    "hint": {
+      "sentenceWithBlank": "I look forward [____] from you soon.",
+      "options": [
+        { "text": "to hearing", "isCorrect": true, "explanation": "Dans l'expression « look forward to », « to » est une préposition : elle est donc suivie d'une forme en -ing." },
+        { "text": "to hear", "isCorrect": false, "explanation": "Ici, « to » n'est pas la marque de l'infinitif mais une préposition : il faut la forme en -ing." },
+        { "text": "hearing", "isCorrect": false, "explanation": "Il manque la préposition « to », obligatoire dans cette expression." }
+      ]
+    },
+    "tense": "Gerund",
+    "topic": "Workplace",
+    "lengthWords": 8
+  },
+  {
+    "id": "99",
+    "text": "It's no use crying over spilled milk.",
+    "translation": "Ce qui est fait est fait, inutile de pleurer sur le lait renversé.",
+    "hint": {
+      "sentenceWithBlank": "It's no use [____] over spilled milk.",
+      "options": [
+        { "text": "crying", "isCorrect": true, "explanation": "Après l'expression « it's no use » (cela ne sert à rien), on emploie toujours la forme en -ing." },
+        { "text": "to cry", "isCorrect": false, "explanation": "L'infinitif ne s'emploie pas dans cette expression figée." },
+        { "text": "cry", "isCorrect": false, "explanation": "Forme grammaticalement incorrecte : il faut la forme en -ing." }
+      ]
+    },
+    "tense": "Gerund",
+    "topic": "General",
+    "lengthWords": 7
+  },
+  {
+    "id": "100",
+    "text": "Not only did he design the layout, but he also wrote the code.",
+    "translation": "Non seulement il a conçu la maquette, mais il a aussi écrit le code.",
+    "hint": {
+      "sentenceWithBlank": "Not only [____] the layout, but he also wrote the code.",
+      "options": [
+        { "text": "did he design", "isCorrect": true, "explanation": "Quand la phrase commence par « Not only », on applique l'inversion (ordre des mots d'une question)." },
+        { "text": "he designed", "isCorrect": false, "explanation": "L'inversion manque, alors qu'elle est obligatoire après « Not only » en tête de phrase." },
+        { "text": "designed he", "isCorrect": false, "explanation": "L'inversion se fait avec l'auxiliaire « did », et non avec le verbe principal." }
+      ]
+    },
+    "tense": "Inversion",
+    "topic": "IT",
+    "lengthWords": 13
+  }
+  ]
+}

@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, useAttrs, watch } from 'vue'
 import useTranslateText from '@/composables/useTranslateText'
+import { computed, onMounted, ref, useAttrs, watch } from 'vue'
 
 defineOptions({
   inheritAttrs: false,
 })
-
-const attrs = useAttrs()
 
 const props = withDefaults(defineProps<{
   text: string | undefined
@@ -17,12 +15,16 @@ const props = withDefaults(defineProps<{
    */
   display?: 'block' | 'tooltip'
   /**
-   * default - normal translation line
+   * default - normal translation line (small italic caption style)
    * word - translation shown under the main word (bigger)
+   * plain - no built-in styling at all; the translated text inherits
+   *   whatever typography the surrounding markup provides. Use when the
+   *   original (untranslated) text plays a heading/body role rather than
+   *   a caption.
    *
    * Only affects display="block". Tooltip mode has its own styling.
    */
-  variant?: 'default' | 'word'
+  variant?: 'default' | 'word' | 'plain'
   /**
    * Source language for translation.
    * Default is 'en' to preserve existing behavior (words/examples come in EN).
@@ -42,6 +44,8 @@ const props = withDefaults(defineProps<{
   as: 'p',
 })
 
+const attrs = useAttrs()
+
 const { translate } = useTranslateText()
 const loading = ref(false)
 const result = ref<string>('')
@@ -55,9 +59,11 @@ async function doTranslate() {
   loading.value = true
   try {
     result.value = await translate(props.text, props.from)
-  } catch {
+  }
+  catch {
     result.value = ''
-  } finally {
+  }
+  finally {
     loading.value = false
   }
 }
@@ -65,10 +71,23 @@ async function doTranslate() {
 onMounted(doTranslate)
 watch(() => [props.text, props.from], doTranslate)
 
+const blockClass = computed(() => {
+  if (props.variant === 'plain')
+    return []
+  return ['tr', props.small ? 'tr--small' : '', props.variant === 'word' ? 'tr--word' : '']
+})
+const loadingBlockClass = computed(() => {
+  if (props.variant === 'plain')
+    return []
+  return ['tr', 'tr--muted', props.variant === 'word' ? 'tr--word' : '']
+})
+
 const hasTooltipText = computed(() => Boolean(result.value) || loading.value)
 const tooltipText = computed(() => {
-  if (result.value) return result.value
-  if (loading.value) return 'перевод…'
+  if (result.value)
+    return result.value
+  if (loading.value)
+    return 'перевод…'
   return ''
 })
 </script>
@@ -80,11 +99,7 @@ const tooltipText = computed(() => {
       :is="as"
       v-if="result"
       v-bind="attrs"
-      :class="[
-        'tr',
-        small ? 'tr--small' : '',
-        variant === 'word' ? 'tr--word' : '',
-      ]"
+      :class="blockClass"
     >
       {{ result }}
     </component>
@@ -93,11 +108,7 @@ const tooltipText = computed(() => {
       :is="as"
       v-else-if="loading"
       v-bind="attrs"
-      :class="[
-        'tr',
-        'tr--muted',
-        variant === 'word' ? 'tr--word' : '',
-      ]"
+      :class="loadingBlockClass"
     >
       перевод…
     </component>
@@ -110,7 +121,7 @@ const tooltipText = computed(() => {
       class="trt"
       :class="[small ? 'trt--small' : '']"
     >
-      <span class="trt__icon" tabindex="0" aria-label="Показать перевод">?</span>
+      <span class="trt__icon" tabindex="0" aria-label="Show translation">?</span>
 
       <span class="trt__tooltip" role="tooltip">
         {{ tooltipText }}
@@ -119,7 +130,6 @@ const tooltipText = computed(() => {
   </template>
 </template>
 
-
 <style scoped>
 /* Regular translation line (block mode) */
 .tr {
@@ -127,19 +137,8 @@ const tooltipText = computed(() => {
   font-size: 0.95rem;
   line-height: 1.35;
   font-style: italic;
+  color: var(--text-secondary);
   transition: color .3s ease;
-}
-
-@media (prefers-color-scheme: dark) {
-  .tr {
-    color: hsl(0, 0%, 75%);
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  .tr {
-    color: hsl(0, 0%, 35%);
-  }
 }
 
 /* Make "small" relative to current context */
@@ -151,10 +150,17 @@ const tooltipText = computed(() => {
   opacity: .7;
 }
 
-/* ✅ Main word translation (block mode only) */
+/* Main word translation (block mode only) — Figma "translation" text under the
+   main word/review card word (18/24 SemiBold, not italic, secondary color) */
 .tr--word {
-  font-size: 1.3rem;
-  margin-top: 0.25rem;
+  margin-top: 0;
+  font-family: var(--font-family-base);
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: -0.05em;
+  color: var(--text-secondary);
 }
 
 /* Tooltip mode */
@@ -166,37 +172,40 @@ const tooltipText = computed(() => {
   vertical-align: baseline;
 }
 
+/* Figma "tooltip" component (16x16 pill next to definitions/examples) */
 .trt__icon {
-  width: 18px;
-  height: 18px;
-  border-radius: 999px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
-  font-size: 12px;
+  font-family: var(--font-family-base);
+  font-size: 11px;
+  font-weight: 500;
   line-height: 1;
-  font-weight: 700;
+  letter-spacing: 0.12em;
 
   user-select: none;
   cursor: help;
 
-  color: hsla(var(--color-raw), 0.3);
+  color: var(--text-secondary);
   border: none;
-  background: hsla(var(--color-raw), 0.08);
+  background: var(--overlay-strong);
 
   transition: background-color .15s ease, color .15s ease;
   outline: none;
 }
 
 .trt__icon:hover {
-  background: hsla(var(--color-raw), 0.12);
-  color: hsla(var(--color-raw), 0.9);
+  background: var(--accent-color-tint);
+  color: var(--accent-color-hover);
 }
 
 .trt__icon:focus {
-  box-shadow: 0 0 0 2px hsla(var(--color-raw), 0.25);
+  box-shadow: 0 0 0 2px var(--accent-color-tint);
 }
 
 .trt__tooltip {

@@ -18,14 +18,20 @@ defineProps({
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
+  padding: 6px;
   border: none;
-  background-color: transparent;
+  border-radius: 4px;
+  background-color: var(--overlay-weak);
   color: var(--color);
-  font-size: 1.25rem;
 }
 .icon-btn:hover {
-  transition: color ease-in-out 0.1s;
-  color: hsla(var(--color-raw), 0.75);
+  transition: background-color ease-in-out 0.13s;
+  background-color: var(--overlay-strong);
+}
+/* explicit px, not font-size: unplugin-icons renders these SVGs at a 1.2em
+   scale, so a font-size rule would come out 20% bigger than the number named */
+.icon-btn :deep(svg) {
+  width: 24px;
+  height: 24px;
 }
 </style>

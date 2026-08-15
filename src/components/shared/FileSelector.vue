@@ -54,8 +54,9 @@ async function handleFile() {
       @change="handleFile"
     >
 
-    <label :for="id" :style="{ maxWidth }">
-      {{ fileName ? fileName : label }}
+    <label :for="id" class="text-body-sm" :style="{ maxWidth }">
+      <i-ic-round-upload-file />
+      <span class="label-text">{{ fileName ? fileName : label }}</span>
     </label>
   </div>
 </template>
@@ -73,16 +74,21 @@ async function handleFile() {
 }
 
 label {
-  display: block;
-  text-align: center;
-  padding: 10px;
-  border-radius: 6px;
-  font-size: 0.9rem;
-  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--overlay-strong);
   color: var(--color);
-  background: hsla(var(--color-raw), 0.15);
+  background: var(--overlay-weak);
   cursor: pointer;
-  transition: background-color ease-in-out 0.13s;
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+}
+
+.label-text {
+  min-width: 0;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
@@ -90,6 +96,7 @@ label {
 
 .input:hover + label,
 .input:focus + label {
-  background: hsla(var(--color-raw), 0.25);
+  background: var(--overlay-strong);
+  border-color: var(--accent-color-hover);
 }
 </style>

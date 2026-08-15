@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import SearchInput from '@/components/shared/SearchInput.vue'
 import useSort from '@/composables/useSort'
 
 import { computed, ref } from 'vue'
@@ -43,13 +44,12 @@ const filteredWords = computed(() =>
           <component :is="sortStateMeta.icon" />
         </button>
 
-        <input
+        <SearchInput
           v-model="searchQuery"
-          type="search"
           placeholder="Filter"
-          class="search"
+          class="grow"
           :disabled="!list.length"
-        >
+        />
       </div>
 
       <slot name="top-action" />
@@ -79,15 +79,15 @@ const filteredWords = computed(() =>
         v-for="word of filteredWords"
         :key="word"
         :style="{
-          padding: dense ? '5px 10px' : '10px',
+          padding: dense ? '5px 10px' : '8px',
           borderRadius: border ? '0' : '4px',
           cursor: pointer ? 'pointer' : 'default',
         }"
         class="row"
-        @click.self="$emit('rowClick', word)"
+        @click="$emit('rowClick', word)"
       >
-        {{ word }}
-        <div class="actions">
+        <span class="row__text text-body">{{ word }}</span>
+        <div class="actions" @click.stop>
           <slot name="actions" :word="word" />
         </div>
       </li>
@@ -104,49 +104,37 @@ const filteredWords = computed(() =>
 }
 .top {
   justify-content: space-between;
+  margin-bottom: 16px;
 }
 
 .sort-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
+  flex-shrink: 0;
+  padding: 6px;
   border: none;
+  border-radius: 4px;
   color: var(--color);
-  background-color: transparent;
-  font-size: 1.2rem;
-  color: hsla(var(--color-raw), 0.5);
+  background-color: var(--overlay-weak);
+  transition: background-color ease-in-out 0.13s;
+}
+/* explicit px, not font-size: unplugin-icons renders these SVGs at a 1.2em
+   scale, so a font-size rule would come out 20% bigger than the number named */
+.sort-btn :deep(svg) {
+  width: 24px;
+  height: 24px;
 }
 .sort-btn:hover:not(:disabled) {
-  transition: color ease-in-out 0.1s;
-  color: var(--color);
+  background-color: var(--overlay-strong);
 }
 .sort-btn:disabled {
   cursor: not-allowed;
   opacity: 0.5;
 }
 
-.search {
+.grow {
   flex-grow: 1;
-  background-color: hsla(var(--color-raw), 0.15);
-  border: none;
-  border-radius: 4px;
-  padding: 5px 10px;
-  color: var(--color);
-  font-size: 1rem;
-  outline: none;
-  transition: background-color ease-in-out 0.13s;
-}
-.search:focus,
-.search:hover:not(:disabled) {
-  background-color: hsla(var(--color-raw), 0.2);
-}
-.search::placeholder {
-  color: hsla(var(--color-raw), 0.6);
-}
-.search:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
 }
 
 .list {
@@ -158,24 +146,39 @@ const filteredWords = computed(() =>
 .list--border {
   padding: 5px 0;
   border-radius: 6px;
-  border: 1px solid hsla(var(--color-raw), 0.25);
+  border: 1px solid var(--overlay-strong);
 }
 
 .row {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  font-size: 1rem;
-  text-transform: capitalize;
+  gap: 12px;
 }
 
 .row:hover {
-  background-color: hsla(var(--color-raw), 0.1);
+  background-color: var(--overlay-weak);
+}
+
+.row__text {
+  flex: 1;
+  min-width: 0;
+  color: var(--color);
+  text-transform: capitalize;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .actions {
   display: flex;
-  gap: 5px;
+  align-items: center;
+  gap: 12px;
+}
+/* explicit px, not font-size: unplugin-icons renders these SVGs at a 1.2em
+   scale, so a font-size rule would come out 20% bigger than the number named */
+.actions :deep(svg) {
+  width: 18px;
+  height: 18px;
 }
 
 .state-message {

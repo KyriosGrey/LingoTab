@@ -24,7 +24,7 @@ function handleCloseDrawer() {
         <transition name="slide" @after-leave="$emit('close')">
           <div v-show="isShowingDrawer" class="drawer">
             <div class="drawer__header">
-              <h4 class="drawer__title">
+              <h4 class="drawer__title text-heading-18">
                 {{ title }}
               </h4>
 
@@ -60,9 +60,12 @@ function handleCloseDrawer() {
   position: absolute;
   right: 0;
   height: 100vh;
-  padding: 10px 15px;
-  background-color: var(--bg-color);
-  max-width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  background-color: var(--drawer-bg);
+  max-width: 345px;
   width: 100%;
   box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.3);
 }
@@ -102,22 +105,40 @@ function handleCloseDrawer() {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 5px 0 15px;
 }
 
 .drawer__title {
   margin: 0;
-  font-size: 1rem;
+  color: var(--color);
 }
 
 .drawer__close {
-  font-size: 1.25rem;
-  color: hsla(var(--color-raw), 0.5);
-  background-color: hsla(var(--color-raw), 0.1);
+  padding: 6px;
+  color: var(--color);
+  background-color: var(--overlay-weak);
   border-radius: 4px;
+}
+/* explicit px, not font-size: unplugin-icons renders these SVGs at a 1.2em
+   scale, so a font-size rule would come out 20% bigger than the number named */
+.drawer__close :deep(svg) {
+  width: 24px;
+  height: 24px;
 }
 .drawer__close:hover {
   transition: background-color ease-in-out 0.13s;
-  background-color: hsla(var(--color-raw), 0.2);
+  background-color: var(--overlay-strong);
+}
+</style>
+
+<!-- Figma's drawer background is a literal solid fill per theme (dark = the
+     page bg #101112, light = solid white), not the tinted #F1F5F9 that
+     --bg-color resolves to in light theme — so it needs its own variable
+     rather than reusing --bg-color directly. -->
+<style>
+.drawer {
+  --drawer-bg: var(--bg-color);
+}
+.light .drawer {
+  --drawer-bg: var(--surface-color);
 }
 </style>

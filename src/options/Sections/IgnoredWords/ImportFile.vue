@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import ActionButton from '@/components/shared/ActionButton.vue'
 import FileSelector from '@/components/shared/FileSelector.vue'
 
 import Modal from '@/components/shared/Modal.vue'
@@ -43,9 +44,9 @@ function handleCleanUp() {
 </script>
 
 <template>
-  <button class="import-btn" @click="isModalOpen = true">
+  <ActionButton @click="isModalOpen = true">
     <i-ic-round-upload-file /> Import file
-  </button>
+  </ActionButton>
 
   <Modal
     v-model="isModalOpen"
@@ -53,7 +54,7 @@ function handleCleanUp() {
     subtitle="Easily expand ignored words by importing a file containing a list of words"
     @close="handleCleanUp"
   >
-    <div class="description">
+    <div class="description text-body-sm">
       <b>Constraints:</b>
       <ul>
         <li>
@@ -75,25 +76,25 @@ function handleCleanUp() {
 
     <div v-if="isFileSelected" class="footer">
       <template v-if="importedWords.length">
-        <p class="footer-msg">
-          <i-ic-round-check-circle />
+        <p class="footer-msg text-body-sm">
+          <i-ic-round-check-circle class="icon icon--success" />
           Found <b>{{ importedWords.length }}</b> word{{
             importedWords.length > 1 ? 's' : ''
           }}
         </p>
 
         <div class="actions">
-          <button class="btn" @click="handleClose">
+          <button class="btn text-body-sm" @click="handleClose">
             Cancel
           </button>
-          <button class="btn btn--primary" @click="handleImport">
+          <button class="btn btn--primary text-body-sm" @click="handleImport">
             Import
           </button>
         </div>
       </template>
       <template v-else>
-        <p class="footer-msg">
-          <i-ic-round-error /> No word found! Select another file.
+        <p class="footer-msg text-body-sm">
+          <i-ic-round-error class="icon icon--error" /> No word found! Select another file.
         </p>
       </template>
     </div>
@@ -101,25 +102,11 @@ function handleCleanUp() {
 </template>
 
 <style scoped>
-.import-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 8px 10px;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  border: none;
-  color: var(--color);
-  background-color: hsla(var(--color-raw), 0.1);
-  transition: background-color ease-in-out 0.13s;
-}
-.import-btn:hover {
-  background-color: hsla(var(--color-raw), 0.2);
-}
-
 .description {
-  font-size: 0.85rem;
-  margin-bottom: 20px;
+  color: var(--color);
+}
+.description b {
+  font-weight: 600;
 }
 
 ul {
@@ -133,42 +120,47 @@ ul li {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-top: 1px solid hsla(var(--color-raw), 0.2);
+  border-top: 1px solid var(--overlay-strong);
   padding-top: 15px;
-  margin-top: 15px;
-  font-size: 1rem;
 }
 
 .footer p {
   margin: 0;
+  color: var(--color);
 }
 
 .actions {
   display: flex;
-  gap: 4px;
+  gap: 8px;
+}
+
+.icon--success {
+  color: var(--success-color);
+}
+.icon--error {
+  color: var(--error-color);
 }
 
 .btn {
-  padding: 6px 15px;
-  border-radius: 5px;
-  font-weight: bold;
-  font-size: 0.75rem;
-  border: 1px solid hsla(var(--color-raw), 0.3);
-  background-color: transparent;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--overlay-strong);
+  background-color: var(--overlay-weak);
   color: var(--color);
+  transition: background-color 0.15s ease-in-out;
 }
 .btn:hover {
-  background-color: hsla(var(--color-raw), 0.05);
+  background-color: var(--overlay-strong);
 }
 
 .btn--primary {
-  margin-left: 10px;
-  border: 1px solid var(--color);
-  background-color: var(--color);
-  color: var(--bg-color);
+  border: 1px solid var(--overlay-strong);
+  background-color: var(--accent-color-hover);
+  color: #fff;
+  transition: filter 0.15s ease-in-out;
 }
 .btn--primary:hover {
-  background-color: hsla(var(--color-raw), 0.9);
+  filter: brightness(1.1);
 }
 
 .footer-msg {

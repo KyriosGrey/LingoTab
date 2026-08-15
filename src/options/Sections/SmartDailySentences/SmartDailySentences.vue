@@ -1,98 +1,28 @@
-<template>
-  <section class="smart-root">
-    <Header2 />
-
-    <!-- Enable toggle block (no hints control here anymore) -->
-    <EnableRow v-model="enabled" />
-
-    <!-- New separate section for hints -->
-    <Hints />
-
-    <!-- New Mix option for words/sentences -->
-    <MixMode />
-
-    <!-- Built-in sentence pack toggle -->
-    <BuiltInPackRow />
-
-    <!-- Imported sentence pack section -->
-    <ImportedPackRow />
-
-    <section class="panel">
-      <!-- ApiKey row: Test button is colocated here -->
-      <ApiKeyRow
-        v-model="apiKey"
-        @save="onApiKeySaved"
-        @test="onTestConnection"
-        :testing="testing"
-        :status="testResult"
-        :status-type="testResultType"
-      />
-
-      <!-- show test result near API row — kept for backward compatibility if needed.
-           ApiKeyRow now also receives testResult via props; this is a visual fallback
-           and will use the same .status-badge styles. -->
-      <div v-if="testResult" :class="['status-badge', testResultType]">
-        {{ testResult }}
-      </div>
-
-      <LanguageRow v-model="targetLang" />
-
-      <CEFRlevel v-model="level" />
-
-      <Topics v-model="topics" :items="topicsList" />
-
-      <GrammarFocus v-model="grammarFocus" :items="grammarOptions" />
-
-      <Length v-model="lengthPreset" />
-
-      <UpdateFrequency v-model="frequency" />
-
-      <GenerationControls
-        :api-key="apiKey"
-        :generating="generating"
-        @generate="onGenerateNow"
-      />
-
-      <!-- genResult styled as status-badge (button-like notification) -->
-      <div v-if="genResult" :class="['status-badge', genResultType]">
-        {{ genResult }}
-      </div>
-
-      <PreviewPanel
-        :pack="previewPack"
-        :warning="previewWarning"
-        @accept="acceptPreview"
-        @discard="discardPreview"
-      />
-    </section>
-  </section>
-</template>
-
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from 'vue'
-import Header2 from './Header2.vue'
-import EnableRow from './EnableRow.vue'
-import Hints from './Hints.vue'
-import MixMode from './MixMode.vue'
-import BuiltInPackRow from './BuiltInPackRow.vue'
-import ImportedPackRow from './ImportedPackRow.vue'
-import ApiKeyRow from './ApiKeyRow.vue'
-import LanguageRow from './LanguageRow.vue'
-import CEFRlevel from './CEFRlevel.vue'
-import Topics from './Topics.vue'
-import GrammarFocus from './GrammarFocus.vue'
-import Length from './Length.vue'
-import UpdateFrequency from './UpdateFrequency.vue'
-import GenerationControls from './GenerationControls.vue'
-import PreviewPanel from './PreviewPanel.vue'
-
-import * as aiProviders from '@/modules/aiProviders'
-import * as storage from '@/utils/storage'
-import { validateAndNormalizePack } from '@/utils/packValidator'
 import { usePackSource } from '@/composables/smartSentences/usePackSource'
-import { builtInPack } from '@/data/smartSentences/builtInPack'
+import * as aiProviders from '@/modules/aiProviders'
+import SettingsGroup from '@/options/components/SettingsGroup.vue'
+import * as storage from '@/utils/storage'
+import { computed, onMounted, ref, watch } from 'vue'
+import ApiKeyRow from './ApiKeyRow.vue'
+import BuiltInPackRow from './BuiltInPackRow.vue'
+import CEFRlevel from './CEFRlevel.vue'
+import CreatePackPrompt from './CreatePackPrompt.vue'
+import EnableRow from './EnableRow.vue'
+import GenerationControls from './GenerationControls.vue'
+import GrammarFocus from './GrammarFocus.vue'
+import Header2 from './Header2.vue'
+import Hints from './Hints.vue'
+import ImportedPackRow from './ImportedPackRow.vue'
+import LanguageRow from './LanguageRow.vue'
 
-type Settings = {
+import Length from './Length.vue'
+import MixMode from './MixMode.vue'
+import PreviewPanel from './PreviewPanel.vue'
+import Topics from './Topics.vue'
+import UpdateFrequency from './UpdateFrequency.vue'
+
+interface Settings {
   enabled?: boolean
   apiKey?: string
   targetLang?: string
@@ -121,7 +51,7 @@ const grammarFocus = ref<string[]>(['All'])
 const lengthPreset = ref('mixed')
 const frequency = ref<string | number>('24')
 
-const topicsList = ['IT-Dev','Finance and Banking','Gaming','Travel and Directions','Daily Life','Workplace Communication','Design','Social Media','Education','Entertainment' ]
+const topicsList = ['IT-Dev', 'Finance and Banking', 'Gaming', 'Travel and Directions', 'Daily Life', 'Workplace Communication', 'Design', 'Social Media', 'Education', 'Entertainment']
 
 const grammarOptions = [
   'All',
@@ -141,7 +71,7 @@ const grammarOptions = [
   'Passive Voice',
   'Modal Verbs',
   'Reported Speech',
-  'Gerund & Infinitive'
+  'Gerund & Infinitive',
 ]
 
 const generating = ref(false)
@@ -154,8 +84,10 @@ const previewWarning = ref('')
 
 // helper: return length range array based on current lengthPreset
 function getLengthRange(): [number, number] {
-  if (lengthPreset.value === 'short') return [4, 7]
-  if (lengthPreset.value === 'mixed') return [3, 16]
+  if (lengthPreset.value === 'short')
+    return [4, 7]
+  if (lengthPreset.value === 'mixed')
+    return [3, 16]
   return [8, 16]
 }
 
@@ -163,7 +95,8 @@ function getLengthRange(): [number, number] {
 const testResultType = computed(() => {
   const sRaw = testResult.value ?? ''
   const s = sRaw.trim().toLowerCase()
-  if (!s) return ''
+  if (!s)
+    return ''
 
   const exactMap: Record<string, 'success' | 'error'> = {
     'connection ok': 'success',
@@ -173,9 +106,12 @@ const testResultType = computed(() => {
     'connection failed or invalid response': 'error',
   }
 
-  if (exactMap[s]) return exactMap[s]
-  if (s.includes('ok') || s.includes('success')) return 'success'
-  if (s.includes('error') || s.includes('fail') || s.includes('invalid')) return 'error'
+  if (exactMap[s])
+    return exactMap[s]
+  if (s.includes('ok') || s.includes('success'))
+    return 'success'
+  if (s.includes('error') || s.includes('fail') || s.includes('invalid'))
+    return 'error'
   return ''
 })
 
@@ -183,7 +119,8 @@ const testResultType = computed(() => {
 const genResultType = computed(() => {
   const sRaw = genResult.value ?? ''
   const s = sRaw.trim().toLowerCase()
-  if (!s) return ''
+  if (!s)
+    return ''
 
   const exactMap: Record<string, 'success' | 'error'> = {
     'preview ready': 'success',
@@ -193,12 +130,18 @@ const genResultType = computed(() => {
     'uploaded pack loaded': 'success',
   }
 
-  if (s.startsWith('built-in pack loaded')) return 'success'
-  if (s.startsWith('uploaded pack loaded')) return 'success'
-  if (s.startsWith('preview ready')) return 'success'
-  if (exactMap[s]) return exactMap[s]
-  if (s.includes('saved') || s.includes('loaded')) return 'success'
-  if (s.includes('error') || s.includes('fail') || s.includes('no api key')) return 'error'
+  if (s.startsWith('built-in pack loaded'))
+    return 'success'
+  if (s.startsWith('uploaded pack loaded'))
+    return 'success'
+  if (s.startsWith('preview ready'))
+    return 'success'
+  if (exactMap[s])
+    return exactMap[s]
+  if (s.includes('saved') || s.includes('loaded'))
+    return 'success'
+  if (s.includes('error') || s.includes('fail') || s.includes('no api key'))
+    return 'error'
   return ''
 })
 
@@ -211,17 +154,21 @@ onMounted(async () => {
   if (s && s[storageKey]) {
     const st: Settings = s[storageKey]
     enabled.value = !!st.enabled
-    if (st.apiKey) apiKey.value = st.apiKey
-    if (st.targetLang) targetLang.value = st.targetLang
+    if (st.apiKey)
+      apiKey.value = st.apiKey
+    if (st.targetLang)
+      targetLang.value = st.targetLang
     level.value = st.level || 'B1'
     topics.value = st.topics && st.topics.length ? st.topics : ['Daily Life & Slang']
     grammarFocus.value = st.grammarFocus && st.grammarFocus.length ? st.grammarFocus : ['All']
     lengthPreset.value = st.lengthPreset || 'short'
     frequency.value = st.frequency || '24'
-  } else {
+  }
+  else {
     // if there's separate saved apiKey
     const s2 = await storage.get([storageApiKey])
-    if (s2 && s2[storageApiKey]) apiKey.value = s2[storageApiKey]
+    if (s2 && s2[storageApiKey])
+      apiKey.value = s2[storageApiKey]
   }
 })
 
@@ -239,13 +186,14 @@ async function saveSettings() {
     topics: topics.value,
     grammarFocus: grammarFocus.value,
     lengthPreset: lengthPreset.value,
-    frequency: frequency.value
+    frequency: frequency.value,
   }
   try {
     const s = await storage.get([storageKey])
     const base = s?.[storageKey] ?? {}
     await storage.set({ [storageKey]: { ...base, ...obj } })
-  } catch (e) {
+  }
+  catch (e) {
     console.warn('[SmartDailySentences] failed to save settings', e)
   }
 }
@@ -261,7 +209,8 @@ async function onTestConnection(passedKey?: string) {
   testResult.value = ''
   const usedKey = (typeof passedKey === 'string' && passedKey.trim()) ? passedKey.trim() : apiKey.value
   if (!usedKey) { testResult.value = 'No API key'; return }
-  if (usedKey !== apiKey.value) apiKey.value = usedKey
+  if (usedKey !== apiKey.value)
+    apiKey.value = usedKey
 
   testing.value = true
   try {
@@ -271,21 +220,25 @@ async function onTestConnection(passedKey?: string) {
       grammarFocus: grammarFocus.value,
       topics: topics.value,
       lengthRange: getLengthRange(),
-      targetLang: targetLang.value
+      targetLang: targetLang.value,
     }
     const ok = await aiProviders.testConnection(usedKey, settings)
     testResult.value = ok ? 'Connection OK' : 'Connection failed or invalid response'
-  } catch (e: any) {
-    testResult.value = 'Error: ' + (e?.message || String(e))
+  }
+  catch (e: any) {
+    testResult.value = `Error: ${e?.message || String(e)}`
     console.debug('[SmartDailySentences] onTestConnection caught', e)
-  } finally {
+  }
+  finally {
     testing.value = false
   }
 }
 
 /**
  * Generate now (preview).
- * Priority: Built-in → Uploaded → API
+ * Priority: Uploaded → API
+ * Generating a new pack always means the user wants a fresh AI pack,
+ * so if the built-in pack is active it gets switched off first.
  */
 async function onGenerateNow() {
   console.debug('[SmartDailySentences] onGenerateNow called, source=', getSource())
@@ -294,17 +247,9 @@ async function onGenerateNow() {
   previewWarning.value = ''
   genResult.value = ''
 
-  // ✅ Check: if built-in enabled, use it
+  // Requesting a new pack means leaving the built-in pack behind.
   if (isBuiltInActive()) {
-    try {
-      previewPack.value = builtInPack
-      genResult.value = 'Built-in pack loaded: 25 sentences. Review and Accept to save.'
-      return
-    } catch (e: any) {
-      genResult.value = 'Error loading built-in pack: ' + (e?.message || String(e))
-      console.debug('[SmartDailySentences] onGenerateNow built-in error', e)
-      return
-    }
+    await setSource(null)
   }
 
   // ✅ Check: if uploaded enabled, load from storage
@@ -317,8 +262,9 @@ async function onGenerateNow() {
         genResult.value = `Uploaded pack loaded: ${uploaded.count} sentences. Review and Accept to save.`
         return
       }
-    } catch (e: any) {
-      genResult.value = 'Error loading uploaded pack: ' + (e?.message || String(e))
+    }
+    catch (e: any) {
+      genResult.value = `Error loading uploaded pack: ${e?.message || String(e)}`
       console.debug('[SmartDailySentences] onGenerateNow uploaded error', e)
       return
     }
@@ -334,7 +280,7 @@ async function onGenerateNow() {
       grammarFocus: grammarFocus.value,
       topics: topics.value,
       lengthRange: getLengthRange(),
-      targetLang: targetLang.value
+      targetLang: targetLang.value,
     }
     const res = await aiProviders.generatePack(apiKey.value, st)
     previewRaw.value = res.raw
@@ -343,10 +289,12 @@ async function onGenerateNow() {
       previewWarning.value = `Generated ${previewPack.value?.sentences?.length ?? 0} of ${st.count} requested sentences. You may retry.`
     }
     genResult.value = `Preview ready: ${res.pack.sentences.length} sentences. Review and Accept to save.`
-  } catch (e: any) {
-    genResult.value = 'Error: ' + (e?.message || String(e))
+  }
+  catch (e: any) {
+    genResult.value = `Error: ${e?.message || String(e)}`
     console.debug('[SmartDailySentences] onGenerateNow error', e)
-  } finally {
+  }
+  finally {
     generating.value = false
   }
 }
@@ -355,7 +303,8 @@ async function onGenerateNow() {
  * Accept preview — handle different sources
  */
 async function acceptPreview() {
-  if (!previewPack.value) return
+  if (!previewPack.value)
+    return
 
   try {
     const source = getSource()
@@ -363,13 +312,14 @@ async function acceptPreview() {
     // If this was built-in or uploaded, just save
     if (source === 'builtin' || source === 'uploaded') {
       await storage.set({ [storagePackKey]: previewPack.value, lastSmartPackGeneratedAt: Date.now() })
-    } else {
+    }
+    else {
       // This is AI-generated, so clear alternative sources
       await setSource('ai')
       await storage.set({
         [storagePackKey]: previewPack.value,
         lastSmartPackGeneratedAt: Date.now(),
-        smartBuiltInEnabled: false
+        smartBuiltInEnabled: false,
       })
     }
 
@@ -377,8 +327,9 @@ async function acceptPreview() {
     previewRaw.value = null
     previewWarning.value = ''
     genResult.value = 'Pack saved.'
-  } catch (e: any) {
-    genResult.value = 'Error saving pack: ' + (e?.message || String(e))
+  }
+  catch (e: any) {
+    genResult.value = `Error saving pack: ${e?.message || String(e)}`
     console.warn('[SmartDailySentences] acceptPreview error', e)
   }
 }
@@ -391,11 +342,89 @@ function discardPreview() {
 }
 </script>
 
-<style scoped>
-.smart-root { display:flex; flex-direction:column; gap:10px; padding: 0; }
-.panel { display:flex; flex-direction:column; gap:12px; padding: 0; max-width: 720px; }
+<template>
+  <section class="smart-root">
+    <Header2 />
+    <div class="smart-root__divider" />
 
-.muted { color: hsla(var(--color-raw), 0.6); font-size: 0.95rem; }
+    <SettingsGroup title="General">
+      <EnableRow v-model="enabled" />
+      <Hints />
+      <MixMode />
+      <BuiltInPackRow />
+      <CreatePackPrompt />
+      <ImportedPackRow />
+    </SettingsGroup>
+
+    <SettingsGroup title="AI Generation Configuration" ai>
+      <!-- ApiKey row: Test button is colocated here -->
+      <ApiKeyRow
+        v-model="apiKey"
+        :testing="testing"
+        :status="testResult"
+        :status-type="testResultType"
+        @save="onApiKeySaved"
+        @test="onTestConnection"
+      />
+
+      <!-- show test result near API row — kept for backward compatibility if needed.
+           ApiKeyRow now also receives testResult via props; this is a visual fallback
+           and will use the same .status-badge styles. -->
+      <div v-if="testResult" class="status-badge text-body-sm" :class="[testResultType]">
+        {{ testResult }}
+      </div>
+    </SettingsGroup>
+
+    <SettingsGroup title="Language & Proficiency" ai>
+      <LanguageRow v-model="targetLang" />
+      <CEFRlevel v-model="level" />
+      <Topics v-model="topics" :items="topicsList" />
+    </SettingsGroup>
+
+    <SettingsGroup title="Grammar focus" ai>
+      <GrammarFocus v-model="grammarFocus" :items="grammarOptions" />
+    </SettingsGroup>
+
+    <SettingsGroup title="Generation settings" ai>
+      <Length v-model="lengthPreset" />
+      <UpdateFrequency v-model="frequency" />
+
+      <GenerationControls
+        :api-key="apiKey"
+        :generating="generating"
+        @generate="onGenerateNow"
+      />
+
+      <!-- genResult styled as status-badge (button-like notification) -->
+      <div v-if="genResult" class="status-badge text-body-sm" :class="[genResultType]">
+        {{ genResult }}
+      </div>
+
+      <PreviewPanel
+        :pack="previewPack"
+        :warning="previewWarning"
+        @accept="acceptPreview"
+        @discard="discardPreview"
+      />
+    </SettingsGroup>
+  </section>
+</template>
+
+<style scoped>
+.smart-root {
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.smart-root__divider {
+  height: 1px;
+  background: var(--overlay-weak);
+}
+
+.muted { color: var(--text-secondary); }
 
 /* Status badge styles (same as ApiKeyRow) */
 .status-badge {
@@ -404,24 +433,22 @@ function discardPreview() {
   justify-content: center;
   padding: 8px 10px;
   border-radius: 4px;
-  font-weight: 700;
-  font-size: 0.8rem;
   color: var(--color);
   line-height: 1;
   user-select: none;
   pointer-events: none;
   margin-top: 8px;
-  background: hsla(var(--color-raw), 0.04);
+  background: var(--overlay-weak);
   border: 1px solid transparent;
 }
 
 .status-badge.success {
-  background: rgba(46, 204, 113, 0.12);
-  border-color: rgba(46, 204, 113, 0.22);
+  background: hsla(150, 42.6%, 50.8%, 0.12);
+  border-color: hsla(150, 42.6%, 50.8%, 0.3);
 }
 
 .status-badge.error {
-  background: rgba(204, 67, 67, 0.10);
-  border-color: rgba(204, 67, 67, 0.18);
+  background: hsla(0, 78.7%, 63.1%, 0.1);
+  border-color: hsla(0, 78.7%, 63.1%, 0.25);
 }
 </style>

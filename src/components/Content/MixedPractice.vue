@@ -6,7 +6,8 @@ import { decideNextIsSentence } from '@/composables/useSmartMix'
 
 import useWord from '@/composables/words/useWord'
 import * as storage from '@/utils/storage'
-import { builtInPack } from '@/data/smartSentences/builtInPack'
+import useGoogleTranslate from '@/composables/useGoogleTranslate'
+import { getBuiltInPackForLanguage } from '@/data/smartSentences/builtInPacks'
 
 import LearnedAllWords from './LearnedAllWords.vue'
 import Loading from './Loading.vue'
@@ -55,7 +56,8 @@ async function decideAndPrepare() {
     let pack = null
     const source = s?.['smartPackSource']
     if (source === 'builtin') {
-      pack = builtInPack
+      const { targetLanguage } = useGoogleTranslate()
+      pack = getBuiltInPackForLanguage(targetLanguage.code)
     } else if (source === 'uploaded') {
       pack = s?.['smartUploadedPack'] ?? null
     } else {

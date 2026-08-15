@@ -11,7 +11,7 @@ button {
   justify-content: center;
   padding: 0;
   border: none;
-  color: hsla(var(--color-raw), 0.25);
+  color: var(--text-secondary);
   background-color: transparent;
   transition: color ease-in-out 0.1s;
 }

@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
-import { normalizeTense, useTenseCards } from '@/composables/smartSentences/useTenseCards'
-import { tenseCardsMap, tenseOptions } from '@/data/smartSentences/tenseCards'
-import useGoogleTranslate from '@/composables/useGoogleTranslate'
-import Translation from '@/components/Content/Translation.vue'
 import type { TextBlock } from '@/data/smartSentences/tenseCards/types'
+import Translation from '@/components/Content/Translation.vue'
+import { normalizeTense, useTenseCards } from '@/composables/smartSentences/useTenseCards'
+import useGoogleTranslate from '@/composables/useGoogleTranslate'
+import { tenseCardsMap, tenseOptions } from '@/data/smartSentences/tenseCards'
+import Select from '@/options/components/Select.vue'
+import { computed, ref, watch } from 'vue'
 
 const props = defineProps<{
   currentTense?: string
@@ -22,7 +23,8 @@ watch(
   (newTense) => {
     if (newTense) {
       const normalized = normalizeTense(newTense)
-      if (normalized !== selectedTense.value) selectedTense.value = normalized
+      if (normalized !== selectedTense.value)
+        selectedTense.value = normalized
     }
   },
   { immediate: true },
@@ -40,67 +42,73 @@ function shouldTranslateBlock(block?: TextBlock) {
 <template>
   <div class="tense-cards-panel">
     <div class="panel-header">
-      <h3 class="panel-title">Grammar Reference</h3>
+      <h3 class="panel-title text-heading-18">
+        Grammar Reference
+      </h3>
 
-      <select v-model="selectedTense" class="tense-select tiny-scrollbar">
-        <option v-for="option in tenseOptions" :key="option.value" :value="option.value">
-          {{ option.text }}
-        </option>
-      </select>
+      <Select v-model="selectedTense" :options="tenseOptions" class="tense-select" />
     </div>
 
-    <div v-if="currentCards" class="cards-grid">
-      <div class="card explain-card">
-        <h4 class="card-title">
+    <div v-if="currentCards" class="reference-card">
+      <div class="left-column">
+        <h4 class="card-title text-heading-18">
           <Translation
             v-if="shouldTranslateBlock(currentCards.explain.title)"
             :text="currentCards.explain.title.text"
             from="ru"
             display="block"
+            variant="plain"
+            as="span"
           />
           <template v-else>
             {{ currentCards.explain.title.text }}
           </template>
         </h4>
 
-        <p class="card-description">
+        <p class="card-description text-body">
           <Translation
             v-if="shouldTranslateBlock(currentCards.explain.description)"
             :text="currentCards.explain.description.text"
             from="ru"
-            small
+            variant="plain"
+            as="span"
           />
           <template v-else>
             {{ currentCards.explain.description.text }}
           </template>
         </p>
 
-        <div class="focus-note">
+        <div class="focus-tip text-body-sm-italic">
           <Translation
             v-if="shouldTranslateBlock(currentCards.explain.focusNote)"
             :text="currentCards.explain.focusNote.text"
             from="ru"
-            small
+            variant="plain"
+            as="span"
           />
           <template v-else>
             {{ currentCards.explain.focusNote.text }}
           </template>
         </div>
 
-        <div class="formula">
-          <strong>Formula:</strong> <code>{{ currentCards.explain.formula }}</code>
-        </div>
+        <p class="formula text-heading-18">
+          <span class="formula-label">Formula: </span>
+          <span class="formula-value">{{ currentCards.explain.formula }}</span>
+        </p>
 
-        <div class="examples">
-          <div v-for="(example, idx) in currentCards.explain.examples" :key="idx" class="example">
-            <div class="example-en">{{ example.en }}</div>
+        <div class="examples-list">
+          <div v-for="(example, idx) in currentCards.explain.examples" :key="idx" class="example-item">
+            <div class="example-en text-body">
+              {{ example.en }}
+            </div>
 
-            <div v-if="example.ru" class="example-ru">
+            <div v-if="example.ru" class="example-ru text-body-sm-italic">
               <Translation
                 v-if="shouldTranslateBlock(example.ru)"
                 :text="example.ru.text"
                 from="ru"
-                small
+                variant="plain"
+                as="span"
               />
               <template v-else>
                 {{ example.ru.text }}
@@ -110,143 +118,165 @@ function shouldTranslateBlock(block?: TextBlock) {
         </div>
       </div>
 
-      <div class="card mistakes-card">
-        <div class="mistakes-list">
-          <div v-for="(mistake, idx) in currentCards.mistakes.mistakes" :key="idx" class="mistake">
-            <div class="mistake-note">
-              <Translation
-                v-if="shouldTranslateBlock(mistake.title)"
-                :text="mistake.title.text"
-                from="ru"
-                small
-              />
-              <template v-else>
-                {{ mistake.title.text }}
-              </template>
+      <div class="right-column">
+        <template v-for="(mistake, idx) in currentCards.mistakes.mistakes" :key="idx">
+          <div class="mistake">
+            <div class="mistake-head">
+              <div class="mistake-title text-body">
+                <Translation
+                  v-if="shouldTranslateBlock(mistake.title)"
+                  :text="mistake.title.text"
+                  from="ru"
+                  variant="plain"
+                  as="span"
+                />
+                <template v-else>
+                  {{ mistake.title.text }}
+                </template>
+              </div>
+              <div class="mistake-note text-body-sm-italic">
+                <Translation
+                  v-if="shouldTranslateBlock(mistake.note)"
+                  :text="mistake.note.text"
+                  from="ru"
+                  variant="plain"
+                  as="span"
+                />
+                <template v-else>
+                  {{ mistake.note.text }}
+                </template>
+              </div>
             </div>
 
-            <div class="mistake-wrong">{{ mistake.wrong }}</div>
-            <div class="mistake-right">{{ mistake.right }}</div>
-
-            <div class="mistake-note">
-              <Translation
-                v-if="shouldTranslateBlock(mistake.note)"
-                :text="mistake.note.text"
-                from="ru"
-                small
-              />
-              <template v-else>
-                {{ mistake.note.text }}
-              </template>
+            <div class="mistake-examples">
+              <div class="mistake-wrong text-body">
+                {{ mistake.wrong }}
+              </div>
+              <div class="mistake-right text-body">
+                {{ mistake.right }}
+              </div>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div class="card when-to-use-card">
-        <h4 class="card-title">
+          <div v-if="idx < currentCards.mistakes.mistakes.length - 1" class="mistake-divider" />
+        </template>
+      </div>
+    </div>
+
+    <div v-if="currentCards" class="trigger-contrast-section">
+      <h4 class="text-heading-18">
+        <Translation
+          v-if="shouldTranslateBlock(currentCards.whenToUse.title)"
+          :text="currentCards.whenToUse.title.text"
+          from="ru"
+          variant="plain"
+          as="span"
+        />
+        <template v-else>
+          {{ currentCards.whenToUse.title.text }}
+        </template>
+      </h4>
+
+      <div class="time-badges">
+        <div v-for="(trigger, idx) in currentCards.whenToUse.triggers" :key="idx" class="trigger text-body-sm">
           <Translation
-            v-if="shouldTranslateBlock(currentCards.whenToUse.title)"
-            :text="currentCards.whenToUse.title.text"
+            v-if="shouldTranslateBlock(trigger)"
+            :text="trigger.text"
             from="ru"
+            variant="plain"
+            as="span"
           />
           <template v-else>
-            {{ currentCards.whenToUse.title.text }}
+            {{ trigger.text }}
           </template>
-        </h4>
-
-        <div class="when-content">
-          <div class="triggers-section">
-            <strong>Time markers:</strong>
-            <ul class="triggers-list">
-              <li v-for="(trigger, idx) in currentCards.whenToUse.triggers" :key="idx">
-                <Translation
-                  v-if="shouldTranslateBlock(trigger)"
-                  :text="trigger.text"
-                  from="ru"
-                  small
-                />
-                <template v-else>
-                  {{ trigger.text }}
-                </template>
-              </li>
-            </ul>
-          </div>
-
-          <div class="comparison-section">
-            <div class="comparison-block">
-              <h5 class="comparison-title">{{ currentCards.whenToUse.comparison.left.title }}</h5>
-
-              <div v-for="(example, idx) in currentCards.whenToUse.comparison.left.examples" :key="idx" class="comparison-example">
-                <div class="example-en">{{ example.en }}</div>
-                <div v-if="example.ru" class="example-ru">
-                  <Translation
-                    v-if="shouldTranslateBlock(example.ru)"
-                    :text="example.ru.text"
-                    from="ru"
-                    small
-                  />
-                  <template v-else>
-                    {{ example.ru.text }}
-                  </template>
-                </div>
-              </div>
-
-              <div v-if="currentCards.whenToUse.comparison.left.note" class="comparison-note">
-                <Translation
-                  v-if="shouldTranslateBlock(currentCards.whenToUse.comparison.left.note)"
-                  :text="currentCards.whenToUse.comparison.left.note.text"
-                  from="ru"
-                  small
-                />
-                <template v-else>
-                  {{ currentCards.whenToUse.comparison.left.note.text }}
-                </template>
-              </div>
-            </div>
-
-            <div class="comparison-block">
-              <h5 class="comparison-title">{{ currentCards.whenToUse.comparison.right.title }}</h5>
-
-              <div v-for="(example, idx) in currentCards.whenToUse.comparison.right.examples" :key="idx" class="comparison-example">
-                <div class="example-en">{{ example.en }}</div>
-                <div v-if="example.ru" class="example-ru">
-                  <Translation
-                    v-if="shouldTranslateBlock(example.ru)"
-                    :text="example.ru.text"
-                    from="ru"
-                    small
-                  />
-                  <template v-else>
-                    {{ example.ru.text }}
-                  </template>
-                </div>
-              </div>
-
-              <div v-if="currentCards.whenToUse.comparison.right.note" class="comparison-note">
-                <Translation
-                  v-if="shouldTranslateBlock(currentCards.whenToUse.comparison.right.note)"
-                  :text="currentCards.whenToUse.comparison.right.note.text"
-                  from="ru"
-                  small
-                />
-                <template v-else>
-                  {{ currentCards.whenToUse.comparison.right.note.text }}
-                </template>
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
+      <div class="contrast-cards">
+        <div class="contrast-card">
+          <h5 class="contrast-title text-heading-18">
+            {{ currentCards.whenToUse.comparison.left.title }}
+          </h5>
+
+          <div v-for="(example, idx) in currentCards.whenToUse.comparison.left.examples" :key="idx" class="example-item">
+            <div class="example-en text-body">
+              {{ example.en }}
+            </div>
+            <div v-if="example.ru" class="example-ru text-body-sm-italic">
+              <Translation
+                v-if="shouldTranslateBlock(example.ru)"
+                :text="example.ru.text"
+                from="ru"
+                variant="plain"
+                as="span"
+              />
+              <template v-else>
+                {{ example.ru.text }}
+              </template>
+            </div>
+          </div>
+
+          <div v-if="currentCards.whenToUse.comparison.left.note" class="comparison-note text-body-sm-italic">
+            <Translation
+              v-if="shouldTranslateBlock(currentCards.whenToUse.comparison.left.note)"
+              :text="currentCards.whenToUse.comparison.left.note.text"
+              from="ru"
+              variant="plain"
+              as="span"
+            />
+            <template v-else>
+              {{ currentCards.whenToUse.comparison.left.note.text }}
+            </template>
+          </div>
+        </div>
+
+        <div class="contrast-card">
+          <h5 class="contrast-title text-heading-18">
+            {{ currentCards.whenToUse.comparison.right.title }}
+          </h5>
+
+          <div v-for="(example, idx) in currentCards.whenToUse.comparison.right.examples" :key="idx" class="example-item">
+            <div class="example-en text-body">
+              {{ example.en }}
+            </div>
+            <div v-if="example.ru" class="example-ru text-body-sm-italic">
+              <Translation
+                v-if="shouldTranslateBlock(example.ru)"
+                :text="example.ru.text"
+                from="ru"
+                variant="plain"
+                as="span"
+              />
+              <template v-else>
+                {{ example.ru.text }}
+              </template>
+            </div>
+          </div>
+
+          <div v-if="currentCards.whenToUse.comparison.right.note" class="comparison-note text-body-sm-italic">
+            <Translation
+              v-if="shouldTranslateBlock(currentCards.whenToUse.comparison.right.note)"
+              :text="currentCards.whenToUse.comparison.right.note.text"
+              from="ru"
+              variant="plain"
+              as="span"
+            />
+            <template v-else>
+              {{ currentCards.whenToUse.comparison.right.note.text }}
+            </template>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
+
 <style scoped>
 .tense-cards-panel {
-  margin: 20px auto 50px;
-  padding: 0 15px;
-  max-width: 800px;
+  margin: 48px auto 50px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 /* Header with title and dropdown */
@@ -254,257 +284,211 @@ function shouldTranslateBlock(block?: TextBlock) {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
   gap: 16px;
 }
 
 .panel-title {
   margin: 0;
-  font-size: 1.2rem;
-  font-weight: 600;
   color: var(--color);
 }
 
-/* Dropdown styling matching Options */
 .tense-select {
-  padding: 6px 10px;
-  border-radius: 4px;
-  border: 1px solid hsla(var(--color-raw), 0.4);
-  background: var(--bg-color);
-  color: var(--color);
-  font-size: 0.9rem;
-  cursor: pointer;
-  min-width: 200px;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  width: 232px;
+  flex-shrink: 0;
 }
 
-.tense-select:hover {
-  border-color: hsla(var(--color-raw), 0.6);
+/* Grammar Reference card */
+.reference-card {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  border-radius: 8px;
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
 }
 
-.tense-select:focus {
-  outline: none;
-  border-color: hsla(var(--color-raw), 0.8);
-  box-shadow: 0 0 0 3px hsla(var(--color-raw), 0.1);
-}
-
-/* Cards grid layout */
-.cards-grid {
-  display: grid;
-  grid-template-columns: 1.35fr 1fr;
-  gap: 12px;
-}
-
-/* Card base styling */
-.card {
-  padding: 16px 18px;
-  border-radius: 10px;
-  background-color: hsla(var(--bg-color-raw), 0.9);
-  backdrop-filter: blur(5px);
-  border: 1px solid hsla(var(--color-raw), 0.08);
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 400px;
+  flex-shrink: 0;
+  padding-right: 24px;
+  border-right: 1px solid var(--border-color);
 }
 
 .card-title {
-  margin: 0 0 10px 0;
-  font-size: 1rem;
-  font-weight: 700;
+  margin: 0;
   color: var(--color);
 }
 
 .card-description {
-  margin: 0 0 12px 0;
-  font-size: 0.9rem;
-  color: hsla(var(--color-raw), 0.85);
-  line-height: 1.5;
+  margin: 0;
+  color: var(--text-secondary);
 }
 
-/* ExplainCard specific */
-.explain-card {
-  grid-column: 1;
-}
-
-.focus-note {
-  margin-bottom: 10px;
-  padding: 8px 10px;
-  background: hsla(var(--color-raw), 0.04);
-  border-radius: 6px;
-  font-size: 0.85rem;
-  color: hsla(var(--color-raw), 0.8);
+.focus-tip {
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--overlay-weak);
+  border: 1px solid var(--overlay-strong);
+  color: var(--color);
 }
 
 .formula {
-  margin-bottom: 12px;
-  font-size: 0.9rem;
+  margin: 0;
+}
+.formula-label {
   color: var(--color);
 }
-
-.formula code {
-  padding: 3px 6px;
-  background: hsla(var(--color-raw), 0.08);
-  border-radius: 4px;
-  font-family: 'Courier New', monospace;
-  font-size: 0.9em;
-  color: var(--color);
+.formula-value {
+  color: var(--text-secondary);
 }
 
-.examples {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.example {
-  padding: 8px 10px;
-  background: hsla(var(--color-raw), 0.03);
-  border-radius: 6px;
-  border-left: 3px solid hsla(var(--color-raw), 0.2);
-}
-
-.example-en {
-  font-size: 0.9rem;
-  color: var(--color);
-  margin-bottom: 4px;
-}
-
-.example-ru {
-  font-size: 0.85rem;
-  color: hsla(var(--color-raw), 0.6);
-  font-style: italic;
-}
-
-/* MistakesCard specific */
-.mistakes-card {
-  grid-column: 2;
-}
-
-.mistakes-list {
+.examples-list {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
+.example-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  border-left-width: 4px;
+}
+
+.example-en {
+  color: var(--color);
+}
+
+.example-ru {
+  color: var(--text-secondary);
+}
+
+/* Mistakes column */
+.right-column {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 .mistake {
-  padding: 10px;
-  background: hsla(var(--color-raw), 0.03);
-  border-radius: 6px;
-  font-size: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.mistake-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .mistake-title {
-  font-weight: 600;
-  margin-bottom: 6px;
   color: var(--color);
-}
-
-.mistake-wrong {
-  color: #c62828;
-  margin-bottom: 4px;
-  font-size: 0.85rem;
-}
-
-.mistake-right {
-  color: #2e7d32;
-  margin-bottom: 6px;
-  font-size: 0.85rem;
 }
 
 .mistake-note {
-  color: hsla(var(--color-raw), 0.65);
-  font-size: 0.8rem;
-  font-style: italic;
+  color: var(--text-secondary);
 }
 
-/* WhenToUseCard specific */
-.when-to-use-card {
-  grid-column: 1 / -1;
+.mistake-divider {
+  height: 1px;
+  background: var(--border-color);
 }
 
-.when-content {
+.mistake-examples {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.mistake-wrong {
+  color: var(--error-color);
+}
+
+.mistake-right {
+  color: var(--success-color);
+}
+
+/* Trigger & Contrast section */
+.trigger-contrast-section {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  padding: 24px 16px;
+  border-radius: 8px;
+  background: var(--surface-color);
+  border: 1px solid var(--border-color);
 }
 
-.triggers-section {
-  font-size: 0.9rem;
+.trigger-contrast-section > h4 {
+  margin: 0;
   color: var(--color);
 }
 
-.triggers-list {
-  margin: 8px 0 0 0;
-  padding-left: 0px;
+.time-badges {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  list-style: none;
 }
 
-.triggers-list li {
-  padding: 4px 10px;
-  background: hsla(var(--color-raw), 0.06);
+.trigger {
+  padding: 6px 12px;
   border-radius: 4px;
-  font-size: 0.85rem;
-  color: hsla(var(--color-raw), 0.8);
+  background: var(--trigger-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
 }
 
-.comparison-section {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+.contrast-cards {
+  display: flex;
   gap: 16px;
+  padding-top: 16px;
 }
 
-.comparison-block {
-  padding: 12px;
-  background: hsla(var(--color-raw), 0.04);
-  border-radius: 8px;
+.contrast-card {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.comparison-title {
-  margin: 0 0 10px 0;
-  font-size: 0.95rem;
-  font-weight: 600;
+.contrast-title {
+  margin: 0;
   color: var(--color);
 }
 
-.comparison-example {
-  margin-bottom: 10px;
-  padding: 8px;
-  background: hsla(var(--bg-color-raw), 0.5);
-  border-radius: 6px;
-}
-
-.comparison-example:last-of-type {
-  margin-bottom: 8px;
-}
-
 .comparison-note {
-  font-size: 0.8rem;
-  color: hsla(var(--color-raw), 0.65);
-  font-style: italic;
-  margin-top: 8px;
+  color: var(--text-secondary);
 }
 
 /* Responsive adjustments */
 @media (max-width: 700px) {
-  .cards-grid {
-    grid-template-columns: 1fr;
+  .reference-card {
+    flex-direction: column;
   }
-
-  .explain-card,
-  .mistakes-card,
-  .when-to-use-card {
-    grid-column: 1;
+  .left-column {
+    width: 100%;
+    padding-right: 0;
+    padding-bottom: 16px;
+    border-right: none;
+    border-bottom: 1px solid var(--border-color);
   }
-
-  .comparison-section {
-    grid-template-columns: 1fr;
+  .contrast-cards {
+    flex-direction: column;
   }
-
   .panel-header {
     flex-direction: column;
     align-items: flex-start;
   }
-
   .tense-select {
     width: 100%;
   }
@@ -512,7 +496,22 @@ function shouldTranslateBlock(block?: TextBlock) {
 
 @media (max-width: 450px) {
   .tense-cards-panel {
-    margin: 15px 12px 30px;
+    margin: 20px 0 30px;
   }
+}
+</style>
+
+<!-- Trigger badge background: recessed black-30% fill in dark theme, flat white
+     surface in light theme — matches every other bordered element on this
+     screen (see --border-color in src/styles/index.css) but this one fill is
+     genuinely inverted rather than just weak/strong, so it's kept local. -->
+<style>
+.tense-cards-panel {
+  --trigger-bg: rgba(0, 0, 0, 0.3);
+}
+html.light .tense-cards-panel,
+body.light .tense-cards-panel,
+.light .tense-cards-panel {
+  --trigger-bg: var(--surface-color);
 }
 </style>
