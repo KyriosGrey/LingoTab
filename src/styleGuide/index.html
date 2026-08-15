@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LingoTab — Style Guide</title>
+  </head>
+
+  <body>
+    <!-- Same logic as extension/initTheme.js, inlined: that file's relative path only
+         resolves once copied next to the built extension pages, and this page is opened
+         straight from the dev server instead. -->
+    <script>
+      (function () {
+        window.__onThemeChange = function () {}
+
+        let preferredTheme
+        try {
+          preferredTheme = localStorage.getItem('theme')
+        }
+        catch {}
+
+        function setTheme(newTheme) {
+          window.__theme = newTheme
+          preferredTheme = newTheme
+          document.body.className = newTheme
+          window.__onThemeChange(newTheme)
+        }
+
+        window.__setPreferredTheme = function (newTheme) {
+          setTheme(newTheme)
+          try {
+            localStorage.setItem('theme', newTheme)
+          }
+          catch {}
+        }
+
+        const darkQuery = window.matchMedia('(prefers-color-scheme: dark)')
+        darkQuery.addEventListener('change', (event) => {
+          window.__setPreferredTheme(event.matches ? 'dark' : 'light')
+        })
+
+        setTheme(preferredTheme || (darkQuery.matches ? 'dark' : 'light'))
+      })()
+    </script>
+    <div id="app"></div>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

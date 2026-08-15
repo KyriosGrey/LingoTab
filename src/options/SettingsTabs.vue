@@ -1,21 +1,36 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const active = ref<'newword' | 'smart' | 'patchnotes'>('newword')
+</script>
+
 <template>
   <div class="settings-root">
     <aside class="settings-sidebar" role="navigation" aria-label="Settings menu">
-      <div class="brand">Settings</div>
+      <div class="brand text-heading-label">
+        Settings
+      </div>
       <nav>
         <button
-          :class="['menu-item', active === 'newword' ? 'active' : '']"
-          @click="active = 'newword'"
+          class="menu-item" :class="[active === 'newword' ? 'active' : '']"
           aria-pressed="active === 'newword'"
+          @click="active = 'newword'"
         >
-          New Word Tab
+          Main Settings
         </button>
         <button
-          :class="['menu-item', active === 'smart' ? 'active' : '']"
-          @click="active = 'smart'"
+          class="menu-item" :class="[active === 'smart' ? 'active' : '']"
           aria-pressed="active === 'smart'"
+          @click="active = 'smart'"
         >
           Smart Sentences
+        </button>
+        <button
+          class="menu-item" :class="[active === 'patchnotes' ? 'active' : '']"
+          aria-pressed="active === 'patchnotes'"
+          @click="active = 'patchnotes'"
+        >
+          Patch Notes
         </button>
       </nav>
     </aside>
@@ -28,20 +43,19 @@
       <section v-show="active === 'smart'" class="panel-section">
         <slot name="smart" />
       </section>
+
+      <section v-show="active === 'patchnotes'" class="panel-section">
+        <slot name="patchnotes" />
+      </section>
     </main>
   </div>
 </template>
-
-<script setup lang="ts">
-import { ref } from 'vue'
-const active = ref<'newword'|'smart'>('newword')
-</script>
 
 <style scoped>
 /* Центрируем весь блок настроек и делаем две колонки рядом */
 .settings-root {
   display: flex;
-  gap: 20px;
+  gap: 48px;
   align-items: flex-start;
   max-width: 980px; /* фиксированная максимальная ширина */
   margin: 24px auto; /* центрирование по горизонтали */
@@ -51,62 +65,64 @@ const active = ref<'newword'|'smart'>('newword')
   font-family: inherit; /* подхватит глобальный шрифт */
 }
 
-/* Sidebar - remove rounded corners, keep only right border */
+/* Sidebar — Figma "sidebar" frame (node-id=19-260): flush left, no border, no
+   internal padding of its own (the shared page margin comes from .settings-root) */
 .settings-sidebar {
-  width: 240px;
-  min-width: 200px;
+  width: 260px;
   background: transparent;
   border: none;
-  border-right: 1px solid hsla(var(--color-raw), 0.04);
-  border-radius: 0; /* убираем закругления */
-  padding: 12px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 24px;
 }
 
-/* Brand: style consistent with other section subtitles (time-title / preview-subtitle) */
 .brand {
   margin: 0;
-  color: hsla(var(--color-raw), 0.7);
-  font-size: 0.75rem;
-  font-weight: 400;
-  line-height: 1.3;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
 }
 
-/* Menu buttons — визуально согласованы со стилем .btn (ApiKeyRow.vue) */
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Menu buttons — Figma "Nav Item" component (frame node-id=24-253) */
 .menu-item {
   display: inline-flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 6px;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 8px;
   background: transparent;
-  border: none;
+  border: 1px solid transparent;
   cursor: pointer;
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: var(--color, #111);
-  min-height: 36px;
-  transition: background-color 0.13s ease-in-out, box-shadow 0.13s, color 0.13s ease-in-out;
-  line-height: 1;
+  font-family: var(--font-family-base);
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: -0.05em;
+  color: var(--text-secondary);
+  transition: background-color 0.13s ease-in-out, border-color 0.13s ease-in-out, color 0.13s ease-in-out;
   text-align: left;
   width: 100%;
+  box-sizing: border-box;
 }
 
-/* Hover state like buttons */
+/* Hover state */
 .menu-item:hover:not(.active) {
-  background-color: hsla(var(--color-raw), 0.08);
+  background-color: var(--overlay-weak);
+  color: var(--color);
 }
 
-/* Active state inherits colors from checkbox/checked state:
-   background uses --color (same as checked checkmark), text uses --bg-color */
+/* Active state */
 .menu-item.active {
-  background: var(--color);
-  color: var(--bg-color);
-  font-weight: 700;
+  background: var(--accent-color-tint);
+  border-color: var(--accent-color-hover);
+  color: var(--color);
+  font-weight: 600;
 }
 
 /* Disabled look if needed in future */
@@ -121,7 +137,6 @@ const active = ref<'newword'|'smart'>('newword')
   flex: 1 1 auto;
   min-width: 420px;
   background: transparent;
-  padding-left: 8px;
   box-sizing: border-box;
 }
 

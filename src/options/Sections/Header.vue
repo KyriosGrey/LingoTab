@@ -4,19 +4,19 @@ import { version } from '@/../package.json'
 
 <template>
   <header class="header">
-    <h1 class="title">
+    <h1 class="title text-heading-32">
       Main Settings
     </h1>
 
     <div class="info">
       <a
-        class="version"
+        class="version text-body-sm"
         href="https://github.com/sajadhsm/new-word-tab/releases"
       >
-        LingoTab v{{ version }}
+        LingoTab v{{ version }} | MIT Licensed
       </a>
-      <small class="copyright">
-        MIT Licensed • Copyright © 2025-PRESENT Serhii Syvorotkin
+      <small class="copyright text-body-sm">
+        Copyright © 2025-PRESENT Serhii Syvorotkin
       </small>
     </div>
   </header>
@@ -27,36 +27,33 @@ import { version } from '@/../package.json'
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 1rem;
-  padding: 1rem 0;
-  border-bottom: 1px solid hsla(var(--color-raw), 0.5);
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .title {
-  font-size: 1.5rem;
   margin: 0;
+  color: var(--color);
 }
 
 .info {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 6px;
+  gap: 4px;
+  text-align: right;
 }
 
 .version {
-  font-size: 0.8rem;
   text-decoration: none;
-  color: hsla(var(--color-raw), 0.7);
+  color: var(--text-secondary);
 }
 .version:hover {
-  color: hsla(var(--color-raw), 0.5);
+  color: var(--color);
 }
 
 .copyright {
-  color: hsla(var(--color-raw), 0.5);
-  font-size: 0.6rem;
+  color: var(--text-tertiary);
 }
 
 @media screen and (max-width: 450px) {

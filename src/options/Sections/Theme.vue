@@ -9,7 +9,7 @@ const { theme, toggleTheme } = useTheme()
 <template>
   <Section title="Theme" description="Change theme color scheme.">
     <template #bar>
-      <button title="Switch theme" class="toggle-btn" @click="toggleTheme">
+      <button title="Switch theme" class="toggle-btn text-body-sm" @click="toggleTheme">
         <template v-if="theme === 'dark'">
           <i-ic-round-dark-mode />
           Dark
@@ -26,18 +26,17 @@ const { theme, toggleTheme } = useTheme()
 <style scoped>
 .toggle-btn {
   display: inline-flex;
-  justify-items: center;
-  gap: 5px;
-  padding: 10px;
-  border: none;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid var(--overlay-weak);
   border-radius: 6px;
-  font-size: 0.9rem;
-  font-weight: bold;
   color: var(--color);
-  background: hsla(var(--color-raw), 0.15);
-  transition: background-color ease-in-out 0.13s;
+  background: var(--overlay-strong);
+  transition: border-color ease-in-out 0.13s;
 }
 .toggle-btn:hover {
-  background: hsla(var(--color-raw), 0.25);
+  border-color: var(--accent-color-hover);
 }
 </style>

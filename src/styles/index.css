@@ -1,11 +1,50 @@
-:root {
-  --def-color: hsl(0, 0%, 75%);
+@import '@fontsource-variable/inter';
+@import '@fontsource-variable/inter/wght-italic.css';
 
-  --bg-color-raw: 0, 0%, 10%;
+:root {
+  /* kept for existing components: --def-color/--bg-color/--color are read across
+     the codebase, so their values are updated in place rather than renamed */
+  --def-color: hsl(219, 6.4%, 56.9%); /* Figma "Default text/secondary" gray, dark theme */
+
+  --bg-color-raw: 210, 5.9%, 6.7%; /* Figma BG/#101112 */
   --bg-color: hsl(var(--bg-color-raw));
 
-  --color-raw: 0, 0%, 100%;
+  --color-raw: 180, 6.7%, 97.1%; /* Figma #F7F8F8, primary text */
   --color: hsl(var(--color-raw));
+
+  /* design tokens, dark theme (default) — see reference_figma_design_file memory for source frames */
+  --surface-color: hsl(240, 5.1%, 11.6%); /* Figma BG/#1C1C1F, card/panel background */
+  --text-secondary: var(--def-color); /* Figma #8A8F98 */
+  --text-tertiary: hsl(218, 5.3%, 40.6%); /* Figma #62666D */
+
+  --overlay-weak: rgba(255, 255, 255, 0.05); /* Figma "White/5%" — subtle fills/borders */
+  --overlay-strong: rgba(255, 255, 255, 0.1); /* Figma "White/10%" */
+
+  --accent-color: hsl(243, 75.4%, 58.6%); /* Figma #4F46E5, same in both themes */
+  --accent-color-hover: hsla(243, 75.4%, 58.6%, 0.8); /* Figma "80% #4F46E5" */
+  --accent-color-tint: hsla(243, 75.4%, 58.6%, 0.1); /* Figma "10% #4F46E5" */
+
+  --success-color: hsl(150, 42.6%, 50.8%); /* Figma #4CB782, same in both themes */
+  --error-color: hsl(0, 78.7%, 63.1%); /* Figma #EB5757, same in both themes */
+
+  --toggle-track-off: var(--overlay-strong); /* Figma Toggle "State=Off" fill, dark theme */
+
+  --card-bg: var(--overlay-weak); /* dark theme: card groups use the translucent white overlay, not a solid fill */
+
+  /* Content cards on the grammar/sentence-practice screen (Figma "lingotab-grammar-screen"):
+     borders are consistently weaker in dark theme and stronger in light theme across
+     every bordered element there (input, dropdown, cards, chips, dividers) — confirmed
+     as a deliberate, repeated pattern across that whole frame, not a one-off value. */
+  --border-color: var(--overlay-weak);
+
+  /* Primary/CTA button (Figma "translate-button" applied instances): dark theme uses
+     the 80%-opacity accent with a neutral overlay border, light theme uses a flat
+     solid accent instead — confirmed asymmetric across both Word.vue's reveal button
+     and the Smart Sentences "Generate now" button. */
+  --primary-btn-bg: var(--accent-color-hover);
+  --primary-btn-border: var(--overlay-strong);
+
+  --font-family-base: 'Inter Variable', Avenir, Helvetica, Arial, sans-serif;
 
   /* Firefox */
   scrollbar-color: hsla(0, 0%, 100%, 0.2) hsla(0, 0%, 100%, 0.1);
@@ -13,13 +52,30 @@
 }
 
 .light {
-  --def-color: hsl(0, 0%, 25%);
+  --def-color: hsl(215, 16.3%, 46.9%); /* Figma "Light theme/#64748B" */
 
-  --bg-color-raw: 0, 0%, 100%;
+  /* Light theme page background is the tinted #F1F5F9, NOT plain white — confirmed
+     against the word-screen frame's own "bg" fill (node 18:1078). Solid white is
+     reserved for elevated surfaces (cards, dropdowns) sitting on top of this page. */
+  --bg-color-raw: 210, 40%, 96.1%; /* Figma "Light theme/BG/#F1F5F9" */
   --bg-color: hsl(var(--bg-color-raw));
 
-  --color-raw: 0, 0%, 10%;
+  --color-raw: 222, 47.4%, 11.2%; /* Figma "Light theme/#0F172A", primary text */
   --color: hsl(var(--color-raw));
+
+  --surface-color: hsl(0, 0%, 100%); /* Figma "Light theme/BG/#FFFFFF" */
+  --text-secondary: var(--def-color); /* Figma "Light theme/#64748B" */
+  --text-tertiary: hsl(215, 20.2%, 65.1%); /* Figma "Light theme/#94A3B8" */
+
+  --overlay-weak: rgba(0, 0, 0, 0.05); /* Figma "Light theme/Black/5%" */
+  --overlay-strong: rgba(0, 0, 0, 0.1); /* Figma "Light theme/Black/10%" */
+
+  --card-bg: var(--surface-color); /* light theme: card groups use the solid white surface */
+
+  --border-color: var(--overlay-strong);
+
+  --primary-btn-bg: var(--accent-color);
+  --primary-btn-border: var(--accent-color);
 }
 
 *,
@@ -29,7 +85,7 @@
 }
 
 html {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: var(--font-family-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -71,4 +127,72 @@ button {
 }
 .tiny-scrollbar::-webkit-scrollbar-thumb {
   background-color: hsla(var(--color-raw), 0.2);
+}
+
+/* Typography scale — one class per Figma text style, so the same style
+   always looks identical wherever it's applied across the extension. */
+.text-display {
+  /* Figma "Headings/main word 56-60" */
+  font-family: var(--font-family-base);
+  font-weight: 600;
+  font-size: 56px;
+  line-height: 60px;
+  letter-spacing: -0.05em;
+}
+.text-heading-32 {
+  /* Figma "Headings/32-32" */
+  font-family: var(--font-family-base);
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 32px;
+  letter-spacing: -0.05em;
+}
+.text-heading-18 {
+  /* Figma "Headings/18-24" */
+  font-family: var(--font-family-base);
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: -0.05em;
+}
+.text-heading-label {
+  /* Figma "Headings/13-16" — wide tracking, used for small emphasized labels */
+  font-family: var(--font-family-base);
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 16px;
+  letter-spacing: 0.12em;
+}
+.text-sentence {
+  /* Figma "Headings/Текст предложений Smart Sentances" */
+  font-family: var(--font-family-base);
+  font-weight: 600;
+  font-size: 40px;
+  line-height: 48px;
+  letter-spacing: -0.05em;
+}
+.text-body {
+  /* Figma "Default text/16-24" */
+  font-family: var(--font-family-base);
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.05em;
+}
+.text-body-sm {
+  /* Figma "Default text/13-16" */
+  font-family: var(--font-family-base);
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 16px;
+  letter-spacing: -0.05em;
+}
+.text-body-sm-italic {
+  /* Figma "Default text/13-16 Italic" */
+  font-family: var(--font-family-base);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 16px;
+  letter-spacing: -0.05em;
 }

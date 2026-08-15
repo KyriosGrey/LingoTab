@@ -8,16 +8,18 @@ defineProps<{
 <template>
   <section class="section">
     <div class="section__bar">
-      <div>
-        <h2 class="section__title">
+      <div class="section__details">
+        <h2 class="section__title text-heading-18">
           {{ title }}
         </h2>
-        <p class="section__description">
+        <p class="section__description text-body-sm">
           {{ description }}
         </p>
       </div>
 
-      <slot name="bar" />
+      <div v-if="$slots.bar" class="section__control">
+        <slot name="bar" />
+      </div>
     </div>
 
     <slot />
@@ -28,30 +30,44 @@ defineProps<{
 .section {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 15px 0;
+  gap: 16px;
+  width: 100%;
+}
+
+.section:not(:first-child) {
+  border-top: 1px solid var(--overlay-weak);
+  margin-top: 24px;
+  padding-top: 24px;
 }
 
 .section__bar {
   display: flex;
-  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  gap: 24px;
 }
 
-.section:not(:last-of-type) {
-  margin-bottom: 5px;
-  border-bottom: 1px solid hsla(var(--color-raw), 0.25);
+/* The control (dropdown/toggle/button) always keeps its own size and stays on the
+   row; if space runs short, the text wraps instead of the whole row breaking. */
+.section__details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 440px;
+}
+
+.section__control {
+  flex-shrink: 0;
 }
 
 .section__title {
-  margin: 0 0 5px;
-  font-size: 1rem;
+  margin: 0;
+  color: var(--color);
 }
 .section__description {
-  color: hsla(var(--color-raw), 0.7);
-  font-size: 0.75rem;
+  color: var(--text-secondary);
   margin: 0;
 }
 </style>

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import ActionButton from '@/components/shared/ActionButton.vue'
 import useLearnedWords from '@/composables/words/useLearnedWords'
 import useLearningWords from '@/composables/words/useLearningWords'
 
@@ -52,36 +53,34 @@ function handleExportLearned() {
   >
     <div class="word-lists">
       <div class="word-list-section">
-        <h3 class="list-title">
+        <h3 class="list-title text-heading-18">
           Learning Words
-          <span class="count">({{ learningWords.length }})</span>
+          <span class="count text-body-sm">({{ learningWords.length }})</span>
         </h3>
         <div class="actions">
           <ImportLearningFile @import="handleImportLearning" />
-          <button
-            class="export-btn"
+          <ActionButton
             :disabled="learningWords.length === 0"
             @click="handleExportLearning"
           >
             <i-ic-round-download /> Export
-          </button>
+          </ActionButton>
         </div>
       </div>
 
       <div class="word-list-section">
-        <h3 class="list-title">
+        <h3 class="list-title text-heading-18">
           Learned Words
-          <span class="count">({{ learnedWords.length }})</span>
+          <span class="count text-body-sm">({{ learnedWords.length }})</span>
         </h3>
         <div class="actions">
           <ImportLearnedFile @import="handleImportLearned" />
-          <button
-            class="export-btn"
+          <ActionButton
             :disabled="learnedWords.length === 0"
             @click="handleExportLearned"
           >
             <i-ic-round-download /> Export
-          </button>
+          </ActionButton>
         </div>
       </div>
     </div>
@@ -104,11 +103,11 @@ function handleExportLearned() {
 
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 15px;
-  border: 0px solid hsla(var(--color-raw), 0.2);
-  border-radius: 8px;
-  background-color: hsla(var(--color-raw), 0.03);
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid var(--overlay-weak);
+  border-radius: 10px;
+  background-color: var(--surface-color);
 }
 
 /* на очень узких экранах — одна колонка */
@@ -118,45 +117,21 @@ function handleExportLearned() {
   }
 }
 
-/* остальное без изменений */
 .list-title {
-  font-size: 0.95rem;
-  font-weight: 600;
-  margin: 0 0 5px 0;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin: 0;
   color: var(--color);
 }
 
 .count {
-  font-weight: normal;
-  font-size: 0.85rem;
-  color: hsla(var(--color-raw), 0.6);
+  color: var(--text-secondary);
 }
 
 .actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
-}
-
-.export-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 8px 10px;
-  border-radius: 4px;
-  font-size: 0.8rem;
-  border: none;
-  color: var(--color);
-  background-color: hsla(var(--color-raw), 0.1);
-  transition: background-color ease-in-out 0.13s;
-}
-
-.export-btn:hover:not(:disabled) {
-  background-color: hsla(var(--color-raw), 0.2);
-}
-
-.export-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
 }
 </style>

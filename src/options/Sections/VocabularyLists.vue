@@ -1,20 +1,26 @@
 <script setup lang="ts">
+import Checkbox from '@/components/shared/Checkbox.vue'
 import useWordLists from '@/composables/words/useWordLists'
 import WORD_LISTS from '@/data/words'
 
+import storage from '@/modules/localStorage'
+
+import { ref, watch } from 'vue'
 import Section from '../components/Section.vue'
 
-import storage from '@/modules/localStorage'
-import { ref, watch } from 'vue'
-
 const { selectedListKeys } = useWordLists()
+
+function toggleListKey(listKey: string, checked: boolean) {
+  selectedListKeys.value = checked
+    ? [...selectedListKeys.value, listKey]
+    : selectedListKeys.value.filter(key => key !== listKey)
+}
 
 const showLearningOnly = ref(storage.get('showLearningOnly') === 'true')
 
 watch(showLearningOnly, (val) => {
   storage.set('showLearningOnly', String(val))
 })
-
 </script>
 
 <template>
@@ -28,26 +34,23 @@ watch(showLearningOnly, (val) => {
         :key="listKey"
         class="vocab-list__item"
       >
-        <label class="checkbox">
-          <b class="vocab-list__item__name">{{ listValue.name }}</b>
-          <small class="vocab-list__item__count">
+        <Checkbox
+          :model-value="selectedListKeys.includes(listKey)"
+          @update:model-value="toggleListKey(listKey, $event)"
+        >
+          <span class="vocab-list__item__name text-body-sm">{{ listValue.name }}</span>
+          <span class="vocab-list__item__count text-body-sm-italic">
             ({{ listValue.list.length }} words)
-          </small>
-
-          <input v-model="selectedListKeys" type="checkbox" :value="listKey">
-          <span class="checkmark" />
-        </label>
+          </span>
+        </Checkbox>
       </li>
     </ul>
-	<div class="vocab-list__item" style="margin-top: 10px;">
-  	<label class="checkbox">
-    	<b class="vocab-list__item__name">Learning words only</b>
-    	<small class="vocab-list__item__count">(show only your saved words)</small>
-
-    	<input type="checkbox" v-model="showLearningOnly">
-    	<span class="checkmark" />
-  	</label>
-	</div>
+    <div class="vocab-list__item" style="margin-top: 10px;">
+      <Checkbox v-model="showLearningOnly">
+        <span class="vocab-list__item__name text-body-sm">Learning words only</span>
+        <span class="vocab-list__item__count text-body-sm-italic">(show only your saved words)</span>
+      </Checkbox>
+    </div>
   </Section>
 </template>
 
@@ -62,7 +65,7 @@ watch(showLearningOnly, (val) => {
   display: flex;
   align-items: center;
   flex-basis: 50%;
-  padding: 5px 0;
+  padding: 8px 0;
 }
 
 @media all and (max-width: 320px) {
@@ -72,75 +75,11 @@ watch(showLearningOnly, (val) => {
 }
 
 .vocab-list__item__name {
-  margin-right: 5px;
+  margin-right: 4px;
+  color: var(--color);
 }
 
 .vocab-list__item__count {
-  color: hsla(var(--color-raw), 0.75);
-}
-
-.checkbox {
-  display: flex;
-  flex-wrap: wrap;
-  position: relative;
-  padding-left: 25px;
-  cursor: pointer;
-  font-size: 0.8rem;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-.checkbox input {
-  position: absolute;
-  opacity: 0;
-  cursor: pointer;
-  height: 0;
-  width: 0;
-}
-
-.checkmark {
-  position: absolute;
-  top: -3px;
-  left: 0;
-  height: 18px;
-  width: 18px;
-  background-color: hsla(var(--color-raw), 0.2);
-  border-radius: 5px;
-}
-
-.checkbox:hover input ~ .checkmark {
-  background-color: hsla(var(--color-raw), 0.3);
-}
-
-.checkbox input:checked ~ .checkmark {
-  background-color: var(--color);
-}
-
-.checkmark:after {
-  content: '';
-  position: absolute;
-  display: none;
-}
-
-.checkbox input:checked ~ .checkmark:after {
-  display: block;
-}
-
-.checkbox .checkmark:after {
-  left: 7px;
-  top: 4px;
-  width: 5px;
-  height: 10px;
-  border: solid var(--bg-color);
-  border-width: 0 3px 3px 0;
-  -webkit-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  transform: rotate(45deg);
-}
-
-.checkbox input:focus ~ .checkmark {
-  box-shadow: 0 0 3px var(--color);
+  color: var(--text-secondary);
 }
 </style>

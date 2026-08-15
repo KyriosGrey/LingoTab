@@ -35,22 +35,24 @@ const handleURLChange = () => saveImageDataURL(url.value)
     </template>
 
     <div v-if="mode === BackgroundMode.IMAGE" class="actions">
-      <input
-        v-model="url"
-        class="url"
-        type="url"
-        placeholder="Enter an image URL"
-        @change="handleURLChange"
-      >
+      <label class="url-input">
+        <i-ic-round-search class="icon" />
+        <input
+          v-model="url"
+          type="url"
+          placeholder="Enter an image URL"
+          class="text-body-sm"
+          @change="handleURLChange"
+        >
+      </label>
 
-      <span>or</span>
+      <span class="or text-body-sm">or</span>
 
       <FileSelector
         id="bg-file"
         label="Select a local file"
         accept="image/*"
         :max-size="2100000"
-        max-width="150px"
         @file="handleFileSelect"
       />
     </div>
@@ -59,30 +61,51 @@ const handleURLChange = () => saveImageDataURL(url.value)
 
 <style scoped>
 .actions {
-  margin-top: 10px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 12px;
 }
 
-.url {
-  flex-grow: 1;
-  background-color: hsla(var(--color-raw), 0.15);
+.or {
   color: var(--color);
+  flex-shrink: 0;
+}
+
+/* Mirrors src/components/shared/SearchInput.vue's look — kept local rather than
+   reusing that component because this field needs a native `change` event (save
+   on blur/enter), which SearchInput doesn't expose (it only emits on every
+   keystroke via v-model). */
+.url-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1 1 auto;
+  min-width: 200px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--overlay-weak);
+  background: var(--surface-color);
+  transition: border-color 0.15s ease-in-out;
+}
+.url-input:has(input:focus) {
+  border-color: var(--accent-color-hover);
+}
+
+.url-input .icon {
+  flex-shrink: 0;
+  color: var(--text-secondary);
+}
+
+.url-input input {
+  flex: 1;
+  min-width: 0;
   border: none;
-  padding: 10px;
-  border-radius: 4px;
-  font-size: 0.85rem;
   outline: none;
-  transition: background-color ease-in-out 0.13s;
+  background: transparent;
+  color: var(--color);
 }
-.url:hover,
-.url:focus {
-  background-color: hsla(var(--color-raw), 0.25);
-}
-.url::placeholder {
-  color: hsla(var(--color-raw), 0.6);
+.url-input input::placeholder {
+  color: var(--text-secondary);
 }
 </style>
