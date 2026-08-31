@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import useTheme from '@/composables/useTheme'
+import { t } from '@/i18n'
 
 import Section from '../components/Section.vue'
 
@@ -7,16 +8,16 @@ const { theme, toggleTheme } = useTheme()
 </script>
 
 <template>
-  <Section title="Theme" description="Change theme color scheme.">
+  <Section :title="t('theme.title')" :description="t('theme.description')">
     <template #bar>
-      <button title="Switch theme" class="toggle-btn text-body-sm" @click="toggleTheme">
+      <button :title="t('theme.switch')" class="toggle-btn text-body-sm" @click="toggleTheme">
         <template v-if="theme === 'dark'">
           <i-ic-round-dark-mode />
-          Dark
+          {{ t('theme.dark') }}
         </template>
         <template v-else>
           <i-ic-round-light-mode />
-          Light
+          {{ t('theme.light') }}
         </template>
       </button>
     </template>

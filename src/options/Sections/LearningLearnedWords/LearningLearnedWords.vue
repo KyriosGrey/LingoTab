@@ -2,6 +2,7 @@
 import ActionButton from '@/components/shared/ActionButton.vue'
 import useLearnedWords from '@/composables/words/useLearnedWords'
 import useLearningWords from '@/composables/words/useLearningWords'
+import { t } from '@/i18n'
 
 import Section from '@/options/components/Section.vue'
 import ImportLearnedFile from './ImportLearnedFile.vue'
@@ -48,13 +49,13 @@ function handleExportLearned() {
 
 <template>
   <Section
-    title="Learning & Learned Words"
-    description="Import or export your learning and learned word lists"
+    :title="t('wordLists.title')"
+    :description="t('wordLists.description')"
   >
     <div class="word-lists">
       <div class="word-list-section">
         <h3 class="list-title text-heading-18">
-          Learning Words
+          {{ t('wordLists.learning') }}
           <span class="count text-body-sm">({{ learningWords.length }})</span>
         </h3>
         <div class="actions">
@@ -63,14 +64,14 @@ function handleExportLearned() {
             :disabled="learningWords.length === 0"
             @click="handleExportLearning"
           >
-            <i-ic-round-download /> Export
+            <i-ic-round-download /> {{ t('wordLists.export') }}
           </ActionButton>
         </div>
       </div>
 
       <div class="word-list-section">
         <h3 class="list-title text-heading-18">
-          Learned Words
+          {{ t('wordLists.learned') }}
           <span class="count text-body-sm">({{ learnedWords.length }})</span>
         </h3>
         <div class="actions">
@@ -79,7 +80,7 @@ function handleExportLearned() {
             :disabled="learnedWords.length === 0"
             @click="handleExportLearned"
           >
-            <i-ic-round-download /> Export
+            <i-ic-round-download /> {{ t('wordLists.export') }}
           </ActionButton>
         </div>
       </div>

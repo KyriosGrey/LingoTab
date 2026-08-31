@@ -3,6 +3,7 @@ import Drawer from '@/components/shared/Drawer.vue'
 
 import IconButton from '@/components/shared/IconButton.vue'
 import useWord from '@/composables/words/useWord'
+import { t } from '@/i18n'
 
 import { ref } from 'vue'
 import Tabs from './Tabs.vue'
@@ -22,13 +23,13 @@ function handleShowDefinition(word: string) {
 <template>
   <IconButton
     class="marked-words-btn"
-    title="Marked Words"
+    :title="t('nav.markedWords')"
     @click="isDrawerOpen = true"
   >
     <i-ic-round-bookmarks />
   </IconButton>
 
-  <Drawer title="Marked Words" :is-open="isDrawerOpen" @close="closeDrawer">
+  <Drawer :title="t('nav.markedWords')" :is-open="isDrawerOpen" @close="closeDrawer">
     <Tabs @show-definition="handleShowDefinition" />
   </Drawer>
 </template>

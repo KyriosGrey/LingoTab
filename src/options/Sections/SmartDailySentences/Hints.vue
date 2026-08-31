@@ -1,22 +1,25 @@
 <script setup lang="ts">
 import Toggle from '@/components/shared/Toggle.vue'
+import { t } from '@/i18n'
 import Section from '@/options/components/Section.vue'
 import * as storage from '@/utils/storage'
 import { onMounted, ref } from 'vue'
 
 const storageKey = 'smartDailySettings'
 
-const localShowHints = ref(false)
+const localShowHints = ref(true)
 
 onMounted(async () => {
   try {
     const s = await storage.get([storageKey])
     const st = s?.[storageKey] ?? {}
-    localShowHints.value = !!st.showHints
+    // Nothing saved yet = new user -> hints are on by default.
+    // An explicit false means the user turned them off, so it must stay off.
+    localShowHints.value = st.showHints ?? true
   }
   catch (e) {
     console.warn('[Hints] failed to read settings', e)
-    localShowHints.value = false
+    localShowHints.value = true
   }
 })
 
@@ -38,8 +41,8 @@ async function onToggle(v: boolean) {
 
 <template>
   <Section
-    title="Hints"
-    description="When enabled, each generated sentence may include a grammar hint"
+    :title="t('smart.hints.title')"
+    :description="t('smart.hints.description')"
   >
     <template #bar>
       <Toggle :model-value="localShowHints" @update:model-value="onToggle" />

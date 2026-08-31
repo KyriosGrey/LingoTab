@@ -2,23 +2,27 @@
 import FileSelector from '@/components/shared/FileSelector.vue'
 
 import useBackground, { BackgroundMode } from '@/composables/useBackground'
+import { t } from '@/i18n'
 import Section from '@/options/components/Section.vue'
 
 import Select from '@/options/components/Select.vue'
 import { readFile } from '@/utils/file'
+import { computed } from 'vue'
 
 const { url, mode, saveImageDataURL } = useBackground({ initialize: true })
 
-const options = [
+// computed, not a plain array: the labels have to be rebuilt when the interface
+// language changes, and `t()` only tracks the language where it is re-evaluated.
+const options = computed(() => [
   {
-    text: 'No Background',
+    text: t('background.none'),
     value: BackgroundMode.NO_BG,
   },
   {
-    text: 'Custom Image',
+    text: t('background.custom'),
     value: BackgroundMode.IMAGE,
   },
-]
+])
 
 async function handleFileSelect(file: File) {
   const base64 = (await readFile(file, 'dataURL')) as string
@@ -29,7 +33,7 @@ const handleURLChange = () => saveImageDataURL(url.value)
 </script>
 
 <template>
-  <Section title="Background" description="Customize page background.">
+  <Section :title="t('background.title')" :description="t('background.description')">
     <template #bar>
       <Select v-model="mode" :options="options" />
     </template>
@@ -40,17 +44,17 @@ const handleURLChange = () => saveImageDataURL(url.value)
         <input
           v-model="url"
           type="url"
-          placeholder="Enter an image URL"
+          :placeholder="t('background.urlPlaceholder')"
           class="text-body-sm"
           @change="handleURLChange"
         >
       </label>
 
-      <span class="or text-body-sm">or</span>
+      <span class="or text-body-sm">{{ t('background.or') }}</span>
 
       <FileSelector
         id="bg-file"
-        label="Select a local file"
+        :label="t('background.chooseFile')"
         accept="image/*"
         :max-size="2100000"
         @file="handleFileSelect"

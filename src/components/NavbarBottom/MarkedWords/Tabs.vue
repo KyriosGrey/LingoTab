@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { t } from '@/i18n'
 import { ref } from 'vue'
 
 import Learned from './Learned.vue'
@@ -19,14 +20,14 @@ const activeTab = ref('learning')
         :class="{ active: activeTab === 'learning' }"
         @click="activeTab = 'learning'"
       >
-        <i-ic-round-school /> Learning
+        <i-ic-round-school /> {{ t('wordLists.learning') }}
       </li>
       <li
         class="text-body"
         :class="{ active: activeTab === 'learned' }"
         @click="activeTab = 'learned'"
       >
-        <i-ic-round-check-circle /> Learned
+        <i-ic-round-check-circle /> {{ t('wordLists.learned') }}
       </li>
     </ul>
 

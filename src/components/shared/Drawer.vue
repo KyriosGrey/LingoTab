@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { t } from '@/i18n'
 import { ref } from 'vue'
 
 defineProps<{ title: string, isOpen: boolean }>()
@@ -30,7 +31,7 @@ function handleCloseDrawer() {
 
               <button
                 class="btn drawer__close"
-                title="Close"
+                :title="t('nav.close')"
                 @click="handleCloseDrawer"
               >
                 <i-ic-round-close />

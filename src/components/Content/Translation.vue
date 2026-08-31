@@ -1,6 +1,12 @@
 <script setup lang="ts">
+import type { TranslateFailureReason } from '@/composables/useTranslateFailureNotice'
+import { isQuotaExhausted } from '@/composables/myMemoryTranslation'
+import useGoogleTranslate from '@/composables/useGoogleTranslate'
+import useTranslateFailureNotice from '@/composables/useTranslateFailureNotice'
 import useTranslateText from '@/composables/useTranslateText'
-import { computed, onMounted, ref, useAttrs, watch } from 'vue'
+import { fetchWordTranslationFallback } from '@/composables/wiktionaryWordTranslation'
+import { t } from '@/i18n'
+import { computed, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
 defineOptions({
   inheritAttrs: false,
@@ -11,7 +17,8 @@ const props = withDefaults(defineProps<{
   small?: boolean
   /**
    * block  - render translation as a separate line (<p> by default)
-   * tooltip - render inline "?" icon with custom tooltip on hover/focus
+   * tooltip - render inline "?" icon; translation is fetched on first click
+   *   and shown in a popover, closed by clicking the icon again or elsewhere
    */
   display?: 'block' | 'tooltip'
   /**
@@ -47,9 +54,22 @@ const props = withDefaults(defineProps<{
 const attrs = useAttrs()
 
 const { translate } = useTranslateText()
+const { targetLanguage } = useGoogleTranslate()
+const { reportFailure } = useTranslateFailureNotice()
 const loading = ref(false)
 const result = ref<string>('')
 
+// Kept separate from the banner's own state so a dismissed banner doesn't take the
+// tooltip's explanation down with it - the tooltip is where the user is actually looking.
+const failureReason = ref<TranslateFailureReason | null>(null)
+
+// variant="word" marks the two places that translate a bare headword (the word's own
+// title, and the word shown on the repetition card) rather than a sentence - only those
+// can fall back to Wiktionary's word-translation data when Google is unreachable. The
+// fallback result is deliberately never written to translate()'s own cache (see
+// useTranslateText.ts) - it only lives in this component instance, so the next time this
+// word is opened, Google gets a fresh attempt instead of being stuck behind a
+// possibly-not-the-most-common cached translation forever.
 async function doTranslate() {
   if (!props.text) {
     result.value = ''
@@ -57,19 +77,40 @@ async function doTranslate() {
   }
 
   loading.value = true
+  failureReason.value = null
   try {
     result.value = await translate(props.text, props.from)
   }
   catch {
-    result.value = ''
+    if (props.variant === 'word' && props.from === 'en') {
+      const tl = (targetLanguage?.code || 'ru').toLowerCase()
+      result.value = (await fetchWordTranslationFallback(props.text, tl)) || ''
+    }
+    else {
+      result.value = ''
+    }
+
+    // Only worth telling the user about once every source has come up empty - Google,
+    // MyMemory inside translate(), and Wiktionary above. When one of them did answer
+    // there is nothing to report: the translation is on screen.
+    //
+    // Translation.vue covers the word title, definition tooltips, and example tooltips -
+    // Grammar Reference calls translateBatch directly and never lands here - so a notice
+    // raised from this component is always about a word or a tooltip.
+    if (!result.value) {
+      failureReason.value = isQuotaExhausted() ? 'quota' : 'unavailable'
+      reportFailure(failureReason.value)
+    }
   }
   finally {
     loading.value = false
   }
 }
 
-onMounted(doTranslate)
-watch(() => [props.text, props.from], doTranslate)
+if (props.display === 'block') {
+  onMounted(doTranslate)
+  watch(() => [props.text, props.from], doTranslate)
+}
 
 const blockClass = computed(() => {
   if (props.variant === 'plain')
@@ -82,12 +123,45 @@ const loadingBlockClass = computed(() => {
   return ['tr', 'tr--muted', props.variant === 'word' ? 'tr--word' : '']
 })
 
-const hasTooltipText = computed(() => Boolean(result.value) || loading.value)
+// Tooltip mode only translates on demand, when the user clicks the "?" icon -
+// otherwise every definition/example on screen would fire its own translate
+// request on mount, even ones nobody ever looks at.
+const isOpen = ref(false)
+const rootEl = ref<HTMLElement | null>(null)
+
+function handleOutsideClick(event: MouseEvent) {
+  if (rootEl.value && !rootEl.value.contains(event.target as Node))
+    isOpen.value = false
+}
+
+watch(isOpen, (open) => {
+  if (open)
+    document.addEventListener('click', handleOutsideClick)
+  else
+    document.removeEventListener('click', handleOutsideClick)
+})
+
+onBeforeUnmount(() => document.removeEventListener('click', handleOutsideClick))
+
+function toggleTooltip() {
+  if (!props.text)
+    return
+
+  isOpen.value = !isOpen.value
+
+  if (isOpen.value && !result.value && !loading.value)
+    doTranslate()
+}
+
 const tooltipText = computed(() => {
   if (result.value)
     return result.value
   if (loading.value)
-    return 'перевод…'
+    return t('translateFailure.translating')
+  if (failureReason.value === 'quota')
+    return t('translateFailure.tooltipQuota')
+  if (failureReason.value === 'unavailable')
+    return t('translateFailure.tooltipUnavailable')
   return ''
 })
 </script>
@@ -110,22 +184,32 @@ const tooltipText = computed(() => {
       v-bind="attrs"
       :class="loadingBlockClass"
     >
-      перевод…
+      translating…
     </component>
   </template>
 
   <!-- tooltip mode -->
   <template v-else>
     <span
-      v-if="hasTooltipText"
+      v-if="text"
+      ref="rootEl"
       class="trt"
       :class="[small ? 'trt--small' : '']"
     >
-      <span class="trt__icon" tabindex="0" aria-label="Show translation">?</span>
+      <button
+        type="button"
+        class="trt__icon"
+        :aria-label="t('word.showTranslation')"
+        @click="toggleTooltip"
+      >
+        ?
+      </button>
 
-      <span class="trt__tooltip" role="tooltip">
-        {{ tooltipText }}
-      </span>
+      <Transition name="trt-fade">
+        <span v-if="isOpen" class="trt__tooltip" role="tooltip">
+          {{ tooltipText }}
+        </span>
+      </Transition>
     </span>
   </template>
 </template>
@@ -188,8 +272,9 @@ const tooltipText = computed(() => {
   line-height: 1;
   letter-spacing: 0.12em;
 
+  padding: 0;
   user-select: none;
-  cursor: help;
+  cursor: pointer;
 
   color: var(--text-secondary);
   border: none;
@@ -232,12 +317,16 @@ const tooltipText = computed(() => {
   white-space: normal;
   word-break: break-word;
 
-  opacity: 0;
-  pointer-events: none;
-  visibility: hidden;
-  transition: opacity .12s ease, transform .12s ease, visibility .12s ease;
-
   z-index: 50;
+}
+
+.trt-fade-enter-active,
+.trt-fade-leave-active {
+  transition: opacity .12s ease;
+}
+.trt-fade-enter-from,
+.trt-fade-leave-to {
+  opacity: 0;
 }
 
 .trt__tooltip::after {
@@ -252,14 +341,6 @@ const tooltipText = computed(() => {
   border-left: 7px solid transparent;
   border-right: 7px solid transparent;
   border-top: 7px solid hsla(var(--bg-color-raw), 0.95);
-}
-
-.trt:hover .trt__tooltip,
-.trt:focus-within .trt__tooltip {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  transform: translateX(-50%) translateY(-2px);
 }
 
 .trt--small .trt__icon {

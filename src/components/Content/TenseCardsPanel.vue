@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import type { TextBlock } from '@/data/smartSentences/tenseCards/types'
-import Translation from '@/components/Content/Translation.vue'
+import type { TenseCardSet, TextBlock } from '@/data/smartSentences/tenseCards/types'
+import Skeleton from '@/components/shared/Skeleton.vue'
 import { normalizeTense, useTenseCards } from '@/composables/smartSentences/useTenseCards'
 import useGoogleTranslate from '@/composables/useGoogleTranslate'
+import useTranslateText from '@/composables/useTranslateText'
 import { tenseCardsMap, tenseOptions } from '@/data/smartSentences/tenseCards'
+import { t } from '@/i18n'
 import Select from '@/options/components/Select.vue'
 import { computed, ref, watch } from 'vue'
 
@@ -15,6 +17,7 @@ const { defaultTenseKey } = useTenseCards()
 const selectedTense = ref<string>(defaultTenseKey)
 
 const { targetLanguage } = useGoogleTranslate()
+const { translateBatch } = useTranslateText()
 const gttlCode = computed(() => (targetLanguage?.code || 'ru').toLowerCase())
 const shouldTranslateRu = computed(() => gttlCode.value !== 'ru')
 
@@ -37,13 +40,96 @@ const currentCards = computed(() => {
 function shouldTranslateBlock(block?: TextBlock) {
   return Boolean(block?.text && block.trRu && shouldTranslateRu.value)
 }
+
+// Collects every RU text on the current card that needs translating, so they can
+// all go out in a single batched request (see useTranslateText.translateBatch)
+// instead of one request per block.
+function collectTranslatableTexts(cards: TenseCardSet): string[] {
+  const texts: string[] = []
+  function consider(block?: TextBlock) {
+    if (shouldTranslateBlock(block) && block?.text)
+      texts.push(block.text)
+  }
+
+  consider(cards.explain.title as TextBlock)
+  consider(cards.explain.description as TextBlock)
+  consider(cards.explain.focusNote as TextBlock)
+  cards.explain.examples.forEach((example) => {
+    if (example.ru)
+      consider(example.ru as TextBlock)
+  })
+
+  cards.mistakes.mistakes.forEach((mistake) => {
+    consider(mistake.title as TextBlock)
+    consider(mistake.note as TextBlock)
+  })
+
+  consider(cards.whenToUse.title as TextBlock)
+
+  for (const side of [cards.whenToUse.comparison.left, cards.whenToUse.comparison.right]) {
+    side.examples.forEach((example) => {
+      if (example.ru)
+        consider(example.ru as TextBlock)
+    })
+    if (side.note)
+      consider(side.note as TextBlock)
+  }
+
+  return texts
+}
+
+const translatedMap = ref<Record<string, string>>({})
+const isTranslatingBatch = ref(false)
+
+async function loadCardTranslations() {
+  const cards = currentCards.value
+  if (!cards || !shouldTranslateRu.value) {
+    translatedMap.value = {}
+    return
+  }
+
+  const texts = [...new Set(collectTranslatableTexts(cards))]
+  if (texts.length === 0) {
+    translatedMap.value = {}
+    return
+  }
+
+  isTranslatingBatch.value = true
+  try {
+    const translated = await translateBatch(texts, 'ru', gttlCode.value)
+    const map: Record<string, string> = {}
+    texts.forEach((text, i) => {
+      map[text] = translated[i]
+    })
+    translatedMap.value = map
+  }
+  catch {
+    translatedMap.value = {}
+  }
+  finally {
+    isTranslatingBatch.value = false
+  }
+}
+
+watch([selectedTense, gttlCode], loadCardTranslations, { immediate: true })
+
+// Falls back to the original RU text when a translation is missing (Google
+// unreachable or rate-limiting us): reading the card in Russian beats reading a
+// blank card.
+function trText(block?: TextBlock) {
+  if (!block?.text)
+    return ''
+  if (!shouldTranslateBlock(block))
+    return block.text
+  return translatedMap.value[block.text] || block.text
+}
 </script>
 
 <template>
   <div class="tense-cards-panel">
     <div class="panel-header">
       <h3 class="panel-title text-heading-18">
-        Grammar Reference
+        {{ t('practice.grammarReference') }}
       </h3>
 
       <Select v-model="selectedTense" :options="tenseOptions" class="tense-select" />
@@ -52,42 +138,23 @@ function shouldTranslateBlock(block?: TextBlock) {
     <div v-if="currentCards" class="reference-card">
       <div class="left-column">
         <h4 class="card-title text-heading-18">
-          <Translation
-            v-if="shouldTranslateBlock(currentCards.explain.title)"
-            :text="currentCards.explain.title.text"
-            from="ru"
-            display="block"
-            variant="plain"
-            as="span"
-          />
+          <Skeleton v-if="shouldTranslateBlock(currentCards.explain.title) && isTranslatingBatch" width="260px" height="24px" />
           <template v-else>
-            {{ currentCards.explain.title.text }}
+            {{ trText(currentCards.explain.title) }}
           </template>
         </h4>
 
         <p class="card-description text-body">
-          <Translation
-            v-if="shouldTranslateBlock(currentCards.explain.description)"
-            :text="currentCards.explain.description.text"
-            from="ru"
-            variant="plain"
-            as="span"
-          />
+          <Skeleton v-if="shouldTranslateBlock(currentCards.explain.description) && isTranslatingBatch" width="100%" height="40px" />
           <template v-else>
-            {{ currentCards.explain.description.text }}
+            {{ trText(currentCards.explain.description) }}
           </template>
         </p>
 
         <div class="focus-tip text-body-sm-italic">
-          <Translation
-            v-if="shouldTranslateBlock(currentCards.explain.focusNote)"
-            :text="currentCards.explain.focusNote.text"
-            from="ru"
-            variant="plain"
-            as="span"
-          />
+          <Skeleton v-if="shouldTranslateBlock(currentCards.explain.focusNote) && isTranslatingBatch" width="100%" height="36px" />
           <template v-else>
-            {{ currentCards.explain.focusNote.text }}
+            {{ trText(currentCards.explain.focusNote) }}
           </template>
         </div>
 
@@ -103,15 +170,9 @@ function shouldTranslateBlock(block?: TextBlock) {
             </div>
 
             <div v-if="example.ru" class="example-ru text-body-sm-italic">
-              <Translation
-                v-if="shouldTranslateBlock(example.ru)"
-                :text="example.ru.text"
-                from="ru"
-                variant="plain"
-                as="span"
-              />
+              <Skeleton v-if="shouldTranslateBlock(example.ru) && isTranslatingBatch" width="220px" height="16px" />
               <template v-else>
-                {{ example.ru.text }}
+                {{ trText(example.ru) }}
               </template>
             </div>
           </div>
@@ -123,27 +184,15 @@ function shouldTranslateBlock(block?: TextBlock) {
           <div class="mistake">
             <div class="mistake-head">
               <div class="mistake-title text-body">
-                <Translation
-                  v-if="shouldTranslateBlock(mistake.title)"
-                  :text="mistake.title.text"
-                  from="ru"
-                  variant="plain"
-                  as="span"
-                />
+                <Skeleton v-if="shouldTranslateBlock(mistake.title) && isTranslatingBatch" width="220px" height="18px" />
                 <template v-else>
-                  {{ mistake.title.text }}
+                  {{ trText(mistake.title) }}
                 </template>
               </div>
               <div class="mistake-note text-body-sm-italic">
-                <Translation
-                  v-if="shouldTranslateBlock(mistake.note)"
-                  :text="mistake.note.text"
-                  from="ru"
-                  variant="plain"
-                  as="span"
-                />
+                <Skeleton v-if="shouldTranslateBlock(mistake.note) && isTranslatingBatch" width="100%" height="32px" />
                 <template v-else>
-                  {{ mistake.note.text }}
+                  {{ trText(mistake.note) }}
                 </template>
               </div>
             </div>
@@ -165,30 +214,15 @@ function shouldTranslateBlock(block?: TextBlock) {
 
     <div v-if="currentCards" class="trigger-contrast-section">
       <h4 class="text-heading-18">
-        <Translation
-          v-if="shouldTranslateBlock(currentCards.whenToUse.title)"
-          :text="currentCards.whenToUse.title.text"
-          from="ru"
-          variant="plain"
-          as="span"
-        />
+        <Skeleton v-if="shouldTranslateBlock(currentCards.whenToUse.title) && isTranslatingBatch" width="240px" height="24px" />
         <template v-else>
-          {{ currentCards.whenToUse.title.text }}
+          {{ trText(currentCards.whenToUse.title) }}
         </template>
       </h4>
 
       <div class="time-badges">
         <div v-for="(trigger, idx) in currentCards.whenToUse.triggers" :key="idx" class="trigger text-body-sm">
-          <Translation
-            v-if="shouldTranslateBlock(trigger)"
-            :text="trigger.text"
-            from="ru"
-            variant="plain"
-            as="span"
-          />
-          <template v-else>
-            {{ trigger.text }}
-          </template>
+          {{ trigger.text }}
         </div>
       </div>
 
@@ -203,29 +237,17 @@ function shouldTranslateBlock(block?: TextBlock) {
               {{ example.en }}
             </div>
             <div v-if="example.ru" class="example-ru text-body-sm-italic">
-              <Translation
-                v-if="shouldTranslateBlock(example.ru)"
-                :text="example.ru.text"
-                from="ru"
-                variant="plain"
-                as="span"
-              />
+              <Skeleton v-if="shouldTranslateBlock(example.ru) && isTranslatingBatch" width="220px" height="16px" />
               <template v-else>
-                {{ example.ru.text }}
+                {{ trText(example.ru) }}
               </template>
             </div>
           </div>
 
           <div v-if="currentCards.whenToUse.comparison.left.note" class="comparison-note text-body-sm-italic">
-            <Translation
-              v-if="shouldTranslateBlock(currentCards.whenToUse.comparison.left.note)"
-              :text="currentCards.whenToUse.comparison.left.note.text"
-              from="ru"
-              variant="plain"
-              as="span"
-            />
+            <Skeleton v-if="shouldTranslateBlock(currentCards.whenToUse.comparison.left.note) && isTranslatingBatch" width="100%" height="32px" />
             <template v-else>
-              {{ currentCards.whenToUse.comparison.left.note.text }}
+              {{ trText(currentCards.whenToUse.comparison.left.note) }}
             </template>
           </div>
         </div>
@@ -240,29 +262,17 @@ function shouldTranslateBlock(block?: TextBlock) {
               {{ example.en }}
             </div>
             <div v-if="example.ru" class="example-ru text-body-sm-italic">
-              <Translation
-                v-if="shouldTranslateBlock(example.ru)"
-                :text="example.ru.text"
-                from="ru"
-                variant="plain"
-                as="span"
-              />
+              <Skeleton v-if="shouldTranslateBlock(example.ru) && isTranslatingBatch" width="220px" height="16px" />
               <template v-else>
-                {{ example.ru.text }}
+                {{ trText(example.ru) }}
               </template>
             </div>
           </div>
 
           <div v-if="currentCards.whenToUse.comparison.right.note" class="comparison-note text-body-sm-italic">
-            <Translation
-              v-if="shouldTranslateBlock(currentCards.whenToUse.comparison.right.note)"
-              :text="currentCards.whenToUse.comparison.right.note.text"
-              from="ru"
-              variant="plain"
-              as="span"
-            />
+            <Skeleton v-if="shouldTranslateBlock(currentCards.whenToUse.comparison.right.note) && isTranslatingBatch" width="100%" height="32px" />
             <template v-else>
-              {{ currentCards.whenToUse.comparison.right.note.text }}
+              {{ trText(currentCards.whenToUse.comparison.right.note) }}
             </template>
           </div>
         </div>

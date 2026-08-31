@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import { t } from '@/i18n'
 import SettingsGroup from './components/SettingsGroup.vue'
 
 import Background from './Sections/Background.vue'
+import DictionarySource from './Sections/DictionarySource.vue'
 import GoogleTranslate from './Sections/GoogleTranslate.vue'
 import Header from './Sections/Header.vue'
 import IgnoredWords from './Sections/IgnoredWords'
+import InterfaceLanguage from './Sections/InterfaceLanguage.vue'
 import LearningLearnedWords from './Sections/LearningLearnedWords'
 import PatchNotes from './Sections/PatchNotes/PatchNotes.vue'
 import Repetition from './Sections/Repetition.vue'
@@ -27,27 +30,29 @@ import SettingsTabs from './SettingsTabs.vue'
           <Header />
           <div class="options__divider" />
 
-          <SettingsGroup title="General">
+          <SettingsGroup :title="t('group.general')">
             <GoogleTranslate />
             <SiteShortcuts />
             <Background />
             <Theme />
+            <InterfaceLanguage />
+            <DictionarySource />
           </SettingsGroup>
 
-          <SettingsGroup title="Vocabulary">
+          <SettingsGroup :title="t('group.vocabulary')">
             <VocabularyLists />
           </SettingsGroup>
 
-          <SettingsGroup title="Translation & Review">
+          <SettingsGroup :title="t('group.translationReview')">
             <Translation />
             <Repetition />
           </SettingsGroup>
 
-          <SettingsGroup title="Data Management">
+          <SettingsGroup :title="t('group.yourWordLists')">
             <LearningLearnedWords />
           </SettingsGroup>
 
-          <SettingsGroup title="Ignored Words">
+          <SettingsGroup :title="t('group.ignoredWords')">
             <IgnoredWords />
           </SettingsGroup>
         </div>

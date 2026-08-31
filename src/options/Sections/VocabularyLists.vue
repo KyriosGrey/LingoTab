@@ -2,6 +2,7 @@
 import Checkbox from '@/components/shared/Checkbox.vue'
 import useWordLists from '@/composables/words/useWordLists'
 import WORD_LISTS from '@/data/words'
+import { t } from '@/i18n'
 
 import storage from '@/modules/localStorage'
 
@@ -25,8 +26,8 @@ watch(showLearningOnly, (val) => {
 
 <template>
   <Section
-    title="Vocabulary lists"
-    description="Select the vocabulary lists that you would like to get a random word from."
+    :title="t('vocab.title')"
+    :description="t('vocab.description')"
   >
     <ul class="vocab-list">
       <li
@@ -40,15 +41,15 @@ watch(showLearningOnly, (val) => {
         >
           <span class="vocab-list__item__name text-body-sm">{{ listValue.name }}</span>
           <span class="vocab-list__item__count text-body-sm-italic">
-            ({{ listValue.list.length }} words)
+            ({{ listValue.list.length }})
           </span>
         </Checkbox>
       </li>
     </ul>
     <div class="vocab-list__item" style="margin-top: 10px;">
       <Checkbox v-model="showLearningOnly">
-        <span class="vocab-list__item__name text-body-sm">Learning words only</span>
-        <span class="vocab-list__item__count text-body-sm-italic">(show only your saved words)</span>
+        <span class="vocab-list__item__name text-body-sm">{{ t('vocab.learningOnly') }}</span>
+        <span class="vocab-list__item__count text-body-sm-italic">{{ t('vocab.learningOnlyHint') }}</span>
       </Checkbox>
     </div>
   </Section>

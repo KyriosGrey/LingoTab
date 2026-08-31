@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { loadRepetitionFrequency, resetRepetitionState } from '@/composables/useRepetition'
+import { t } from '@/i18n'
 import storage from '@/modules/localStorage'
 import Section from '../components/Section.vue'
 import Select from '../components/Select.vue'
@@ -9,16 +10,16 @@ import Select from '../components/Select.vue'
 const repetitionFrequency = ref(loadRepetitionFrequency())
 
 // Options for the dropdown
-const frequencyOptions = [
-  { value: 'off', text: 'Off' },
-  { value: '1', text: 'Every 1 word' },
-  { value: '2', text: 'Every 2 words' },
-  { value: '3', text: 'Every 3 words' },
-  { value: '4', text: 'Every 4 words' },
-  { value: '5', text: 'Every 5 words' },
-  { value: '10', text: 'Every 10 words' },
-  { value: '20', text: 'Every 20 words' },
-]
+const frequencyOptions = computed(() => [
+  { value: 'off', text: t('repetition.off') },
+  { value: '1', text: t('repetition.every1') },
+  { value: '2', text: t('repetition.every2') },
+  { value: '3', text: t('repetition.every3') },
+  { value: '4', text: t('repetition.every4') },
+  { value: '5', text: t('repetition.every5') },
+  { value: '10', text: t('repetition.every10') },
+  { value: '20', text: t('repetition.every20') },
+])
 
 // Watch for changes and save + reset counter
 watch(repetitionFrequency, (val) => {
@@ -29,14 +30,14 @@ watch(repetitionFrequency, (val) => {
 
 <template>
   <Section
-    title="Learned words review"
-    description="Shows a random learned word for review. Configure how often it appears."
+    :title="t('repetition.title')"
+    :description="t('repetition.description')"
   >
     <template #bar>
       <Select
         v-model="repetitionFrequency"
         :options="frequencyOptions"
-        title="Choose repetition frequency"
+        :title="t('repetition.select')"
       />
     </template>
   </Section>

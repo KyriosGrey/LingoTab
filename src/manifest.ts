@@ -30,7 +30,12 @@ export async function getManifest() {
     },
 
     host_permissions: [
-  'https://translate.googleapis.com/*',
+      'https://translate.googleapis.com/*',
+      'https://en.wiktionary.org/*',
+      'https://commons.wikimedia.org/*',
+      'https://upload.wikimedia.org/*',
+      'https://api.wiktapi.dev/*',
+      'https://api.mymemory.translated.net/*',
     ],
 
     content_security_policy: {

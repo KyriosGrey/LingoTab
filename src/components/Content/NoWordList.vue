@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import PrimaryButton from '@/components/shared/PrimaryButton.vue'
 import useBackground from '@/composables/useBackground'
+import { t } from '@/i18n'
 
 import { openOptionsPage } from '@/utils/browser'
 
@@ -15,14 +17,15 @@ const backgroundClass = computed(() => ({
 <template>
   <div class="no-word-list" :class="backgroundClass">
     <span class="no-word-list__emoji">😐</span>
-    <h1 class="no-word-list__title">
-      There's nothing to show!
+    <h1 class="no-word-list__title text-heading-18">
+      {{ t('empty.noLists.title') }}
     </h1>
-    <p class="no-word-list__subtitle">
-      Please head to
-      <a class="options-page-link" @click="openOptionsPage">options page</a> and
-      select at least one vocabulary list.
+    <p class="no-word-list__subtitle text-body-sm">
+      {{ t('empty.noLists.description') }}
     </p>
+    <PrimaryButton class="no-word-list__action" @click="openOptionsPage">
+      ⚙️ {{ t('common.settings') }}
+    </PrimaryButton>
   </div>
 </template>
 
@@ -35,7 +38,6 @@ const backgroundClass = computed(() => ({
   width: 100%;
   padding: 0 15px;
   text-align: center;
-  font-size: 1rem;
 }
 
 .no-word-list--boxed {
@@ -52,19 +54,15 @@ const backgroundClass = computed(() => ({
 
 .no-word-list__title {
   margin: 20px 0 10px;
-  font-size: 1.25rem;
+  color: var(--color);
 }
 
 .no-word-list__subtitle {
   margin: 0;
-  font-size: 1rem;
+  color: var(--text-secondary);
 }
 
-.options-page-link {
-  cursor: pointer;
-  font-weight: bold;
-}
-.options-page-link:hover {
-  opacity: 0.75;
+.no-word-list__action {
+  margin-top: 20px;
 }
 </style>

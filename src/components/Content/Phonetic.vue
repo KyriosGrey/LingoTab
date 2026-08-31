@@ -2,6 +2,7 @@
 import type { IWordDefinition } from '@/composables/words/useWordDefinitions'
 
 import IconButton from '@/components/shared/IconButton.vue'
+import { t } from '@/i18n'
 
 import audio from '@/modules/audio'
 import { computed } from 'vue'
@@ -33,7 +34,7 @@ function handleListen() {
     <small v-if="phonetic.text" class="phonetic__text">
       {{ phonetic.text }}
     </small>
-    <IconButton v-if="phonetic.audio" class="volume-btn" title="Listen" @click="handleListen">
+    <IconButton v-if="phonetic.audio" class="volume-btn" :title="t('action.listen')" @click="handleListen">
       <i-ic-round-volume-up />
     </IconButton>
   </div>

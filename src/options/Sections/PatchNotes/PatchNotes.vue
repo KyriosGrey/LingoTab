@@ -8,6 +8,71 @@ import Header3 from './Header3.vue'
     <Header3 />
     <div class="patchnotes-root__divider" />
 
+    <SettingsGroup title="Version 2.8.0">
+      <div class="entry text-body-sm">
+        <p class="intro">
+          Smart Sentences settings got much simpler, and LingoTab can now speak your language.
+        </p>
+        <ul>
+          <li>Removed built-in AI generation. Making your own sentence pack no longer needs an API key — copy the "Create your own pack" prompt into any AI chat instead.</li>
+          <li>New setting: "Interface language". Leave it on Auto to follow your translation language, or pick one yourself. Available in de, es, fr, hi, ja, ko, pl, pt, ru, uk and zh-CN; any other language stays in English.</li>
+          <li>Reworded most settings and empty screens so they say what they actually do.</li>
+          <li>Fixed: the "off" state of toggle switches showed the wrong color in light theme (almost white instead of the intended muted gray).</li>
+        </ul>
+      </div>
+    </SettingsGroup>
+
+    <SettingsGroup title="Version 2.7.6">
+      <div class="entry text-body-sm">
+        <p class="intro">
+          More reliability work on word lookups and translations, plus a simpler Smart Sentences setup.
+        </p>
+        <ul>
+          <li>Fixed: word lookups and translations could sit on a loading spinner indefinitely. They now give up after a few seconds and retry or fall back, instead of waiting forever.</li>
+          <li>In Automatic mode, Wiktionary is now tried first, with Free Dictionary API as the backup — it's proven more reliable. You can still force either one in "Dictionary source".</li>
+          <li>Translations now have a backup source: when Google Translate can't be reached, another service steps in instead of leaving a blank space. This matters most in Firefox, where Google refuses these requests far more often than in Chrome.</li>
+          <li>The notice at the top of the page now appears only when no translation could be fetched at all — not when the backup worked — and tells you which of the two happened.</li>
+          <li>Fixed: the "?" icon opened an empty tooltip when a translation couldn't be fetched. It now explains why.</li>
+          <li>Removed the "Target language" dropdown from Smart Sentences settings — there were two language settings that were easy to mix up. Everything now follows "Google Translate" in Main Settings.</li>
+        </ul>
+      </div>
+    </SettingsGroup>
+
+    <SettingsGroup title="Version 2.7.5">
+      <div class="entry text-body-sm">
+        <ul>
+          <li>Fixed: with all "Vocabulary lists" checkboxes unchecked but "Learning words only" turned on, the extension incorrectly showed "nothing to show" instead of your saved words.</li>
+          <li>Fixed: on the sentence practice screen, searching for a word did nothing. Searching now opens the word right away, as does picking one from your word history, marked words, or vocabulary lists.</li>
+          <li>Added a dismissible notice at the top of the page for when a translation can't be fetched, so it's clear what happened instead of leaving a blank space.</li>
+        </ul>
+      </div>
+    </SettingsGroup>
+
+    <SettingsGroup title="Version 2.7.4">
+      <div class="entry text-body-sm">
+        <p class="intro">
+          Fixes for missing translations. Google Translate limits how many translations can be requested at once, and the extension used to ask for dozens at a time — so some of them silently came back empty.
+        </p>
+        <ul>
+          <li>Fixed: translations occasionally showed up as blank space — on the word screen, in the review block, and in Grammar Reference.</li>
+          <li>Definition and example translations are now fetched when you click the "?" icon, instead of all of them being fetched up front. Previously a word with many meanings could request 30-40 translations at once, most of which nobody ever looked at.</li>
+          <li>Grammar Reference now fetches all of its translations in a single request instead of roughly fifteen separate ones, so cards load without hitting the limit.</li>
+          <li>If a translation can't be fetched at all, Grammar Reference now shows the original text instead of leaving an empty space.</li>
+          <li>Translations you've already seen are still remembered, so revisiting the same word or grammar card needs no new requests.</li>
+          <li>If Google Translate can't be reached at all, the word title now falls back to a translation from Wiktionary instead of staying blank. It's not always the most common translation, but it beats an empty space — and it's never remembered, so Google gets a fresh try the next time you open that word.</li>
+        </ul>
+      </div>
+    </SettingsGroup>
+
+    <SettingsGroup title="Version 2.7.3">
+      <div class="entry text-body-sm">
+        <ul>
+          <li>Word lookups are now more reliable — if the main dictionary service is temporarily unavailable, the extension automatically and silently tries Wiktionary instead, so a brief outage no longer looks like "word not found".</li>
+          <li>New setting: "Dictionary source" (General settings) lets you choose between Automatic (recommended), Free Dictionary API, or Wiktionary.</li>
+        </ul>
+      </div>
+    </SettingsGroup>
+
     <SettingsGroup title="Version 2.7.2">
       <div class="entry text-body-sm">
         <ul>

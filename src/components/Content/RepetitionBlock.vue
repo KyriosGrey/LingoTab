@@ -5,6 +5,7 @@ import ActionButton from '@/components/shared/WordList/ActionButton.vue'
 import useIgnoredWords from '@/composables/words/useIgnoredWords'
 import useLearnedWords from '@/composables/words/useLearnedWords'
 import useLearningWords from '@/composables/words/useLearningWords'
+import { t } from '@/i18n'
 import { computed, ref, watch } from 'vue'
 import Translation from './Translation.vue'
 
@@ -64,21 +65,21 @@ function handleRemove() {
   <div v-if="randomWord" class="repetition-block">
     <div class="repetition-header">
       <h3 class="repetition-title text-body-sm">
-        Review Learned Word
+        {{ t('repetitionBlock.title') }}
       </h3>
       <div class="repetition-actions">
         <ActionButton
-          title="Mark as Learning"
+          :title="t('action.markLearning')"
           @click="handleMarkAsLearning"
         >
           <i-ic-outline-school />
         </ActionButton>
 
-        <ActionButton title="Ignore word" @click="handleMarkAsIgnored">
+        <ActionButton :title="t('action.ignore')" @click="handleMarkAsIgnored">
           <i-ic-outline-visibility-off />
         </ActionButton>
 
-        <ActionButton title="Remove from list" @click="handleRemove">
+        <ActionButton :title="t('list.remove')" @click="handleRemove">
           <i-ic-round-remove-circle-outline />
         </ActionButton>
       </div>
@@ -88,7 +89,7 @@ function handleRemove() {
       <div v-if="isWordHidden" class="spoiler-slot">
         <Skeleton width="230px" height="32px" />
         <PrimaryButton class="spoiler-overlay-btn" @click="isSpoilerRevealed = true">
-          <i-ic-round-remove-red-eye /> Show word
+          <i-ic-round-remove-red-eye /> {{ t('word.showWord') }}
         </PrimaryButton>
       </div>
       <div v-else class="word">
@@ -98,7 +99,7 @@ function handleRemove() {
       <div v-if="isTranslationHidden" class="spoiler-slot">
         <Skeleton width="230px" height="24px" />
         <PrimaryButton class="spoiler-overlay-btn" @click="isSpoilerRevealed = true">
-          <i-ic-round-remove-red-eye /> Show translation
+          <i-ic-round-remove-red-eye /> {{ t('word.showTranslation') }}
         </PrimaryButton>
       </div>
       <Translation

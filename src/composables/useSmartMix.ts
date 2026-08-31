@@ -11,12 +11,14 @@ export async function loadMixConfig(): Promise<MixConfig> {
   try {
     const s = await storage.get([SETTINGS_KEY])
     const cfg = s?.[SETTINGS_KEY]?.mixMode ?? {}
+    // Nothing saved yet = new user -> mixing is on by default.
+    // An explicit false means the user turned it off, so it must stay off.
     return {
-      enabled: !!cfg.enabled,
-      wordsPerSentence: Math.max(1, Number(cfg.wordsPerSentence ?? 2))
+      enabled: cfg.enabled ?? true,
+      wordsPerSentence: Math.max(1, Number(cfg.wordsPerSentence ?? 5))
     }
   } catch (e) {
-    return { enabled: false, wordsPerSentence: 2 }
+    return { enabled: true, wordsPerSentence: 5 }
   }
 }
 

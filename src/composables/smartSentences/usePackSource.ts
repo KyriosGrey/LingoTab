@@ -5,21 +5,26 @@ const STORAGE_KEY = 'smartPackSource'
 
 type PackSourceType = 'builtin' | 'uploaded' | 'ai' | null
 
-const packSource = ref<PackSourceType>(null)
+const packSource = ref<PackSourceType>('builtin')
 
 export function usePackSource() {
   // Load saved source preference
   async function loadSource() {
     try {
       const data = await storage.get([STORAGE_KEY])
-      if (data && (data[STORAGE_KEY] === 'builtin' || data[STORAGE_KEY] === 'uploaded' || data[STORAGE_KEY] === 'ai')) {
-        packSource.value = data[STORAGE_KEY]
+      const saved = data?.[STORAGE_KEY]
+      if (saved === 'builtin' || saved === 'uploaded' || saved === 'ai') {
+        packSource.value = saved
+      } else if (saved === undefined) {
+        // Nothing saved yet = new user -> the built-in pack is on by default.
+        // Turning it off stores an explicit null, which must stay off.
+        packSource.value = 'builtin'
       } else {
         packSource.value = null
       }
     } catch (e) {
       console.warn('[usePackSource] failed to load source preference', e)
-      packSource.value = null
+      packSource.value = 'builtin'
     }
   }
 

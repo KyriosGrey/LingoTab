@@ -28,6 +28,7 @@ const showRepetitionNow = ref(false)
 const { isOnline } = useOnline()
 const {
   hasLearnedAllWords,
+  isSearchedWord,
   definitions,
   isLoading,
   wordsPoll,
@@ -49,15 +50,26 @@ async function onWordMarked() {
 async function decideAndPrepare() {
   loading.value = true
   try {
+    // The target language is already known synchronously (read from localStorage), so
+    // this starts loading its built-in pack chunk right away, in parallel with the
+    // storage.get() below, instead of only starting once the storage round-trip finishes
+    // and confirms the pack source really is "builtin". By the time it's actually needed
+    // a few lines down, it has often already resolved - wasted only if the source turns
+    // out not to be "builtin", in which case the (small, unused) chunk is simply ignored.
+    const { targetLanguage } = useGoogleTranslate()
+    const builtInPackPromise = getBuiltInPackForLanguage(targetLanguage.code)
+
     // read settings and pack together
     const s = await storage.get([MIX_SETTINGS_KEY, PACK_KEY, 'smartPackSource', 'smartUploadedPack'])
     const settings = s?.[MIX_SETTINGS_KEY] ?? {}
-    
+
     let pack = null
-    const source = s?.['smartPackSource']
+    // Nothing saved yet = new user -> the built-in pack is on by default.
+    // Turning it off stores an explicit null, which must stay off.
+    const savedSource = s?.['smartPackSource']
+    const source = savedSource === undefined ? 'builtin' : savedSource
     if (source === 'builtin') {
-      const { targetLanguage } = useGoogleTranslate()
-      pack = getBuiltInPackForLanguage(targetLanguage.code)
+      pack = await builtInPackPromise
     } else if (source === 'uploaded') {
       pack = s?.['smartUploadedPack'] ?? null
     } else {
@@ -65,7 +77,7 @@ async function decideAndPrepare() {
     }
 
     const smartEnabledGlobally = !!settings.enabled
-    const mixEnabled = !!settings.mixMode?.enabled
+    const mixEnabled = settings.mixMode?.enabled ?? true
     const hasSentences = !!(pack && Array.isArray(pack.sentences) && pack.sentences.length > 0)
 
     // If mix is disabled -> preserve previous behavior:
@@ -132,25 +144,20 @@ onMounted(() => {
 
 <template>
   <div>
-    <template v-if="loading">
-      <!-- while deciding, reuse the existing Loading behavior (simple placeholder) -->
-      <div class="content">
-        <div class="meaning boxed">
-          Loading…
-        </div>
-      </div>
-    </template>
+    <Loading v-if="loading" />
 
     <!-- If decided to show a sentence and pack is available — mount full SmartSentencePractice -->
-    <SmartSentencePractice v-else-if="showSentence" />
+    <!-- A word requested by the user (search, history, marked, inventory)
+         always wins over the sentence screen -->
+    <SmartSentencePractice v-else-if="showSentence && !isSearchedWord" />
 
     <!-- Otherwise show word flow (re-uses Word.vue and word composable) -->
     <template v-else>
-      <NoWordList v-if="!wordsPoll.length" />
+      <NoWordList v-if="!wordsPoll.length && !isSearchedWord" />
       <OfflineState v-else-if="!isOnline" />
       <Loading v-else-if="isLoading" />
       <WordFetchError v-else-if="error" :word="word" @retry="getWord" />
-      <LearnedAllWords v-else-if="hasLearnedAllWords" />
+      <LearnedAllWords v-else-if="hasLearnedAllWords && !isSearchedWord" />
       <Word
         v-else
         :word="word"
@@ -161,17 +168,3 @@ onMounted(() => {
     </template>
   </div>
 </template>
-
-<style scoped>
-/* Reuse existing component spacing to match Word/SmartSentencePractice layout.
-   No new visual styles here — child components supply full UI/visuals. */
-
-.content { margin: 100px auto 50px; padding: 0 15px; max-width: 800px; }
-
-.boxed {
-  padding: 15px 20px;
-  border-radius: 10px;
-  background-color: hsla(var(--bg-color-raw), 0.9);
-  backdrop-filter: blur(5px);
-}
-</style>

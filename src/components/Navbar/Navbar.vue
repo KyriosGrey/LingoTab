@@ -25,7 +25,10 @@ const backgroundClass = computed(() => ({
 .navbar {
   position: fixed;
   right: 1rem;
-  top: 1rem;
+  /* --google-translate-banner-height is 0px unless GoogleTranslateErrorBanner.vue is
+     showing, in which case it's that banner's actual rendered height - so this icon row
+     shifts down to clear it instead of sitting on top of it. */
+  top: calc(1rem + var(--google-translate-banner-height, 0px));
   z-index: 2;
   display: flex;
   align-items: center;

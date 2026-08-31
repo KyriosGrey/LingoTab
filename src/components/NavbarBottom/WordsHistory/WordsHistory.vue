@@ -6,6 +6,7 @@ import WordsList from '@/components/shared/WordList'
 
 import useWord from '@/composables/words/useWord'
 import useWordsHistory from '@/composables/words/useWordsHistory'
+import { t } from '@/i18n'
 import { ref } from 'vue'
 
 const { wordsHistory } = useWordsHistory()
@@ -20,14 +21,14 @@ function handleShowDefinition(word: string) {
 </script>
 
 <template>
-  <IconButton class="open-btn" title="History" @click="isModalOpen = true">
+  <IconButton class="open-btn" :title="t('nav.history')" @click="isModalOpen = true">
     <i-ic-round-history />
   </IconButton>
 
   <Modal
     v-model="isModalOpen"
-    title="History"
-    subtitle="Last words that have been displayed"
+    :title="t('nav.history')"
+    :subtitle="t('nav.historySubtitle')"
     max-width="400px"
   >
     <WordsList

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Toggle from '@/components/shared/Toggle.vue'
 import { usePackSource } from '@/composables/smartSentences/usePackSource'
+import { t } from '@/i18n'
 import Section from '@/options/components/Section.vue'
 import { computed, onMounted } from 'vue'
 
@@ -29,8 +30,8 @@ async function onToggle(v: boolean) {
 
 <template>
   <Section
-    title="Built-in sentence pack"
-    description="Enable to use a pre-loaded set of practice sentences instead of generating new ones."
+    :title="t('smart.builtIn.title')"
+    :description="t('smart.builtIn.description')"
   >
     <template #bar>
       <Toggle :model-value="isEnabled" @update:model-value="onToggle" />

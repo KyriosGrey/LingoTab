@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ActionButton from '@/components/shared/ActionButton.vue'
+import { t } from '@/i18n'
 import { computed } from 'vue'
 
 const props = defineProps<{ pack: any | null, warning?: string }>()
@@ -14,10 +15,10 @@ const warning = computed(() => props.warning ?? '')
   <div v-if="pack" class="preview">
     <div class="preview-header">
       <h3 class="preview-title text-heading-18">
-        Preview generated pack
+        {{ t('smart.preview.title') }}
       </h3>
       <p class="preview-subtitle text-body-sm">
-        Review the sentences generated from your settings. Accept to save the pack locally, or discard to retry generation.
+        {{ t('smart.preview.description') }}
       </p>
     </div>
 
@@ -25,10 +26,10 @@ const warning = computed(() => props.warning ?? '')
 
     <div class="row small-gap">
       <ActionButton @click="$emit('accept')">
-        Accept (save pack)
+        {{ t('smart.preview.accept') }}
       </ActionButton>
       <ActionButton @click="$emit('discard')">
-        Discard
+        {{ t('smart.preview.discard') }}
       </ActionButton>
     </div>
 
