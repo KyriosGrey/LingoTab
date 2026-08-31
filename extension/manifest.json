@@ -16,6 +16,10 @@
     "48": "./assets/48.png",
     "128": "./assets/128.png"
   },
+  "permissions": [
+    "storage"
+  ],
+
   "host_permissions": [
     "https://translate.googleapis.com/*",
     "https://en.wiktionary.org/*",
@@ -25,6 +29,14 @@
     "https://api.mymemory.translated.net/*"
   ],
   "content_security_policy": {
-    "extension_pages": "img-src * data:;object-src 'self';script-src 'self'"
+    "extension_pages": "img-src 'self' data: https://icons.duckduckgo.com https://www.google.com https://api.faviconkit.com; object-src 'self'; script-src 'self'"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "new-word-tab@graydesign",
+      "strict_min_version": "109.0"
+    }
   }
 }
+
+
