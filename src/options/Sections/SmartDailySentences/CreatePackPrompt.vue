@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ActionButton from '@/components/shared/ActionButton.vue'
 import { createPackPrompt } from '@/data/smartSentences/createPackPrompt'
+import { t } from '@/i18n'
 import Section from '@/options/components/Section.vue'
 import { ref } from 'vue'
 
@@ -41,15 +42,15 @@ async function copyPrompt() {
 
 <template>
   <Section
-    title="Create your own pack"
-    description="Copy a ready-made prompt for an AI chat (ChatGPT, Claude, etc.) — it will ask you a few questions, then generate a sentence pack JSON you can import below with 'Choose file'."
+    :title="t('smart.create.title')"
+    :description="t('smart.create.description')"
   >
     <template #bar>
       <div class="bar-actions">
         <ActionButton @click="copyPrompt">
-          <i-ic-round-content-copy /> Copy prompt
+          <i-ic-round-content-copy /> {{ t('smart.create.copy') }}
         </ActionButton>
-        <span v-if="copied" class="copied-badge text-body-sm">Copied!</span>
+        <span v-if="copied" class="copied-badge text-body-sm">{{ t('smart.create.copied') }}</span>
       </div>
     </template>
   </Section>

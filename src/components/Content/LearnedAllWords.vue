@@ -1,11 +1,15 @@
+<script setup lang="ts">
+import { t } from '@/i18n'
+</script>
+
 <template>
   <div class="learned-all">
     <span class="learned-all__emoji">🎉</span>
     <h1 class="learned-all__title">
-      Hooray
+      {{ t('empty.learnedAll.title') }}
     </h1>
     <p class="learned-all__subtitle">
-      You've learned all of our words. Well done!
+      {{ t('empty.learnedAll.description') }}
     </p>
   </div>
 </template>

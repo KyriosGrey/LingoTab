@@ -1,6 +1,7 @@
 <script lang="ts" setup>
+import { t } from '@/i18n'
 import { formatBytes } from '@/utils/number'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 interface Props {
   id: string
@@ -11,7 +12,7 @@ interface Props {
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  label: 'Select a file',
+  label: undefined,
   maxWidth: undefined,
   maxSize: Infinity,
 })
@@ -19,6 +20,10 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   (e: 'file', file: File): void
 }>()
+
+// Resolved while rendering rather than as a prop default, so the fallback label
+// follows the interface language instead of freezing at component setup.
+const labelText = computed(() => props.label ?? t('file.select'))
 
 const input = ref<HTMLInputElement | null>(null)
 const fileName = ref('')
@@ -56,7 +61,7 @@ async function handleFile() {
 
     <label :for="id" class="text-body-sm" :style="{ maxWidth }">
       <i-ic-round-upload-file />
-      <span class="label-text">{{ fileName ? fileName : label }}</span>
+      <span class="label-text">{{ fileName ? fileName : labelText }}</span>
     </label>
   </div>
 </template>

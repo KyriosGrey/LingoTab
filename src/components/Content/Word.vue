@@ -4,6 +4,7 @@ import type { IWordDefinition } from '@/composables/words/useWordDefinitions'
 import PrimaryButton from '@/components/shared/PrimaryButton.vue'
 import Skeleton from '@/components/shared/Skeleton.vue'
 import useBackground from '@/composables/useBackground'
+import { t } from '@/i18n'
 // ✅ добавляем импорт для хранения
 import storage from '@/modules/localStorage'
 
@@ -90,7 +91,7 @@ watch(
                 <Skeleton width="165px" height="24px" />
               </div>
               <PrimaryButton class="spoiler-overlay-btn" @click="isSpoilerRevealed = true">
-                <i-ic-round-remove-red-eye /> Show word
+                <i-ic-round-remove-red-eye /> {{ t('word.showWord') }}
               </PrimaryButton>
             </div>
           </template>
@@ -115,7 +116,7 @@ watch(
         <div v-if="isTranslationHidden" class="spoiler-slot spoiler-slot--line">
           <Skeleton width="230px" height="24px" />
           <PrimaryButton class="spoiler-overlay-btn" @click="isSpoilerRevealed = true">
-            <i-ic-round-remove-red-eye /> Show translation
+            <i-ic-round-remove-red-eye /> {{ t('word.showTranslation') }}
           </PrimaryButton>
         </div>
         <Translation

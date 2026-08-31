@@ -3,6 +3,7 @@ import useShortcutContextMenu from '@/composables/shortcuts/useShortcutContextMe
 
 import useShortcutModal from '@/composables/shortcuts/useShortcutModal'
 import useShortcuts from '@/composables/shortcuts/useShortcuts'
+import { t } from '@/i18n'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
@@ -32,6 +33,7 @@ export default defineComponent({
 
       contextMenuRef,
       isVisible,
+      t,
     }
   },
 })
@@ -40,10 +42,10 @@ export default defineComponent({
 <template>
   <ul v-show="isVisible" ref="contextMenuRef" class="shortcut-context-menu">
     <li @click="handleEdit">
-      Edit shortcut
+      {{ t('shortcut.edit') }}
     </li>
     <li @click="handleRemove">
-      Remove
+      {{ t('shortcut.remove') }}
     </li>
   </ul>
 </template>

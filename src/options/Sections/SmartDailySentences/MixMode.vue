@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Toggle from '@/components/shared/Toggle.vue'
 import { resetMixState } from '@/composables/useSmartMix'
+import { t } from '@/i18n'
 import Section from '@/options/components/Section.vue'
 import Select from '@/options/components/Select.vue'
 import * as storage from '@/utils/storage'
@@ -8,8 +9,8 @@ import { onMounted, ref, watch } from 'vue'
 
 const storageKey = 'smartDailySettings'
 
-const localEnabled = ref(false)
-const localWordsPerSentence = ref<number>(2)
+const localEnabled = ref(true)
+const localWordsPerSentence = ref<number>(5)
 
 // Options for select — keep small range by default, can be extended later
 const options = [
@@ -32,15 +33,17 @@ onMounted(async () => {
     const s = await storage.get([storageKey])
     const st = s?.[storageKey] ?? {}
     const mix = st.mixMode ?? {}
-    localEnabled.value = !!mix.enabled
-    const v = Number(mix.wordsPerSentence ?? 2) || 2
+    // Nothing saved yet = new user -> mixing is on by default.
+    // An explicit false means the user turned it off, so it must stay off.
+    localEnabled.value = mix.enabled ?? true
+    const v = Number(mix.wordsPerSentence ?? 5) || 5
     // clamp to available options
-    localWordsPerSentence.value = options.some(o => o.value === v) ? v : 2
+    localWordsPerSentence.value = options.some(o => o.value === v) ? v : 5
   }
   catch (e) {
     console.warn('[MixMode] failed to read settings', e)
-    localEnabled.value = false
-    localWordsPerSentence.value = 2
+    localEnabled.value = true
+    localWordsPerSentence.value = 5
   }
 })
 
@@ -67,7 +70,7 @@ async function onToggle(v: boolean) {
 // watch the select value and persist changes (debounced behavior not required for small updates)
 watch(localWordsPerSentence, async (val, oldVal) => {
   const clamped = Math.max(1, Math.round(Number(val || 1)))
-  localWordsPerSentence.value = options.some(o => o.value === clamped) ? clamped : 2
+  localWordsPerSentence.value = options.some(o => o.value === clamped) ? clamped : 5
   try {
     await savePartial({ wordsPerSentence: localWordsPerSentence.value })
     // reset internal mix state when ratio changes
@@ -82,8 +85,8 @@ watch(localWordsPerSentence, async (val, oldVal) => {
 
 <template>
   <Section
-    title="Mix words & sentences"
-    description="When enabled, New Tab will alternate showing words and generated sentences."
+    :title="t('smart.mix.title')"
+    :description="t('smart.mix.description')"
   >
     <template #bar>
       <Toggle :model-value="localEnabled" @update:model-value="onToggle" />
@@ -91,8 +94,8 @@ watch(localWordsPerSentence, async (val, oldVal) => {
   </Section>
 
   <Section
-    title="Words per sentence"
-    description="If sentences are not available, the system falls back to individual words."
+    :title="t('smart.wordsPer.title')"
+    :description="t('smart.wordsPer.description')"
   >
     <template #bar>
       <Select

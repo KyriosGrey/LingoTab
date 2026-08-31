@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { version } from '@/../package.json'
+import { t } from '@/i18n'
 </script>
 
 <template>
   <header class="header">
     <h1 class="title text-heading-32">
-      Smart Sentences Settings
+      {{ t('settings.tab.smart') }}
     </h1>
 
     <div class="info">
       <a
         class="version text-body-sm"
-        href="https://github.com/sajadhsm/new-word-tab/releases"
+        href="https://github.com/KyriosGrey/LingoTab"
       >
         LingoTab v{{ version }} | MIT Licensed
       </a>

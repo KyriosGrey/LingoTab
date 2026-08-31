@@ -4,6 +4,7 @@ import useIgnoredWords from '@/composables/words/useIgnoredWords'
 import useLearnedWords from '@/composables/words/useLearnedWords'
 
 import useLearningWords from '@/composables/words/useLearningWords'
+import { t } from '@/i18n'
 
 defineEmits<{
   (e: 'showDefinition', word: string): void
@@ -34,27 +35,26 @@ function handleMarkAsIgnored(word: string) {
   >
     <template #actions="{ word }">
       <ActionButton
-        title="Mark as Learning"
+        :title="t('action.markLearning')"
         @click="handleMarkAsLearning(word)"
       >
         <i-ic-outline-school />
       </ActionButton>
 
-      <ActionButton title="Ignore word" @click="handleMarkAsIgnored(word)">
+      <ActionButton :title="t('action.ignore')" @click="handleMarkAsIgnored(word)">
         <i-ic-outline-visibility-off />
       </ActionButton>
 
-      <ActionButton title="Remove from list" @click="removeLearnedWords(word)">
+      <ActionButton :title="t('list.remove')" @click="removeLearnedWords(word)">
         <i-ic-round-remove-circle-outline />
       </ActionButton>
     </template>
 
     <template #empty>
-      <p class="empty-state">
-        Mark words in the <i>Learning</i> tab
+      <p class="empty-state text-body-sm">
+        <i-ic-round-check-circle-outline class="empty-state__icon" />
         <br>
-        by using
-        <i-ic-round-check-circle-outline class="empty-state__icon" /> icon
+        {{ t('empty.learned') }}
       </p>
     </template>
   </WordList>
@@ -62,13 +62,15 @@ function handleMarkAsIgnored(word: string) {
 
 <style scoped>
 .empty-state {
-  font-size: 0.9rem;
   padding: 30px 5px;
   text-align: center;
+  color: var(--text-secondary);
 }
 
 .empty-state__icon {
   display: inline-block;
-  margin-bottom: -5px;
+  width: 24px;
+  height: 24px;
+  margin-bottom: 6px;
 }
 </style>

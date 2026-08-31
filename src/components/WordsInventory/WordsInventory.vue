@@ -2,6 +2,7 @@
 import IconButton from '@/components/shared/IconButton.vue'
 
 import Modal from '@/components/shared/Modal.vue'
+import { t } from '@/i18n'
 import { ref } from 'vue'
 import WordsList from './WordsList.vue'
 
@@ -11,7 +12,7 @@ const isModalOpen = ref(false)
 <template>
   <IconButton
     class="open-btn"
-    title="Word Inventory"
+    :title="t('nav.inventory')"
     @click="isModalOpen = true"
   >
     <i-ic-round-inventory-2 />
@@ -19,8 +20,8 @@ const isModalOpen = ref(false)
 
   <Modal
     v-model="isModalOpen"
-    title="Word Inventory"
-    subtitle="Browse all included words"
+    :title="t('nav.inventory')"
+    :subtitle="t('nav.inventorySubtitle')"
   >
     <WordsList @check="isModalOpen = false" />
   </Modal>

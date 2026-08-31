@@ -72,6 +72,12 @@
 
   --card-bg: var(--surface-color); /* light theme: card groups use the solid white surface */
 
+  /* Toggle "Off" track: dark theme keeps the translucent white-10% overlay (looks
+     right on a dark surface), but light theme needs a genuinely visible solid color
+     instead of black-10% (which reads as almost-white on the light background) —
+     confirmed by Sergey against Figma as --text-tertiary's light value, #94A3B8. */
+  --toggle-track-off: var(--text-tertiary);
+
   --border-color: var(--overlay-strong);
 
   --primary-btn-bg: var(--accent-color);

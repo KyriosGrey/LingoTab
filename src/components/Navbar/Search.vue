@@ -2,6 +2,7 @@
 import IconButton from '@/components/shared/IconButton.vue'
 import SearchInput from '@/components/shared/SearchInput.vue'
 import useWord from '@/composables/words/useWord'
+import { t } from '@/i18n'
 import { computed, ref, watch } from 'vue'
 
 const query = ref('')
@@ -31,7 +32,7 @@ watch(inputRef, el => el?.focus())
 
 <template>
   <div class="search">
-    <IconButton v-if="!isVisible" title="Search word" @click="isVisible = true">
+    <IconButton v-if="!isVisible" :title="t('nav.search')" @click="isVisible = true">
       <i-ic-round-search />
     </IconButton>
 
@@ -39,7 +40,7 @@ watch(inputRef, el => el?.focus())
       <SearchInput
         ref="inputRef"
         v-model="query"
-        placeholder="Search word"
+        :placeholder="t('nav.search')"
       />
     </form>
   </div>

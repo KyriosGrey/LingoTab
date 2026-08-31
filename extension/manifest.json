@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "LingoTab",
   "description": "Learn English in new tab",
-  "version": "2.7.2",
+  "version": "2.8.0",
   "chrome_url_overrides": {
     "newtab": "./dist/newTab/index.html"
   },
@@ -22,7 +22,11 @@
 
   "host_permissions": [
     "https://translate.googleapis.com/*",
-    "https://api.groq.com/*"
+    "https://en.wiktionary.org/*",
+    "https://commons.wikimedia.org/*",
+    "https://upload.wikimedia.org/*",
+    "https://api.wiktapi.dev/*",
+    "https://api.mymemory.translated.net/*"
   ],
   "content_security_policy": {
     "extension_pages": "img-src 'self' data: https://icons.duckduckgo.com https://www.google.com https://api.faviconkit.com; object-src 'self'; script-src 'self'"
@@ -34,4 +38,5 @@
     }
   }
 }
+
 

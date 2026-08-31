@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { t } from '@/i18n'
 import { ref } from 'vue'
 
 const active = ref<'newword' | 'smart' | 'patchnotes'>('newword')
@@ -6,9 +7,9 @@ const active = ref<'newword' | 'smart' | 'patchnotes'>('newword')
 
 <template>
   <div class="settings-root">
-    <aside class="settings-sidebar" role="navigation" aria-label="Settings menu">
+    <aside class="settings-sidebar" role="navigation" :aria-label="t('settings.menu')">
       <div class="brand text-heading-label">
-        Settings
+        {{ t('settings.brand') }}
       </div>
       <nav>
         <button
@@ -16,21 +17,21 @@ const active = ref<'newword' | 'smart' | 'patchnotes'>('newword')
           aria-pressed="active === 'newword'"
           @click="active = 'newword'"
         >
-          Main Settings
+          {{ t('settings.tab.main') }}
         </button>
         <button
           class="menu-item" :class="[active === 'smart' ? 'active' : '']"
           aria-pressed="active === 'smart'"
           @click="active = 'smart'"
         >
-          Smart Sentences
+          {{ t('settings.tab.smart') }}
         </button>
         <button
           class="menu-item" :class="[active === 'patchnotes' ? 'active' : '']"
           aria-pressed="active === 'patchnotes'"
           @click="active = 'patchnotes'"
         >
-          Patch Notes
+          {{ t('settings.tab.patchNotes') }}
         </button>
       </nav>
     </aside>

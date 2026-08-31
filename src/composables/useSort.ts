@@ -1,3 +1,4 @@
+import type { MessageKey } from '@/i18n/en'
 import { computed, ref } from 'vue'
 
 import MdiSortAlphabeticalAscending from '~icons/mdi/sort-alphabetical-ascending'
@@ -5,24 +6,27 @@ import MdiSortAlphabeticalDescending from '~icons/mdi/sort-alphabetical-descendi
 import MdiSortClockAscending from '~icons/mdi/sort-clock-ascending'
 import MdiSortClockDescending from '~icons/mdi/sort-clock-descending'
 
-const SORT_STATES = [
+// Holds the translation key, not the text: this list is built once when the module
+// loads, so a resolved string would freeze the language it was resolved in. The
+// component translates it while rendering instead.
+const SORT_STATES: { titleKey: MessageKey, icon: unknown, sortMethod: (list: string[]) => string[] }[] = [
   {
-    text: 'Time - Ascending',
+    titleKey: 'list.sort.oldest',
     icon: MdiSortClockAscending,
     sortMethod: (list: string[]) => list,
   },
   {
-    text: 'Time - Descending',
+    titleKey: 'list.sort.newest',
     icon: MdiSortClockDescending,
     sortMethod: (list: string[]) => list.reverse(),
   },
   {
-    text: 'Alphabet - Ascending',
+    titleKey: 'list.sort.aToZ',
     icon: MdiSortAlphabeticalAscending,
     sortMethod: (list: string[]) => list.sort((a, b) => a.localeCompare(b)),
   },
   {
-    text: 'Alphabet - Descending',
+    titleKey: 'list.sort.zToA',
     icon: MdiSortAlphabeticalDescending,
     sortMethod: (list: string[]) => list.sort((a, b) => b.localeCompare(a)),
   },

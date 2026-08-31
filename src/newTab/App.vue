@@ -2,6 +2,7 @@
 import Content from '@/components/Content'
 import Navbar from '@/components/Navbar'
 import NavbarBottom from '@/components/NavbarBottom'
+import GoogleTranslateErrorBanner from '@/components/shared/GoogleTranslateErrorBanner.vue'
 import SiteShortcuts from '@/components/SiteShortcuts'
 
 import { isActive } from '@/composables/shortcuts/useShortcuts'
@@ -11,6 +12,8 @@ useBackground({ initialize: true })
 </script>
 
 <template>
+  <GoogleTranslateErrorBanner />
+
   <div class="container">
     <main class="main">
       <Navbar />

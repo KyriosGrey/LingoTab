@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import SearchInput from '@/components/shared/SearchInput.vue'
 import useSort from '@/composables/useSort'
+import { t } from '@/i18n'
 
 import { computed, ref } from 'vue'
 
@@ -37,7 +38,7 @@ const filteredWords = computed(() =>
       <div class="filters" :style="{ flex: stretch ? '1' : '0' }">
         <button
           class="sort-btn"
-          :title="`Sort (${sortStateMeta.text})`"
+          :title="t(sortStateMeta.titleKey)"
           :disabled="!list.length"
           @click="setNextSortState"
         >
@@ -46,7 +47,7 @@ const filteredWords = computed(() =>
 
         <SearchInput
           v-model="searchQuery"
-          placeholder="Filter"
+          :placeholder="t('list.search')"
           class="grow"
           :disabled="!list.length"
         />
@@ -56,17 +57,17 @@ const filteredWords = computed(() =>
     </div>
 
     <slot v-if="!list.length" name="empty">
-      <p class="state-message">
+      <p class="state-message text-body-sm">
         <i-ic-round-inbox />
         <br>
-        There is nothing to show
+        {{ t('list.empty') }}
       </p>
     </slot>
 
-    <p v-else-if="!filteredWords.length" class="state-message">
+    <p v-else-if="!filteredWords.length" class="state-message text-body-sm">
       <i-ic-round-search-off />
       <br>
-      No word matched
+      {{ t('list.noMatch') }}
     </p>
 
     <ul
@@ -183,10 +184,11 @@ const filteredWords = computed(() =>
 
 .state-message {
   margin-top: 50px;
-  font-size: 1rem;
+  color: var(--text-secondary);
   text-align: center;
 }
 .state-message svg {
-  font-size: 1.5rem;
+  width: 24px;
+  height: 24px;
 }
 </style>

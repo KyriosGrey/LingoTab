@@ -2,6 +2,7 @@
 import { selectedShortcut } from '@/composables/shortcuts/useShortcutContextMenu'
 
 import useShortcuts from '@/composables/shortcuts/useShortcuts'
+import { t } from '@/i18n'
 import { computed, defineComponent, onMounted, ref } from 'vue'
 
 const SHORTCUT_SCHEMA = {
@@ -91,6 +92,7 @@ export default defineComponent({
       isFormValid,
       handleSubmit,
       handleCancel,
+      t,
     }
   },
 })
@@ -99,7 +101,7 @@ export default defineComponent({
 <template>
   <form class="form" @submit.prevent="handleSubmit">
     <label class="form__label text-body-sm">
-      Name
+      {{ t('shortcut.name') }}
       <input
         ref="urlInputRef"
         v-model="formModel.name"
@@ -107,21 +109,21 @@ export default defineComponent({
         :class="{ 'form__input--error': isNameDuplicated }"
       >
       <small v-if="isNameDuplicated" class="form__error text-body-sm-italic">
-        Name is duplicated.
+        {{ t('shortcut.nameDuplicated') }}
       </small>
     </label>
 
     <label class="form__label text-body-sm">
-      URL
+      {{ t('shortcut.url') }}
       <input v-model="formModel.url" class="form__input text-body">
     </label>
 
     <div class="form__footer">
       <button type="button" class="form__cancel-btn text-body-sm" @click="handleCancel">
-        Cancel
+        {{ t('shortcut.cancel') }}
       </button>
       <button type="submit" class="form__submit-btn text-body-sm" :disabled="!isFormValid">
-        Done
+        {{ t('shortcut.done') }}
       </button>
     </div>
   </form>

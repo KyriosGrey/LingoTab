@@ -3,6 +3,7 @@ import type { HintData, HintOption } from '@/utils/packValidator'
 import PrimaryButton from '@/components/shared/PrimaryButton.vue'
 import useGoogleTranslate from '@/composables/useGoogleTranslate'
 import { getBuiltInPackForLanguage } from '@/data/smartSentences/builtInPacks'
+import { t } from '@/i18n'
 import { validateAndNormalizePack } from '@/utils/packValidator'
 import * as storage from '@/utils/storage'
 import { computed, onMounted, ref } from 'vue'
@@ -20,7 +21,7 @@ const input = ref('')
 // New flag: controls whether the top header shows the ORIGINAL English sentence
 const headerShowsOriginal = ref(false)
 
-const showHints = ref(false) // controls whether hint is shown
+const showHints = ref(true) // controls whether hint is shown
 
 const answerInput = ref<HTMLTextAreaElement | null>(null)
 const interactiveNextBtn = ref<HTMLButtonElement | null>(null)
@@ -76,16 +77,27 @@ function onOptionClick(option: HintOption) {
 async function loadPackAndState() {
   loading.value = true
   try {
+    // The target language is already known synchronously (read from localStorage), so
+    // this starts loading its built-in pack chunk right away, in parallel with the
+    // storage.get() below, instead of only starting once the storage round-trip finishes
+    // and confirms the pack source really is "builtin". By the time it's actually needed
+    // a few lines down, it has often already resolved - wasted only if the source turns
+    // out not to be "builtin", in which case the (small, unused) chunk is simply ignored.
+    const { targetLanguage } = useGoogleTranslate()
+    const builtInPackPromise = getBuiltInPackForLanguage(targetLanguage.code)
+
     // include settings so we can read showHints
     const s = await storage.get([PACK_KEY, STATE_KEY, SETTINGS_KEY, 'smartPackSource', 'smartUploadedPack'])
 
-    const source = s?.smartPackSource
+    // Nothing saved yet = new user -> the built-in pack is on by default.
+    // Turning it off stores an explicit null, which must stay off.
+    const savedSource = s?.smartPackSource
+    const source = savedSource === undefined ? 'builtin' : savedSource
     if (source === 'builtin') {
       // Re-shuffle hint options on every load: the built-in data always lists
       // the correct option first, so it must pass through the same
       // normalizer used for AI/uploaded packs to randomize option order.
-      const { targetLanguage } = useGoogleTranslate()
-      pack.value = validateAndNormalizePack(getBuiltInPackForLanguage(targetLanguage.code))
+      pack.value = validateAndNormalizePack(await builtInPackPromise)
     }
     else if (source === 'uploaded') {
       pack.value = s?.smartUploadedPack ?? null
@@ -97,9 +109,9 @@ async function loadPackAndState() {
     const st = s?.[STATE_KEY] ?? { lastIndex: -1 }
     const last = typeof st.lastIndex === 'number' ? st.lastIndex : -1
 
-    // load showHints from saved settings (safe fallback to false)
+    // load showHints from saved settings (nothing saved yet = on by default)
     const settings = s?.[SETTINGS_KEY] ?? {}
-    showHints.value = !!settings.showHints
+    showHints.value = settings.showHints ?? true
 
     if (pack.value && Array.isArray(pack.value.sentences) && pack.value.sentences.length > 0) {
       const n = pack.value.sentences.length
@@ -218,10 +230,10 @@ function openSettings() {
     <!-- Если нет пака — единый блок с CTA -->
     <div v-if="!pack || !pack.sentences || pack.sentences.length === 0" class="empty-card">
       <p class="text-body">
-        No Smart Sentences pack found. Generate a pack in Settings to start practicing.
+        {{ t('empty.noPack') }}
       </p>
       <PrimaryButton @click="openSettings">
-        ⚙️ Settings
+        ⚙️ {{ t('common.settings') }}
       </PrimaryButton>
     </div>
 
@@ -231,7 +243,7 @@ function openSettings() {
         <!-- Верхний блок: перевод или оригинал в зависимости от состояния -->
         <div class="translated-sentence">
           <div class="eyebrow text-heading-label">
-            Translate to English:
+            {{ t('practice.translatePrompt') }}
           </div>
           <div class="sentence text-sentence" aria-live="polite">
             {{ headerShowsOriginal ? current?.text : current?.translation }}
@@ -277,10 +289,10 @@ function openSettings() {
                position doesn't shift when the button appears once the hint resolves. -->
           <div class="interactive-footer">
             <div class="counter text-body-sm">
-              Sentence {{ indexDisplay }} of {{ pack.sentences.length }}
+              {{ indexDisplay }} / {{ pack.sentences.length }}
             </div>
             <button v-if="hintResolved" ref="interactiveNextBtn" class="check-btn" @click="onNextClick">
-              Next →
+              {{ t('action.next') }} →
             </button>
           </div>
         </div>
@@ -292,8 +304,8 @@ function openSettings() {
               ref="answerInput"
               v-model="input"
               class="answer-input text-body"
-              placeholder="Type the English sentence here"
-              aria-label="Enter English sentence"
+              :placeholder="t('practice.inputPlaceholder')"
+              :aria-label="t('practice.inputLabel')"
               @keydown.enter="onEnterKey"
             />
             <div class="input-footer">
@@ -301,13 +313,13 @@ function openSettings() {
                 {{ current.tense }}
               </div>
               <button class="check-btn text-body-sm" @click="onNextClick">
-                {{ headerShowsOriginal ? 'Next →' : 'Check' }}
+                {{ headerShowsOriginal ? `${t('action.next')} →` : t('practice.check') }}
               </button>
             </div>
           </div>
 
           <div class="counter text-body-sm">
-            Sentence {{ indexDisplay }} of {{ pack.sentences.length }}
+            {{ indexDisplay }} / {{ pack.sentences.length }}
           </div>
         </template>
       </div>

@@ -6,6 +6,7 @@ import useGoogleTranslate from '@/composables/useGoogleTranslate'
 import useIgnoredWords from '@/composables/words/useIgnoredWords'
 
 import useLearningWords from '@/composables/words/useLearningWords'
+import { t } from '@/i18n'
 
 const props = defineProps<{
   definition: IWordDefinition
@@ -45,17 +46,17 @@ function handleNextWord() {
       <i-ic-round-g-translate />
     </IconButton>
 
-    <IconButton title="Ignore word" @click="handleMarkAsIgnored">
+    <IconButton :title="t('action.ignore')" @click="handleMarkAsIgnored">
       <i-ic-round-visibility-off />
     </IconButton>
 
-    <IconButton title="Mark as Learning" @click="handleMarkAsLearning">
+    <IconButton :title="t('action.markLearning')" @click="handleMarkAsLearning">
       <i-ic-round-bookmark-add />
     </IconButton>
 
     <!-- ✅ Новая кнопка: Next Word -->
     <button class="next-btn text-body-sm" @click="handleNextWord">
-      Next
+      {{ t('action.next') }}
       <i-ic-round-arrow-forward />
     </button>
   </div>

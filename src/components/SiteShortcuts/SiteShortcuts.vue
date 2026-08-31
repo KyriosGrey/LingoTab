@@ -7,6 +7,7 @@ import {
 } from '@/composables/shortcuts/useShortcutContextMenu'
 import useShortcutModal from '@/composables/shortcuts/useShortcutModal'
 import useBackground from '@/composables/useBackground'
+import { t } from '@/i18n'
 import { computed } from 'vue'
 
 import AddShortcutForm from './AddShortcutForm.vue'
@@ -36,7 +37,7 @@ function hideShortcutContextMenuOnScroll() {
   >
     <Shortcuts />
 
-    <button class="shortcut-add" title="Add shortcut" @click="openModal">
+    <button class="shortcut-add" :title="t('shortcut.add')" @click="openModal">
       <i-ic-round-plus />
     </button>
   </aside>
@@ -45,7 +46,7 @@ function hideShortcutContextMenuOnScroll() {
 
   <Modal
     v-model="isModalVisible"
-    :title="selectedShortcut ? 'Edit shortcut' : 'Add shortcut'"
+    :title="selectedShortcut ? t('shortcut.edit') : t('shortcut.add')"
     :show-close="false"
     :close-on-overlay="false"
   >
@@ -56,7 +57,11 @@ function hideShortcutContextMenuOnScroll() {
 <style>
 .shortcuts {
   position: fixed;
-  height: 100%;
+  /* No explicit top, so this sits at its normal-flow position - which already shifts
+     down on its own when GoogleTranslateErrorBanner.vue is showing (see Navbar.vue for
+     the same variable). Height needs the matching reduction so it doesn't overflow past
+     the bottom of the viewport by that same amount. */
+  height: calc(100% - var(--google-translate-banner-height, 0px));
   padding: 10px 5px;
   background-color: var(--surface-color);
   backdrop-filter: blur(5px);

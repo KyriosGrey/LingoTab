@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import WordList, { ActionButton } from '@/components/shared/WordList'
 import useIgnoredWords from '@/composables/words/useIgnoredWords'
+import { t } from '@/i18n'
 
 import Section from '@/options/components/Section.vue'
 import ImportFile from './ImportFile.vue'
@@ -14,8 +15,7 @@ function handleImportFile(words: string[]) {
 
 <template>
   <Section
-    title="Ignored words"
-    description="Ignored words don't show up in new tabs. You can remove them from the list, so they will reappear in a new tab."
+    :description="t('ignored.description')"
   >
     <WordList :list="ignoredWords" max-height="250px" dense border>
       <template #top-action>
@@ -24,7 +24,7 @@ function handleImportFile(words: string[]) {
 
       <template #actions="{ word }">
         <ActionButton
-          title="Remove from list"
+          :title="t('list.remove')"
           @click="removeIgnoredWords(word)"
         >
           <i-ic-round-remove-circle-outline />
@@ -32,9 +32,10 @@ function handleImportFile(words: string[]) {
       </template>
 
       <template #empty>
-        <p class="empty-state">
-          Add a word to ignored list using
-          <i-ic-round-visibility-off class="empty-state__icon" /> icon
+        <p class="empty-state text-body-sm">
+          <i-ic-round-visibility-off class="empty-state__icon" />
+          <br>
+          {{ t('ignored.empty') }}
         </p>
       </template>
     </WordList>
@@ -43,13 +44,15 @@ function handleImportFile(words: string[]) {
 
 <style scoped>
 .empty-state {
-  font-size: 0.9rem;
   padding: 30px 5px;
   text-align: center;
+  color: var(--text-secondary);
 }
 
 .empty-state__icon {
   display: inline-block;
-  margin-bottom: -5px;
+  width: 24px;
+  height: 24px;
+  margin-bottom: 6px;
 }
 </style>

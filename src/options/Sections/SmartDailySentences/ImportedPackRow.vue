@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ActionButton from '@/components/shared/ActionButton.vue'
 import { usePackSource } from '@/composables/smartSentences/usePackSource'
+import { t } from '@/i18n'
 import Section from '@/options/components/Section.vue'
 import { type Pack, validateAndNormalizePack } from '@/utils/packValidator'
 import * as storage from '@/utils/storage'
@@ -115,13 +116,13 @@ function discardImportedPack() {
 
 <template>
   <Section
-    title="Import sentence pack"
-    description="Load a custom pack from a JSON file."
+    :title="t('smart.import.title')"
+    :description="t('smart.import.description')"
   >
     <template #bar>
       <div class="bar-actions">
         <ActionButton @click="triggerFileInput">
-          {{ selectedFileName ? 'Change file' : 'Choose file' }}
+          {{ selectedFileName ? t('smart.import.change') : t('smart.import.choose') }}
         </ActionButton>
         <span v-if="selectedFileName" class="file-name text-body-sm">{{ selectedFileName }}</span>
       </div>

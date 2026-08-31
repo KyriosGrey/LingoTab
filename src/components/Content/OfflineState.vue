@@ -1,3 +1,7 @@
+<script setup lang="ts">
+import { t } from '@/i18n'
+</script>
+
 <template>
   <div class="offline">
     <span class="icon">
@@ -5,11 +9,11 @@
     </span>
 
     <h3 class="title">
-      You are offline
+      {{ t('empty.offline.title') }}
     </h3>
 
     <p class="description">
-      You need to connect to the internet to see word definitions.
+      {{ t('empty.offline.description') }}
     </p>
   </div>
 </template>

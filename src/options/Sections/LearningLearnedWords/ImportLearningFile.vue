@@ -2,6 +2,8 @@
 import ActionButton from '@/components/shared/ActionButton.vue'
 import FileSelector from '@/components/shared/FileSelector.vue'
 import Modal from '@/components/shared/Modal.vue'
+import { t } from '@/i18n'
+import ImportRequirements from '@/options/components/ImportRequirements.vue'
 
 import { readFile } from '@/utils/file'
 import { getWordsOfText } from '@/utils/string'
@@ -27,7 +29,7 @@ async function handleFile(file: File) {
     isFileSelected.value = true
   }
   catch (error) {
-    errorMessage.value = 'Failed to read file. Please try again.'
+    errorMessage.value = t('import.readError')
     console.error('Error reading file:', error)
   }
 }
@@ -50,28 +52,16 @@ function handleCleanUp() {
 
 <template>
   <ActionButton @click="isModalOpen = true">
-    <i-ic-round-upload-file /> Import file
+    <i-ic-round-upload-file /> {{ t('wordLists.import') }}
   </ActionButton>
 
   <Modal
     v-model="isModalOpen"
-    title="Import Learning Words"
-    subtitle="Import a file containing a list of words to add to your learning list"
+    :title="t('import.learning.title')"
+    :subtitle="t('import.learning.subtitle')"
     @close="handleCleanUp"
   >
-    <div class="description text-body-sm">
-      <b>Constraints:</b>
-      <ul>
-        <li>
-          Words can be separated using <b>space</b>, <b>tab</b>, <b>comma</b>,
-          or
-          <b>newline</b>
-        </li>
-        <li>Only words with less than <b>30</b> characters will be included</li>
-        <li>All words will be auto-converted to <b>lowercase</b></li>
-        <li>A <b>plain text</b> file will do the job</li>
-      </ul>
-    </div>
+    <ImportRequirements />
 
     <FileSelector id="learning-file" accept="text/plain" @file="handleFile" />
 
@@ -85,23 +75,21 @@ function handleCleanUp() {
       <template v-if="importedWords.length">
         <p class="footer-msg text-body-sm">
           <i-ic-round-check-circle class="icon icon--success" />
-          Found <b>{{ importedWords.length }}</b> word{{
-            importedWords.length > 1 ? 's' : ''
-          }}
+          {{ t('import.found') }} <b>{{ importedWords.length }}</b>
         </p>
 
         <div class="actions">
           <button class="btn text-body-sm" @click="handleClose">
-            Cancel
+            {{ t('import.cancel') }}
           </button>
           <button class="btn btn--primary text-body-sm" @click="handleImport">
-            Import
+            {{ t('import.confirm') }}
           </button>
         </div>
       </template>
       <template v-else>
         <p class="footer-msg text-body-sm">
-          <i-ic-round-error class="icon icon--error" /> No word found! Select another file.
+          <i-ic-round-error class="icon icon--error" /> {{ t('import.none') }}
         </p>
       </template>
     </div>
@@ -109,20 +97,6 @@ function handleCleanUp() {
 </template>
 
 <style scoped>
-.description {
-  color: var(--color);
-}
-.description b {
-  font-weight: 600;
-}
-
-ul {
-  padding-left: 25px;
-}
-ul li {
-  margin: 0 0 5px;
-}
-
 .footer {
   display: flex;
   align-items: center;

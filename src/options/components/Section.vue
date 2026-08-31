@@ -1,6 +1,8 @@
 <script setup lang="ts">
 defineProps<{
-  title: string
+  // Optional: a group holding a single section doesn't need to repeat the group's
+  // own title on the row inside it (see the "Ignored words" group).
+  title?: string
   description: string
 }>()
 </script>
@@ -9,7 +11,7 @@ defineProps<{
   <section class="section">
     <div class="section__bar">
       <div class="section__details">
-        <h2 class="section__title text-heading-18">
+        <h2 v-if="title" class="section__title text-heading-18">
           {{ title }}
         </h2>
         <p class="section__description text-body-sm">
