@@ -13,13 +13,26 @@ async function packExtension() {
 
   await zip({
     source: 'extension',
-    output: `pack/NWT_${version}.zip`,
+    output: `pack/LingoTab_${version}.zip`,
     isDir: true,
   })
   await zip({
     source: '**/*',
-    ignore: ['node_modules/**/*', 'pack/**/*', '.git/**/*'],
-    output: `pack/NWT_${version}_Source.zip`,
+    ignore: [
+      'node_modules',
+      'node_modules/**/*',
+      'pack',
+      'pack/**/*',
+      '.git',
+      '.git/**/*',
+      '.claude',
+      '.claude/**/*',
+      '.gemini',
+      '.gemini/**/*',
+      'CLAUDE.md',
+      'REDESIGN_CHANGELOG.md',
+    ],
+    output: `pack/LingoTab_${version}_Source.zip`,
   })
 
   log('PACK', `Done`)
