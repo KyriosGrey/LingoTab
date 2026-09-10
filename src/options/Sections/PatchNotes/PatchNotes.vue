@@ -8,6 +8,15 @@ import Header3 from './Header3.vue'
     <Header3 />
     <div class="patchnotes-root__divider" />
 
+    <SettingsGroup title="Version 2.8.1">
+      <div class="entry text-body-sm">
+        <ul>
+          <li>Fixed: with "Learning words only" turned on, the extension could wrongly show "Hooray! You've learned every word in your lists" while your saved words were still right there in the list. Reloading or restarting the browser didn't help — the only workaround was emptying your ignored words list.</li>
+          <li>Your ignored words no longer apply while "Learning words only" is on: your saved list is now shown exactly as you built it.</li>
+        </ul>
+      </div>
+    </SettingsGroup>
+
     <SettingsGroup title="Version 2.8.0">
       <div class="entry text-body-sm">
         <p class="intro">

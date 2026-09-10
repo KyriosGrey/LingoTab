@@ -23,7 +23,7 @@ export function useStoredList(storageKey: string) {
 
   function remove(items: string | string[]) {
     if (Array.isArray(items)) {
-      items.forEach(_listSet.value.delete)
+      items.forEach(item => _listSet.value.delete(item))
     }
     else {
       _listSet.value.delete(items)

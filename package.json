@@ -1,7 +1,7 @@
 {
   "name": "lingotab",
   "displayName": "LingoTab",
-  "version": "2.8.0",
+  "version": "2.8.1",
   "packageManager": "pnpm@9.15.1",
   "description": "Learn English in new tab",
   "author": {

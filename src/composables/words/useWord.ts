@@ -19,31 +19,34 @@ export default function useWord() {
   const { wordsPoll: listsWordsPoll } = useWordLists()
   const { learningWords } = useLearningWords()
 
-  const { ignoredWords, isIgnoredWord, reloadIgnoredWords } = useIgnoredWords()
+  const { isIgnoredWord, reloadIgnoredWords } = useIgnoredWords()
   const { addWordToHistory } = wordsHistory()
 
-  // when "Learning words only" is on and the user has words saved,
-  // getRandomWord() (useRandomWord.ts) pulls from learningWords instead of
-  // the vocabulary-lists pool — this pool must match that so the
-  // "nothing to show" gate reflects the words actually used
-  const wordsPoll = computed(() => {
-    const showLearningOnly = storage.get('showLearningOnly') === 'true'
+  // "Learning words only" is on and the user has words saved: the personal
+  // list wins over everything else — it is the single pool both the word
+  // picker and the empty-state gates read, and the ignored list does not apply
+  const isLearningOnlyMode = computed(
+    () => storage.get('showLearningOnly') === 'true' && !!learningWords.value.length,
+  )
 
-    return showLearningOnly && learningWords.value.length
-      ? learningWords.value
-      : listsWordsPoll.value
-  })
+  const wordsPoll = computed(() =>
+    isLearningOnlyMode.value ? learningWords.value : listsWordsPoll.value,
+  )
 
   // ✅ Исправлено: явно указываем тип word: string
   const unIgnoredWords = computed(() =>
-    wordsPoll.value.filter((word: string) => !isIgnoredWord(word)),
+    isLearningOnlyMode.value
+      ? wordsPoll.value
+      : wordsPoll.value.filter((word: string) => !isIgnoredWord(word)),
   )
 
   const { getRandomWord } = useRandomWord(unIgnoredWords)
   const { isLoading, definitions, error, getDefinitions } = useWordDefinitions()
 
+  // compare the actual words, not the list sizes: a big ignored list must not
+  // make a smaller pool look fully learned
   const hasLearnedAllWords = computed(
-    () => wordsPoll.value.length <= ignoredWords.value.length,
+    () => !!wordsPoll.value.length && !unIgnoredWords.value.length,
   )
 
   async function getWord() {
