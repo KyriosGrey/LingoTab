@@ -127,6 +127,20 @@ export const en = {
   'import.readError': 'Couldn\'t read this file. Make sure it\'s a plain text file and try again.',
   'import.cancel': 'Cancel',
   'import.confirm': 'Import',
+  'wordLists.importJson': 'Import with translations (JSON)',
+  'wordLists.exportJson': 'Export with translations (JSON)',
+  'import.json.title': 'Import words with translations',
+  'import.json.subtitle': 'Add words with your own translations to Learning from a .json file. A translation from the file replaces the one you already have.',
+  'import.json.invalid': 'This isn\'t a valid LingoTab words file. Check that it\'s JSON in the expected format.',
+  'import.json.newWords': 'New words:',
+  'import.json.translations': 'Translations:',
+  'import.json.replaced': 'Will replace yours:',
+  'import.json.skipped': 'Skipped (not a single word):',
+  'aiPrompt.title': 'Translate your words with AI',
+  'aiPrompt.description': 'Copy a ready-made prompt that already contains your Learning words without your own translation. Paste it into ChatGPT, Claude or another AI chat, save the reply as a .json file and import it with “Import with translations (JSON)” above.',
+  'aiPrompt.wordsCount': 'Words without your translation:',
+  'aiPrompt.copy': 'Copy prompt',
+  'aiPrompt.copied': 'Copied!',
   'file.select': 'Select a file',
 
   // Smart Sentences — General
@@ -202,6 +216,22 @@ export const en = {
   'shortcut.nameDuplicated': 'Name is duplicated.',
   'shortcut.cancel': 'Cancel',
   'shortcut.done': 'Done',
+
+  // New Tab — edit word popup
+  'action.editTranslation': 'Edit translation',
+  'editWord.title': 'Edit word',
+  'editWord.word': 'Word',
+  'editWord.translation': 'Translation',
+  'editWord.translationPlaceholder': 'Leave empty to use the automatic translation',
+  'editWord.invalidWord': 'One word, no spaces or commas.',
+  'editWord.duplicateWord': 'This word is already in the list.',
+  'editWord.addTitle': 'Add word',
+  'editWord.translate': 'Translate automatically',
+  'editWord.translateFailed': 'Automatic translation unavailable — enter it manually.',
+  'editWord.movedFromLearned': 'This word will be moved from Learned to Learning.',
+  'editWord.movedFromIgnored': 'This word will be moved from Ignored words to Learning.',
+  'list.sort.ownFirst': 'Sort: My translations first',
+  'word.ownTranslation': 'Your translation',
 
   // New Tab — translation failures
   'translateFailure.quota.label': 'Daily limit reached',

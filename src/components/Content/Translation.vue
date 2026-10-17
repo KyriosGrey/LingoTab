@@ -5,6 +5,7 @@ import useGoogleTranslate from '@/composables/useGoogleTranslate'
 import useTranslateFailureNotice from '@/composables/useTranslateFailureNotice'
 import useTranslateText from '@/composables/useTranslateText'
 import { fetchWordTranslationFallback } from '@/composables/wiktionaryWordTranslation'
+import useUserTranslations from '@/composables/words/useUserTranslations'
 import { t } from '@/i18n'
 import { computed, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
@@ -56,7 +57,13 @@ const attrs = useAttrs()
 const { translate } = useTranslateText()
 const { targetLanguage } = useGoogleTranslate()
 const { reportFailure } = useTranslateFailureNotice()
+const { getUserTranslation } = useUserTranslations()
 const loading = ref(false)
+
+// The user's own translation of a headword wins over any API - no request is made at all.
+const userTranslation = computed(() =>
+  props.variant === 'word' && props.text ? getUserTranslation(props.text) : undefined,
+)
 const result = ref<string>('')
 
 // Kept separate from the banner's own state so a dismissed banner doesn't take the
@@ -73,6 +80,12 @@ const failureReason = ref<TranslateFailureReason | null>(null)
 async function doTranslate() {
   if (!props.text) {
     result.value = ''
+    return
+  }
+
+  if (userTranslation.value) {
+    result.value = userTranslation.value
+    failureReason.value = null
     return
   }
 
@@ -109,7 +122,7 @@ async function doTranslate() {
 
 if (props.display === 'block') {
   onMounted(doTranslate)
-  watch(() => [props.text, props.from], doTranslate)
+  watch(() => [props.text, props.from, userTranslation.value], doTranslate)
 }
 
 const blockClass = computed(() => {

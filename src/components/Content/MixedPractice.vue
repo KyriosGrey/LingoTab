@@ -35,6 +35,7 @@ const {
   getWord,
   error,
   word,
+  hasUserTranslation,
 } = useWord()
 
 async function onWordMarked() {
@@ -154,14 +155,15 @@ onMounted(() => {
     <!-- Otherwise show word flow (re-uses Word.vue and word composable) -->
     <template v-else>
       <NoWordList v-if="!wordsPoll.length && !isSearchedWord" />
-      <OfflineState v-else-if="!isOnline" />
+      <!-- Same light-card rules as Content.vue -->
+      <OfflineState v-else-if="!isOnline && !hasUserTranslation(word)" />
       <Loading v-else-if="isLoading" />
-      <WordFetchError v-else-if="error" :word="word" @retry="getWord" />
+      <WordFetchError v-else-if="error && !hasUserTranslation(word)" :word="word" @retry="getWord" />
       <LearnedAllWords v-else-if="hasLearnedAllWords && !isSearchedWord" />
       <Word
         v-else
         :word="word"
-        :definitions="definitions || []"
+        :definitions="error ? [] : (definitions || [])"
         :show-repetition="showRepetitionNow"
         @marked="onWordMarked"
       />

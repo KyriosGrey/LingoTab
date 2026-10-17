@@ -4,6 +4,9 @@ import type { IWordDefinition } from '@/composables/words/useWordDefinitions'
 import PrimaryButton from '@/components/shared/PrimaryButton.vue'
 import Skeleton from '@/components/shared/Skeleton.vue'
 import useBackground from '@/composables/useBackground'
+import useEditWordModal from '@/composables/words/useEditWordModal'
+import useUserTranslations from '@/composables/words/useUserTranslations'
+import useWord from '@/composables/words/useWord'
 import { t } from '@/i18n'
 // ✅ добавляем импорт для хранения
 import storage from '@/modules/localStorage'
@@ -24,6 +27,15 @@ const props = defineProps<{
 defineEmits(['marked'])
 
 const { shouldModifyUI } = useBackground()
+const { hasUserTranslation } = useUserTranslations()
+const { openEditWordModal } = useEditWordModal()
+const { searchWord } = useWord()
+
+// The word itself may have been corrected in the popup - then show the corrected one.
+function handleWordEdited(newWord: string) {
+  if (newWord !== props.word.toLowerCase())
+    searchWord(newWord)
+}
 
 const definition = computed(() => props.definitions?.[0])
 
@@ -99,13 +111,13 @@ watch(
             <h1 class="word text-display">
               {{ word }}
             </h1>
-            <Phonetic :definition="definition" />
+            <Phonetic v-if="definition" :definition="definition" />
           </template>
         </div>
 
         <Actions
-          v-if="definition"
-          :definition="definition"
+          v-if="word"
+          :word="word"
           @marked="$emit('marked')"
         />
       </div>
@@ -119,11 +131,22 @@ watch(
             <i-ic-round-remove-red-eye /> {{ t('word.showTranslation') }}
           </PrimaryButton>
         </div>
-        <Translation
-          v-else-if="word"
-          :text="word"
-          variant="word"
-        />
+        <template v-else-if="word">
+          <Translation
+            :text="word"
+            variant="word"
+          />
+          <button
+            type="button"
+            class="edit-translation-btn"
+            :class="{ 'edit-translation-btn--own': hasUserTranslation(word) }"
+            :title="t('action.editTranslation')"
+            :aria-label="t('action.editTranslation')"
+            @click="openEditWordModal(word, handleWordEdited)"
+          >
+            <i-ic-outline-edit />
+          </button>
+        </template>
       </div>
     </div>
 
@@ -216,6 +239,33 @@ watch(
   display: flex;
   align-items: center;
   min-height: 32px;
+}
+
+/* Pencil after the translation: grey = translation from the service,
+   accent = the user's own translation. */
+.edit-translation-btn {
+  display: inline-flex;
+  flex-shrink: 0;
+  margin-left: 8px;
+  padding: 4px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background-color 0.13s ease-in-out, color 0.13s ease-in-out;
+}
+.edit-translation-btn :deep(svg) {
+  width: 16px;
+  height: 16px;
+}
+.edit-translation-btn:hover {
+  background-color: var(--overlay-weak);
+  color: var(--color);
+}
+.edit-translation-btn--own,
+.edit-translation-btn--own:hover {
+  color: var(--accent-color-hover);
 }
 
 /* Figma "hidden word/translation" states (frame node-id=18-835): a blurred

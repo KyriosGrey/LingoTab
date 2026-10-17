@@ -8,8 +8,10 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     IEosIconsLoading: typeof import('~icons/eos-icons/loading')['default']
+    IIcOutlineEdit: typeof import('~icons/ic/outline-edit')['default']
     IIcOutlineSchool: typeof import('~icons/ic/outline-school')['default']
     IIcOutlineVisibilityOff: typeof import('~icons/ic/outline-visibility-off')['default']
+    IIcRoundAdd: typeof import('~icons/ic/round-add')['default']
     IIcRoundArrowForward: typeof import('~icons/ic/round-arrow-forward')['default']
     IIcRoundAutorenew: typeof import('~icons/ic/round-autorenew')['default']
     IIcRoundBookmarkAdd: typeof import('~icons/ic/round-bookmark-add')['default']

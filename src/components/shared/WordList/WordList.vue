@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import type { SortState } from '@/composables/useSort'
 import SearchInput from '@/components/shared/SearchInput.vue'
 import useSort from '@/composables/useSort'
 import { t } from '@/i18n'
@@ -13,13 +14,14 @@ const props = defineProps<{
   pointer?: boolean
   maxHeight?: string
   noFilters?: boolean
+  extraSortStates?: SortState[]
 }>()
 
 defineEmits<{
   (e: 'rowClick', word: string): void
 }>()
 
-const { sortStateMeta, setNextSortState } = useSort()
+const { sortStateMeta, setNextSortState } = useSort(props.extraSortStates)
 
 const searchQuery = ref('')
 
@@ -87,7 +89,10 @@ const filteredWords = computed(() =>
         class="row"
         @click="$emit('rowClick', word)"
       >
-        <span class="row__text text-body">{{ word }}</span>
+        <div class="row__main">
+          <span class="row__text text-body">{{ word }}</span>
+          <slot name="subtitle" :word="word" />
+        </div>
         <div class="actions" @click.stop>
           <slot name="actions" :word="word" />
         </div>
@@ -160,9 +165,14 @@ const filteredWords = computed(() =>
   background-color: var(--overlay-weak);
 }
 
-.row__text {
+.row__main {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   min-width: 0;
+}
+
+.row__text {
   color: var(--color);
   text-transform: capitalize;
   white-space: nowrap;

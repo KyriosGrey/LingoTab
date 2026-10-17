@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import type { IWordDefinition } from '@/composables/words/useWordDefinitions'
-
 import IconButton from '@/components/shared/IconButton.vue'
 import useGoogleTranslate from '@/composables/useGoogleTranslate'
 import useIgnoredWords from '@/composables/words/useIgnoredWords'
 
 import useLearningWords from '@/composables/words/useLearningWords'
 import { t } from '@/i18n'
+import { guessSourceLanguage } from '@/utils/string'
 
+// Only the word is needed, so the buttons also work on a card without dictionary data.
 const props = defineProps<{
-  definition: IWordDefinition
+  word: string
 }>()
 
 const emit = defineEmits(['marked'])
@@ -19,13 +19,13 @@ const { setAsIgnored } = useIgnoredWords()
 const { setAsLearning, removeLearningWords } = useLearningWords()
 
 function handleMarkAsLearning() {
-  setAsLearning(props.definition.word)
+  setAsLearning(props.word)
   emit('marked')
 }
 
 function handleMarkAsIgnored() {
-  removeLearningWords(props.definition.word)
-  setAsIgnored(props.definition.word)
+  removeLearningWords(props.word)
+  setAsIgnored(props.word)
   emit('marked')
 }
 
@@ -40,7 +40,7 @@ function handleNextWord() {
   <div class="actions">
     <IconButton
       :title="`Google translate (${targetLanguage.lang})`"
-      :href="`https://translate.google.com/?sl=en&tl=${targetLanguage.code}&text=${definition.word}&op=translate`"
+      :href="`https://translate.google.com/?sl=${guessSourceLanguage(word)}&tl=${targetLanguage.code}&text=${encodeURIComponent(word)}&op=translate`"
       target="_blank"
     >
       <i-ic-round-g-translate />

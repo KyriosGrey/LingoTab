@@ -176,5 +176,17 @@ export default function useTranslateText() {
     return results
   }
 
-  return { translate, translateBatch }
+  // Cache-only lookup: never touches the network. Used to prefill/preview a word's
+  // translation without firing a request per word.
+  function getCachedTranslation(text: string, sl = 'en'): string | undefined {
+    return loadCache()[key(text, sl, tl)]
+  }
+
+  // Same, for a whole list - reads the cache once instead of once per word.
+  function getCachedTranslations(texts: string[], sl = 'en'): Record<string, string | undefined> {
+    const cache = loadCache()
+    return Object.fromEntries(texts.map(text => [text, cache[key(text, sl, tl)]]))
+  }
+
+  return { translate, translateBatch, getCachedTranslation, getCachedTranslations }
 }
