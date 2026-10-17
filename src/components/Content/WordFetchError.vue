@@ -8,6 +8,7 @@ import useGoogleTranslate from '@/composables/useGoogleTranslate'
 import useIgnoredWords from '@/composables/words/useIgnoredWords'
 import { t } from '@/i18n'
 import { randomNumberBetween } from '@/utils/number'
+import { guessSourceLanguage } from '@/utils/string'
 import { computed } from 'vue'
 
 const props = defineProps<{
@@ -54,7 +55,7 @@ const emoji = EMOJIS[randomEmojiIndex]
           <i-ic-round-visibility-off /> {{ t('empty.wordError.ignore') }}
         </ActionButton>
         <a
-          :href="`https://translate.google.com/?sl=en&tl=${targetLanguage.code}&text=${word}&op=translate`"
+          :href="`https://translate.google.com/?sl=${guessSourceLanguage(word)}&tl=${targetLanguage.code}&text=${encodeURIComponent(word)}&op=translate`"
           target="_blank"
           class="secondary-link text-body-sm"
         >

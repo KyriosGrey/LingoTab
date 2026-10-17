@@ -8,6 +8,21 @@ import Header3 from './Header3.vue'
     <Header3 />
     <div class="patchnotes-root__divider" />
 
+    <SettingsGroup title="Version 2.9.0">
+      <div class="entry text-body-sm">
+        <p class="intro">
+          Your own translations: LingoTab now keeps working even when translation services are down.
+        </p>
+        <ul>
+          <li>New: edit a word's translation with the pencil next to it — on the word card or in your Learning list. Your translation always wins over the automatic one.</li>
+          <li>New: "Add word" button at the bottom of the Marked Words panel, with an optional one-click automatic translation.</li>
+          <li>Learning list now shows each word's translation, plus a sort mode that puts words with your own translation first.</li>
+          <li>Offline, or when the dictionary is unavailable, words with your own translation still show on a simplified card.</li>
+          <li>New: import and export your Learning words with translations as JSON, and a ready-made prompt to translate them in any AI chat.</li>
+        </ul>
+      </div>
+    </SettingsGroup>
+
     <SettingsGroup title="Version 2.8.1">
       <div class="entry text-body-sm">
         <ul>

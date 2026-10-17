@@ -23,6 +23,7 @@ const {
   getWord,
   error,
   word,
+  hasUserTranslation,
 } = useWord()
 
 const { isOnline } = useOnline()
@@ -64,11 +65,13 @@ onMounted(async () => {
   <!-- Otherwise keep existing word flow -->
   <template v-else>
     <NoWordList v-if="!wordsPoll.length" />
-    <OfflineState v-else-if="!isOnline" />
+    <!-- A word with the user's own translation still shows - as a light card
+         without dictionary data - when offline or when the dictionary fails. -->
+    <OfflineState v-else-if="!isOnline && !hasUserTranslation(word)" />
     <Loading v-else-if="isLoading" />
 
     <WordFetchError
-      v-else-if="error"
+      v-else-if="error && !hasUserTranslation(word)"
       :word="word"
       @retry="getWordWithRepetition"
     />
@@ -78,7 +81,7 @@ onMounted(async () => {
     <Word
       v-else
       :word="word"
-      :definitions="definitions || []"
+      :definitions="error ? [] : (definitions || [])"
       :show-repetition="showRepetitionNow"
       @marked="getWordWithRepetition"
     />

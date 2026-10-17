@@ -2,6 +2,7 @@
 import Content from '@/components/Content'
 import Navbar from '@/components/Navbar'
 import NavbarBottom from '@/components/NavbarBottom'
+import EditWordModal from '@/components/shared/EditWordModal.vue'
 import GoogleTranslateErrorBanner from '@/components/shared/GoogleTranslateErrorBanner.vue'
 import SiteShortcuts from '@/components/SiteShortcuts'
 
@@ -26,6 +27,8 @@ useBackground({ initialize: true })
       <SiteShortcuts />
     </div>
   </div>
+
+  <EditWordModal />
 </template>
 
 <style scoped>

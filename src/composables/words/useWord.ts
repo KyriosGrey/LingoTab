@@ -4,6 +4,7 @@ import { computed, ref } from 'vue'
 import useIgnoredWords from './useIgnoredWords'
 import useLearningWords from './useLearningWords'
 import useRandomWord from './useRandomWord'
+import useUserTranslations from './useUserTranslations'
 import useWordDefinitions from './useWordDefinitions'
 import useWordLists from './useWordLists'
 import wordsHistory from './useWordsHistory'
@@ -43,6 +44,12 @@ export default function useWord() {
   const { getRandomWord } = useRandomWord(unIgnoredWords)
   const { isLoading, definitions, error, getDefinitions } = useWordDefinitions()
 
+  // Without a network only words with the user's own translation can be shown -
+  // on a light card, with no dictionary data.
+  const { hasUserTranslation } = useUserTranslations()
+  const offlineWords = computed(() => unIgnoredWords.value.filter(hasUserTranslation))
+  const { getRandomWord: getRandomOfflineWord } = useRandomWord(offlineWords)
+
   // compare the actual words, not the list sizes: a big ignored list must not
   // make a smaller pool look fully learned
   const hasLearnedAllWords = computed(
@@ -51,6 +58,14 @@ export default function useWord() {
 
   async function getWord() {
     reloadIgnoredWords()
+
+    if (!navigator.onLine && offlineWords.value.length) {
+      isSearchedWord.value = false
+      definitions.value = null
+      error.value = null
+      handleUpdateWord(getRandomOfflineWord().value)
+      return
+    }
 
     const randomWord = getRandomWord().value
     if (!randomWord)
@@ -79,6 +94,7 @@ export default function useWord() {
 
   return {
     hasLearnedAllWords,
+    hasUserTranslation,
     isSearchedWord,
     definitions,
     searchWord,

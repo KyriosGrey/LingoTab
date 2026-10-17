@@ -17,6 +17,8 @@ const TIMEOUT_MS = 4000
 const LANGUAGE_CODE_ALIASES: Record<string, string> = {
   iw: 'he',
   jw: 'jv',
+  // Google's "detect the language" code; MyMemory rejects 'auto' and spells it this way.
+  auto: 'Autodetect',
 }
 
 // Once the daily free quota is gone every further request is a wasted round-trip that

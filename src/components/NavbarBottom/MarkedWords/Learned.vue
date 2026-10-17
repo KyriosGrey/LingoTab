@@ -28,7 +28,7 @@ function handleMarkAsIgnored(word: string) {
 <template>
   <WordList
     :list="learnedWords"
-    max-height="calc(100vh - 165px)"
+    max-height="calc(100vh - 297px)"
     stretch
     pointer
     @row-click="$emit('showDefinition', $event)"
