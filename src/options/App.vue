@@ -14,6 +14,7 @@ import Repetition from './Sections/Repetition.vue'
 import SiteShortcuts from './Sections/SiteShortcuts.vue'
 /* Новая секция SmartDailySentences */
 import SmartDailySentences from './Sections/SmartDailySentences/SmartDailySentences.vue'
+import SupportMe from './Sections/SupportMe.vue'
 import Theme from './Sections/Theme.vue'
 import Translation from './Sections/Translation.vue'
 
@@ -55,6 +56,8 @@ import SettingsTabs from './SettingsTabs.vue'
           <SettingsGroup :title="t('group.ignoredWords')">
             <IgnoredWords />
           </SettingsGroup>
+
+          <SupportMe />
         </div>
       </template>
 
@@ -62,6 +65,7 @@ import SettingsTabs from './SettingsTabs.vue'
       <template #smart>
         <div class="options">
           <SmartDailySentences />
+          <SupportMe />
         </div>
       </template>
 

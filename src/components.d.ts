@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     IEosIconsLoading: typeof import('~icons/eos-icons/loading')['default']
     IIcOutlineEdit: typeof import('~icons/ic/outline-edit')['default']
+    IIcOutlineInfo: typeof import('~icons/ic/outline-info')['default']
     IIcOutlineSchool: typeof import('~icons/ic/outline-school')['default']
     IIcOutlineVisibilityOff: typeof import('~icons/ic/outline-visibility-off')['default']
     IIcRoundAdd: typeof import('~icons/ic/round-add')['default']

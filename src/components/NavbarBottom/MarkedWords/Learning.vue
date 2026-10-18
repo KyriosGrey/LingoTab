@@ -9,6 +9,8 @@ import useLearnedWords from '@/composables/words/useLearnedWords'
 import useLearningWords from '@/composables/words/useLearningWords'
 import useUserTranslations from '@/composables/words/useUserTranslations'
 import { t } from '@/i18n'
+import storage from '@/modules/localStorage'
+import { openOptionsPage } from '@/utils/browser'
 import { computed } from 'vue'
 import IcOutlineEdit from '~icons/ic/outline-edit'
 
@@ -31,6 +33,11 @@ const ownTranslationsFirst: SortState = {
   sortMethod: list => [...list].sort((a, b) =>
     Number(hasUserTranslation(b)) - Number(hasUserTranslation(a)) || a.localeCompare(b)),
 }
+
+// Only worth suggesting once the list has words: with an empty list "Learning words only"
+// is ignored by useWord.ts and the tab keeps showing the built-in lists anyway.
+// Read on mount - the panel re-mounts every time it opens.
+const showLearningOnlyTip = storage.get('showLearningOnly') !== 'true'
 
 // Cache only: showing the list must not fire a translate request per word.
 const cachedTranslations = computed(() => getCachedTranslations(learningWords.value))
@@ -83,12 +90,29 @@ function handleMarkAsIgnored(word: string) {
       </ActionButton>
     </template>
 
-    <template #empty>
-      <p class="empty-state text-body-sm">
-        <i-ic-round-bookmark-add class="empty-state__icon" />
-        <br>
-        {{ t('empty.learning') }}
+    <!-- Shown under the words only - WordList renders the footer just when the list isn't empty. -->
+    <template v-if="showLearningOnlyTip" #footer>
+      <p class="learning-only-tip text-body-sm">
+        <i-ic-outline-info class="learning-only-tip__icon" />
+        <span>
+          {{ t('learningOnlyTip.text') }}
+          <button type="button" class="learning-only-tip__link" @click="openOptionsPage">
+            {{ t('learningOnlyTip.openSettings') }}
+          </button>
+        </span>
       </p>
+    </template>
+
+    <template #empty>
+      <div class="empty-state">
+        <i-ic-round-bookmark-add class="empty-state__icon" />
+        <p class="empty-state__title text-heading-18">
+          {{ t('empty.learningTitle') }}
+        </p>
+        <p class="empty-state__text text-body-sm">
+          {{ t('empty.learning') }}
+        </p>
+      </div>
     </template>
   </WordList>
 </template>
@@ -110,6 +134,10 @@ function handleMarkAsIgnored(word: string) {
 }
 
 .empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
   padding: 30px 5px;
   text-align: center;
   color: var(--text-secondary);
@@ -119,6 +147,44 @@ function handleMarkAsIgnored(word: string) {
   display: inline-block;
   width: 24px;
   height: 24px;
-  margin-bottom: 6px;
+}
+
+.empty-state__title {
+  margin: 4px 0 0;
+  color: var(--color);
+}
+
+.empty-state__text {
+  margin: 0;
+  max-width: 260px;
+}
+
+/* "Learning words only" hint under the list */
+.learning-only-tip {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background-color: var(--overlay-weak);
+  color: var(--text-secondary);
+}
+
+.learning-only-tip__icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+}
+
+.learning-only-tip__link {
+  display: inline;
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: var(--accent-color-hover);
+  text-decoration: underline;
+  cursor: pointer;
 }
 </style>

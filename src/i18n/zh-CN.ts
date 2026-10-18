@@ -85,6 +85,9 @@ export const zhCN: Partial<Record<MessageKey, string>> = {
 
   // 基本设置 — 已隐藏的单词
   'group.ignoredWords': '已隐藏的单词',
+  'group.supportMe': '支持我',
+  'supportMe.description': '如果这个扩展对你有帮助，也许你愿意支持我。我会继续改进它，你的支持会给我很大的帮助。谢谢。',
+  'supportMe.button': '在 Ko-fi 上支持我',
   'ignored.description': '已隐藏的单词不会再出现在新标签页上。把它从列表中删除即可恢复。',
   'ignored.empty': '点击单词旁的这个图标，它就不会再出现在新标签页上。',
 
@@ -176,7 +179,10 @@ export const zhCN: Partial<Record<MessageKey, string>> = {
   'empty.learnedAll.title': '太棒了！',
   'empty.learnedAll.description': '你已经学完了词汇表中的所有单词。做得好！',
   'empty.noPack': '还没有例句集。请在设置中打开内置例句集，或者导入你自己的。',
-  'empty.learning': '点击单词旁的这个图标，就会把它添加到这里。',
+  'empty.learningTitle': '你的单词会显示在这里',
+  'empty.learning': '可以用单词卡片上的书签图标，或下方的“添加单词”按钮添加。',
+  'learningOnlyTip.text': '如果只想学习这些单词，请在 设置 → 词汇表 中开启“仅学习中的单词”。',
+  'learningOnlyTip.openSettings': '打开设置',
   'empty.learned': '在“学习中”的单词上点击这个图标，就会把它移到这里。',
 
   // 新标签页 — 顶部栏

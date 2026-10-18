@@ -90,6 +90,9 @@ export const es: Partial<Record<MessageKey, string>> = {
 
   // Ajustes principales — Palabras ocultas
   'group.ignoredWords': 'Palabras ocultas',
+  'group.supportMe': 'Apóyame',
+  'supportMe.description': 'Si la extensión te ha resultado útil, quizá quieras apoyarme. Planeo seguir mejorándola, y tu apoyo contribuirá mucho a ello. Gracias.',
+  'supportMe.button': 'Apóyame en Ko-fi',
   'ignored.description': 'Las palabras ocultas ya no aparecen en la nueva pestaña. Quita una palabra de la lista para recuperarla.',
   'ignored.empty': 'Pulsa este icono en una palabra para ocultarla de las nuevas pestañas.',
 
@@ -181,7 +184,10 @@ export const es: Partial<Record<MessageKey, string>> = {
   'empty.learnedAll.title': '¡Bravo!',
   'empty.learnedAll.description': 'Has aprendido todas las palabras de tus listas. ¡Bien hecho!',
   'empty.noPack': 'Todavía no hay ningún paquete de frases. Activa el integrado en los ajustes o importa el tuyo.',
-  'empty.learning': 'Pulsa este icono en una palabra para añadirla aquí.',
+  'empty.learningTitle': 'Aquí aparecerán tus palabras',
+  'empty.learning': 'Añádelas con el icono de marcador en la tarjeta de una palabra o con el botón «Añadir palabra» de abajo.',
+  'learningOnlyTip.text': 'Para estudiar solo estas palabras, activa «Solo palabras en aprendizaje» en Ajustes → Listas de vocabulario.',
+  'learningOnlyTip.openSettings': 'Abrir ajustes',
   'empty.learned': 'Pulsa este icono en una palabra de «Aprendiendo» para moverla aquí.',
 
   // Nueva pestaña — barra superior

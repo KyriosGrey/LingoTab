@@ -8,6 +8,14 @@ import Header3 from './Header3.vue'
     <Header3 />
     <div class="patchnotes-root__divider" />
 
+    <SettingsGroup title="Version 2.9.1">
+      <div class="entry text-body-sm">
+        <ul>
+          <li>Minor UI improvements.</li>
+        </ul>
+      </div>
+    </SettingsGroup>
+
     <SettingsGroup title="Version 2.9.0">
       <div class="entry text-body-sm">
         <p class="intro">

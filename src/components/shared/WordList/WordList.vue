@@ -97,6 +97,10 @@ const filteredWords = computed(() =>
           <slot name="actions" :word="word" />
         </div>
       </li>
+      <!-- Scrolls with the rows, so it needs no height of its own in the max-height math. -->
+      <li v-if="$slots.footer" class="list-footer">
+        <slot name="footer" />
+      </li>
     </ul>
   </div>
 </template>
@@ -159,6 +163,10 @@ const filteredWords = computed(() =>
   display: flex;
   align-items: center;
   gap: 12px;
+}
+
+.list-footer {
+  padding: 12px 8px 4px;
 }
 
 .row:hover {

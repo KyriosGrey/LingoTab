@@ -65,6 +65,14 @@ Automatic translation does not always land on the meaning you actually need. Now
 
 ---
 
+## Support me
+
+If you found this extension useful, please consider supporting me. I plan to continue improving it, and your support will help make that possible. Thank you.
+
+<a href="https://ko-fi.com/kyriosgrey"><img src="src/assets/support_me_on_kofi_red.png" alt="Support me on Ko-fi" height="36"></a>
+
+---
+
 ### Credits:
 
 * Word definitions and pronunciation come from [Wiktionary](https://www.wiktionary.org/) (via the Wikimedia and Wiktionary APIs), with [Free Dictionary API](https://github.com/meetDeveloper/freeDictionaryAPI) as a fallback source.

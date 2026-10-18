@@ -88,6 +88,9 @@ export const ja: Partial<Record<MessageKey, string>> = {
 
   // 基本設定 — 非表示の単語
   'group.ignoredWords': '非表示の単語',
+  'group.supportMe': '開発者を応援',
+  'supportMe.description': 'この拡張機能がお役に立てたなら、応援していただけるとうれしいです。今後も改善を続けていく予定で、皆さんの応援が大きな支えになります。ありがとうございます。',
+  'supportMe.button': 'Ko-fi で応援する',
   'ignored.description': '非表示にした単語は新しいタブに出てきません。リストから削除すると元に戻ります。',
   'ignored.empty': '単語のこのアイコンを押すと、新しいタブに表示されなくなります。',
 
@@ -179,7 +182,10 @@ export const ja: Partial<Record<MessageKey, string>> = {
   'empty.learnedAll.title': 'やった！',
   'empty.learnedAll.description': 'リストの単語をすべて学習しました。お見事！',
   'empty.noPack': '例文セットがまだありません。設定で内蔵セットをオンにするか、自分のセットをインポートしてください。',
-  'empty.learning': '単語のこのアイコンを押すと、ここに追加されます。',
+  'empty.learningTitle': 'ここにあなたの単語が表示されます',
+  'empty.learning': '単語カードのブックマークアイコン、または下の「単語を追加」ボタンで追加できます。',
+  'learningOnlyTip.text': 'これらの単語だけを学習するには、設定 → 単語リストで「学習中の単語のみ」をオンにしてください。',
+  'learningOnlyTip.openSettings': '設定を開く',
   'empty.learned': '「学習中」の単語でこのアイコンを押すと、ここに移動します。',
 
   // 新しいタブ — 上部バー

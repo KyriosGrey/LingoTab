@@ -88,6 +88,9 @@ export const pl: Partial<Record<MessageKey, string>> = {
 
   // Ustawienia główne — Ukryte słowa
   'group.ignoredWords': 'Ukryte słowa',
+  'group.supportMe': 'Wesprzyj mnie',
+  'supportMe.description': 'Jeśli rozszerzenie okazało się przydatne, być może zechcesz mnie wesprzeć. Planuję dalej je rozwijać, a Twoje wsparcie bardzo w tym pomoże. Dziękuję.',
+  'supportMe.button': 'Wesprzyj mnie na Ko-fi',
   'ignored.description': 'Ukryte słowa nie pojawiają się już na nowej karcie. Usuń słowo z listy, aby je przywrócić.',
   'ignored.empty': 'Kliknij tę ikonę przy słowie, aby ukryć je na nowych kartach.',
 
@@ -179,7 +182,10 @@ export const pl: Partial<Record<MessageKey, string>> = {
   'empty.learnedAll.title': 'Hurra!',
   'empty.learnedAll.description': 'Wszystkie słowa z Twoich list są już nauczone. Świetna robota!',
   'empty.noPack': 'Nie ma jeszcze zestawu zdań. Włącz wbudowany w ustawieniach albo zaimportuj własny.',
-  'empty.learning': 'Kliknij tę ikonę przy słowie, aby dodać je tutaj.',
+  'empty.learningTitle': 'Tutaj pojawią się Twoje słowa',
+  'empty.learning': 'Dodawaj je ikoną zakładki na karcie słowa lub przyciskiem „Dodaj słowo” poniżej.',
+  'learningOnlyTip.text': 'Aby uczyć się tylko tych słów, włącz „Tylko słowa do nauki” w Ustawienia → Listy słownictwa.',
+  'learningOnlyTip.openSettings': 'Otwórz ustawienia',
   'empty.learned': 'Kliknij tę ikonę przy słowie z listy „Uczę się”, aby przenieść je tutaj.',
 
   // Nowa karta — górny pasek
