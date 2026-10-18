@@ -95,6 +95,9 @@ export const en = {
 
   // Main Settings — Ignored words
   'group.ignoredWords': 'Ignored words',
+  'group.supportMe': 'Support me',
+  'supportMe.description': 'If you found this extension useful, please consider supporting me. I plan to continue improving it, and your support will help make that possible. Thank you.',
+  'supportMe.button': 'Support me on Ko-fi',
   'ignored.description': 'Ignored words never appear on a new tab. Remove one from the list to bring it back.',
   'ignored.empty': 'Use this icon on a word to hide it from your new tabs.',
 
@@ -186,7 +189,10 @@ export const en = {
   'empty.learnedAll.title': 'Hooray!',
   'empty.learnedAll.description': 'You\'ve learned every word in your lists. Well done!',
   'empty.noPack': 'No sentence pack yet. Turn on the built-in pack in Settings, or import your own.',
-  'empty.learning': 'Use this icon on a word to add it here.',
+  'empty.learningTitle': 'Your words will appear here',
+  'empty.learning': 'Add them with the bookmark icon on a word card, or with the “Add word” button below.',
+  'learningOnlyTip.text': 'To study only these words, turn on “Learning words only” in Settings → Vocabulary lists.',
+  'learningOnlyTip.openSettings': 'Open settings',
   'empty.learned': 'Use this icon on a Learning word to move it here.',
 
   // New Tab — top bar

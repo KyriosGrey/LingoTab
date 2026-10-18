@@ -87,6 +87,9 @@ export const ko: Partial<Record<MessageKey, string>> = {
 
   // 기본 설정 — 숨긴 단어
   'group.ignoredWords': '숨긴 단어',
+  'group.supportMe': '개발자 후원하기',
+  'supportMe.description': '이 확장 프로그램이 도움이 되셨다면, 저를 후원해 주시면 좋겠습니다. 앞으로도 계속 개선해 나갈 예정이며, 여러분의 후원이 큰 도움이 됩니다. 감사합니다.',
+  'supportMe.button': 'Ko-fi에서 후원하기',
   'ignored.description': '숨긴 단어는 새 탭에 더 이상 나타나지 않습니다. 목록에서 지우면 다시 나타납니다.',
   'ignored.empty': '단어 옆의 이 아이콘을 누르면 새 탭에 나타나지 않습니다.',
 
@@ -178,7 +181,10 @@ export const ko: Partial<Record<MessageKey, string>> = {
   'empty.learnedAll.title': '축하합니다!',
   'empty.learnedAll.description': '목록에 있는 단어를 모두 학습했습니다. 훌륭해요!',
   'empty.noPack': '아직 문장 세트가 없습니다. 설정에서 기본 제공 세트를 켜거나 직접 만든 세트를 가져오세요.',
-  'empty.learning': '단어 옆의 이 아이콘을 누르면 여기에 추가됩니다.',
+  'empty.learningTitle': '여기에 내 단어가 표시됩니다',
+  'empty.learning': '단어 카드의 북마크 아이콘이나 아래의 "단어 추가" 버튼으로 추가하세요.',
+  'learningOnlyTip.text': '이 단어들만 학습하려면 설정 → 어휘 목록에서 "학습 중인 단어만"을 켜세요.',
+  'learningOnlyTip.openSettings': '설정 열기',
   'empty.learned': '“학습 중” 목록의 단어에서 이 아이콘을 누르면 여기로 옮겨집니다.',
 
   // 새 탭 — 상단 바

@@ -14,7 +14,7 @@ Every time you open a new tab you get a random word with its meaning, translatio
 
 ---
 
-## Main features
+### Main features
 
 * **🗣 Pronunciation** — hear how the words you are studying are pronounced.
 * **📚 Meanings and examples** — exact definitions and real usage in context.
@@ -34,13 +34,13 @@ Every time you open a new tab you get a random word with its meaning, translatio
 
 ---
 
-## Your own translations
+### Your own translations
 
 Automatic translation does not always land on the meaning you actually need. Now any translation can be corrected and saved — your version is always shown instead of the automatic one.
 
 **This also lifts the language limit.** You can add a word in any language — German, Polish, Japanese — write your own translation for it, and it will open just like the English ones, even if the English dictionary has never heard of it. That turns LingoTab into a tool for learning any language, not only English.
 
-### What you can do:
+#### What you can do:
 
 * **✏️ Edit a translation** — the pencil next to a word, both on the card and in your Learning list. Your translation always wins over the automatic one.
 * **➕ Add your own words** — the "Add word" button at the bottom of the Marked Words panel. Write the translation yourself, or fetch it automatically in one click.
@@ -51,17 +51,25 @@ Automatic translation does not always land on the meaning you actually need. Now
 
 ---
 
-## Smart Sentences
+### Smart Sentences
 
 **Smart Sentences** is the feature that helps you learn English grammar through example sentences. You can practise grammatical structures and build the skill of using English in context.
 
-### What you can do:
+#### What you can do:
 
 * **📦 Built-in sentence pack** — a ready-made pack ships with the extension, translated into 10 languages. The right one is picked automatically from the language chosen in "Translation language".
 * **✍️ Your own sentence pack** — the "Copy prompt" button copies a ready-made prompt for any AI chat (ChatGPT, Claude and others). The chat asks a few questions and returns a file you can import into the extension.
 * **💡 Grammar hints** — each sentence can come with a multiple-choice question that explains why that particular answer is the right one.
 * **📗 Grammar reference** — below the exercise a card opens for the tense or structure that appeared in the sentence: an explanation, the typical mistakes, and the marker words it is recognised by.
 * **⭐ Study side by side** — alternate sentence practice with ordinary word study, and set how often a sentence appears.
+
+---
+
+### Support me
+
+If you found this extension useful, please consider supporting me. I plan to continue improving it, and your support will help make that possible. Thank you.
+
+<a href="https://ko-fi.com/kyriosgrey"><img src="src/assets/support_me_on_kofi_red.png" alt="Support me on Ko-fi" height="36"></a>
 
 ---
 

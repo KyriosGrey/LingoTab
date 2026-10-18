@@ -89,6 +89,9 @@ export const de: Partial<Record<MessageKey, string>> = {
 
   // Haupteinstellungen — Ausgeblendete Wörter
   'group.ignoredWords': 'Ausgeblendete Wörter',
+  'group.supportMe': 'Unterstütze mich',
+  'supportMe.description': 'Wenn dir die Erweiterung nützlich ist, möchtest du mich vielleicht unterstützen. Ich plane, sie weiter zu verbessern, und deine Unterstützung trägt wesentlich dazu bei. Danke.',
+  'supportMe.button': 'Unterstütze mich auf Ko-fi',
   'ignored.description': 'Ausgeblendete Wörter erscheinen nicht mehr im neuen Tab. Entferne ein Wort aus der Liste, um es zurückzuholen.',
   'ignored.empty': 'Klicke dieses Symbol bei einem Wort an, um es aus neuen Tabs auszublenden.',
 
@@ -180,7 +183,10 @@ export const de: Partial<Record<MessageKey, string>> = {
   'empty.learnedAll.title': 'Hurra!',
   'empty.learnedAll.description': 'Du hast alle Wörter aus deinen Listen gelernt. Gut gemacht!',
   'empty.noPack': 'Noch kein Satzpaket vorhanden. Aktiviere das mitgelieferte in den Einstellungen oder importiere ein eigenes.',
-  'empty.learning': 'Klicke dieses Symbol bei einem Wort an, um es hier hinzuzufügen.',
+  'empty.learningTitle': 'Hier erscheinen deine Wörter',
+  'empty.learning': 'Füge sie mit dem Lesezeichen-Symbol auf einer Wortkarte oder mit der Schaltfläche „Wort hinzufügen“ unten hinzu.',
+  'learningOnlyTip.text': 'Um nur diese Wörter zu lernen, aktiviere „Nur Wörter, die ich lerne“ unter Einstellungen → Wortschatzlisten.',
+  'learningOnlyTip.openSettings': 'Einstellungen öffnen',
   'empty.learned': 'Klicke dieses Symbol bei einem Wort aus „Lernen“ an, um es hierher zu verschieben.',
 
   // Neuer Tab — obere Leiste

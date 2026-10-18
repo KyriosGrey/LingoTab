@@ -89,6 +89,9 @@ export const fr: Partial<Record<MessageKey, string>> = {
 
   // Paramètres principaux — Mots masqués
   'group.ignoredWords': 'Mots masqués',
+  'group.supportMe': 'Me soutenir',
+  'supportMe.description': 'Si l’extension vous a été utile, vous aurez peut-être envie de me soutenir. Je compte continuer à l’améliorer, et votre soutien y contribuera beaucoup. Merci.',
+  'supportMe.button': 'Me soutenir sur Ko-fi',
   'ignored.description': 'Les mots masqués n’apparaissent plus dans le nouvel onglet. Retirez un mot de la liste pour le faire revenir.',
   'ignored.empty': 'Cliquez sur cette icône près d’un mot pour le masquer des nouveaux onglets.',
 
@@ -180,7 +183,10 @@ export const fr: Partial<Record<MessageKey, string>> = {
   'empty.learnedAll.title': 'Bravo !',
   'empty.learnedAll.description': 'Vous avez appris tous les mots de vos listes. Beau travail !',
   'empty.noPack': 'Aucun jeu de phrases pour l’instant. Activez le jeu intégré dans les paramètres ou importez le vôtre.',
-  'empty.learning': 'Cliquez sur cette icône près d’un mot pour l’ajouter ici.',
+  'empty.learningTitle': 'Vos mots apparaîtront ici',
+  'empty.learning': 'Ajoutez-les avec l’icône de marque-page sur une carte de mot ou avec le bouton « Ajouter un mot » ci-dessous.',
+  'learningOnlyTip.text': 'Pour n’étudier que ces mots, activez « Uniquement les mots en cours » dans Paramètres → Listes de vocabulaire.',
+  'learningOnlyTip.openSettings': 'Ouvrir les paramètres',
   'empty.learned': 'Cliquez sur cette icône près d’un mot « En cours » pour le déplacer ici.',
 
   // Nouvel onglet — barre supérieure

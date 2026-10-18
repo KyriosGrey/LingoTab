@@ -2,7 +2,9 @@
 import AiTag from '@/components/shared/AiTag.vue'
 
 defineProps<{
-  title: string
+  // Optional: a group whose single row carries its own title can skip the outer label
+  // (see "Support me").
+  title?: string
   description?: string
   ai?: boolean
 }>()
@@ -10,8 +12,8 @@ defineProps<{
 
 <template>
   <div class="settings-group">
-    <div class="settings-group__header">
-      <div class="settings-group__heading">
+    <div v-if="title || description" class="settings-group__header">
+      <div v-if="title" class="settings-group__heading">
         <h2 class="settings-group__title text-heading-18">
           {{ title }}
         </h2>
