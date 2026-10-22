@@ -14,6 +14,12 @@ LingoTab — это расширение для Chrome и Firefox, превра�
 
 ---
 
+### Установка
+
+* **🦊 Firefox** — [LingoTab в каталоге дополнений Firefox](https://addons.mozilla.org/firefox/addon/lingotab/)
+
+---
+
 ### Основные функции
 
 * **🗣 Произношение** — слушайте правильное произношение изучаемых слов.

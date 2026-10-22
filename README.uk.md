@@ -14,6 +14,12 @@ LingoTab — це розширення для Chrome і Firefox, яке пере
 
 ---
 
+### Встановлення
+
+* **🦊 Firefox** — [LingoTab у каталозі додатків Firefox](https://addons.mozilla.org/firefox/addon/lingotab/)
+
+---
+
 ### Основні функції
 
 * **🗣 Вимова** — слухайте правильну вимову слів, які вивчаєте.

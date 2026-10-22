@@ -14,6 +14,12 @@ Every time you open a new tab you get a random word with its meaning, translatio
 
 ---
 
+### Install
+
+* **🦊 Firefox** — [LingoTab on Firefox Add-ons](https://addons.mozilla.org/firefox/addon/lingotab/)
+
+---
+
 ### Main features
 
 * **🗣 Pronunciation** — hear how the words you are studying are pronounced.
