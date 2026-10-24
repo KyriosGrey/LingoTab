@@ -4,9 +4,6 @@
 
 > Learn English every time you open a new tab.
 
-<img src="media/GIF.gif" alt="LingoTab in action: a new tab showing the word of the day with its translation, meanings and examples" width="100%">
-
-
 https://github.com/user-attachments/assets/9efc3a13-02fd-41b1-bd3c-24e9c4789f09
 
 
