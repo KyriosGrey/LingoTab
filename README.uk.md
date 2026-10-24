@@ -4,7 +4,7 @@
 
 > Вивчайте англійську щоразу, коли відкриваєте нову вкладку.
 
-<img src="media/GIF.gif" alt="LingoTab у дії: нова вкладка зі словом дня, перекладом, значеннями та прикладами" width="100%">
+https://github.com/user-attachments/assets/9efc3a13-02fd-41b1-bd3c-24e9c4789f09
 
 ---
 
