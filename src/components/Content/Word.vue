@@ -5,8 +5,10 @@ import PrimaryButton from '@/components/shared/PrimaryButton.vue'
 import Skeleton from '@/components/shared/Skeleton.vue'
 import useBackground from '@/composables/useBackground'
 import useEditWordModal from '@/composables/words/useEditWordModal'
+import useUserExamples from '@/composables/words/useUserExamples'
 import useUserTranslations from '@/composables/words/useUserTranslations'
 import useWord from '@/composables/words/useWord'
+import useWordExamples from '@/composables/words/useWordExamples'
 import { t } from '@/i18n'
 // ✅ добавляем импорт для хранения
 import storage from '@/modules/localStorage'
@@ -30,6 +32,8 @@ const { shouldModifyUI } = useBackground()
 const { hasUserTranslation } = useUserTranslations()
 const { openEditWordModal } = useEditWordModal()
 const { searchWord } = useWord()
+const { examples: tatoebaExamples, isLoading: isTatoebaLoading } = useWordExamples()
+const { getUserExamples } = useUserExamples()
 
 // The word itself may have been corrected in the popup - then show the corrected one.
 function handleWordEdited(newWord: string) {
@@ -44,8 +48,25 @@ const backgroundClass = computed(() => ({ boxed: shouldModifyUI.value }))
 const activeMeaningIndex = ref(0)
 const activeMeaning = computed(() => definition.value?.meanings?.[activeMeaningIndex.value])
 
+// Examples come first and open by default: they show the meaning in use.
+// The user's own examples replace Tatoeba's (no request is made for them then).
+const ownExamples = computed(() => getUserExamples(props.word))
+const hasOwnExamples = computed(() => ownExamples.value.length > 0)
+const examples = computed(() => hasOwnExamples.value ? ownExamples.value : tatoebaExamples.value)
+const isExamplesLoading = computed(() => !hasOwnExamples.value && isTatoebaLoading.value)
+// While Tatoeba's load the tab already shows a skeleton; with none found it disappears.
+const hasExamples = computed(() => examples.value.length > 0 || isExamplesLoading.value)
+const isExamplesTabActive = ref(true)
+const showExamples = computed(() => hasExamples.value && isExamplesTabActive.value)
+
+function selectMeaning(index: number) {
+  activeMeaningIndex.value = index
+  isExamplesTabActive.value = false
+}
+
 watch(() => props.word, () => {
   activeMeaningIndex.value = 0
+  isExamplesTabActive.value = true
 })
 
 // ✅ флаг из настроек и локальное состояние
@@ -152,21 +173,73 @@ watch(
 
     <RepetitionBlock v-if="showRepetition" />
 
-    <div v-if="definition" class="meanings">
+    <div v-if="definition || hasExamples" class="meanings">
       <div class="pos-tabs">
         <button
-          v-for="(meaning, index) of definition.meanings"
+          v-if="hasExamples"
+          class="pos-tab"
+          :class="{ active: showExamples }"
+          @click="isExamplesTabActive = true"
+        >
+          {{ t('word.examples') }}
+        </button>
+        <button
+          v-for="(meaning, index) of definition?.meanings"
           :key="index"
           class="pos-tab"
-          :class="{ active: index === activeMeaningIndex }"
-          @click="activeMeaningIndex = index"
+          :class="{ active: !showExamples && index === activeMeaningIndex }"
+          @click="selectMeaning(index)"
         >
           {{ meaning.partOfSpeech }}
         </button>
       </div>
 
       <div
-        v-if="activeMeaning"
+        v-if="showExamples"
+        :class="backgroundClass"
+        class="meaning"
+      >
+        <!-- Under the spoiler the examples would give the word or its translation away. -->
+        <template v-if="isExamplesLoading || isWordHidden || isTranslationHidden">
+          <div v-for="n of (isExamplesLoading ? 3 : examples.length)" :key="n" class="definition">
+            <Skeleton width="70%" height="24px" />
+            <Skeleton width="45%" height="16px" />
+          </div>
+        </template>
+        <template v-else>
+          <div v-for="example of examples" :key="example.text" class="definition">
+            <p class="meaning__def">
+              {{ example.text }}
+            </p>
+            <p v-if="example.translation" class="meaning__example">
+              {{ example.translation }}
+            </p>
+          </div>
+        </template>
+
+        <p class="examples-source">
+          <template v-if="hasOwnExamples">
+            {{ t('word.ownExamples') }}
+          </template>
+          <template v-else>
+            {{ t('word.examplesSource') }}
+            <a href="https://tatoeba.org" target="_blank" rel="noopener noreferrer">Tatoeba</a>
+          </template>
+          <button
+            type="button"
+            class="edit-translation-btn edit-examples-btn"
+            :class="{ 'edit-translation-btn--own': hasOwnExamples }"
+            :title="t('action.editExamples')"
+            :aria-label="t('action.editExamples')"
+            @click="openEditWordModal(word, handleWordEdited)"
+          >
+            <i-ic-outline-edit />
+          </button>
+        </p>
+      </div>
+
+      <div
+        v-else-if="activeMeaning"
         :class="backgroundClass"
         class="meaning"
       >
@@ -358,6 +431,35 @@ watch(
   line-height: 16px;
   letter-spacing: -0.05em;
   color: var(--text-tertiary);
+}
+
+.examples-source {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  font-family: var(--font-family-base);
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--text-tertiary);
+}
+
+.edit-examples-btn {
+  margin-left: 2px;
+  padding: 2px;
+}
+.edit-examples-btn :deep(svg) {
+  width: 14px;
+  height: 14px;
+}
+
+.examples-source a {
+  color: inherit;
+}
+
+.examples-source a:hover {
+  color: var(--color);
 }
 
 .meaning__def::first-letter,

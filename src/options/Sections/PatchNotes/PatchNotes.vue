@@ -8,6 +8,20 @@ import Header3 from './Header3.vue'
     <Header3 />
     <div class="patchnotes-root__divider" />
 
+    <SettingsGroup title="Version 2.9.2">
+      <div class="entry text-body-sm">
+        <p class="intro">
+          Usage examples: see how a word is actually used.
+        </p>
+        <ul>
+          <li>New: an "Examples" tab, first on the word card, with real sentences and translations made by people, from Tatoeba. It's hidden when a word has no examples and can be turned off in "Usage examples" (General settings).</li>
+          <li>New: add your own examples, with an optional translation, using the pencil. They replace Tatoeba's for that word.</li>
+          <li>JSON import and export now include your examples, and the AI prompt asks for 3 examples per word without overwriting translations you already have.</li>
+          <li>Fixed: searching for a word while another one was still loading could show one word with the other's definitions.</li>
+        </ul>
+      </div>
+    </SettingsGroup>
+
     <SettingsGroup title="Version 2.9.1">
       <div class="entry text-body-sm">
         <ul>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import useOnline from '@/composables/useOnline'
+import useUserExamples from '@/composables/words/useUserExamples'
 import useWord from '@/composables/words/useWord'
 import { decideShowRepetitionNow } from '@/composables/useRepetition'
 
@@ -19,12 +20,14 @@ const {
   hasLearnedAllWords,
   definitions,
   isLoading,
+  examples,
   wordsPoll,
   getWord,
   error,
   word,
   hasUserTranslation,
 } = useWord()
+const { hasUserExamples } = useUserExamples()
 
 const { isOnline } = useOnline()
 
@@ -71,7 +74,7 @@ onMounted(async () => {
     <Loading v-else-if="isLoading" />
 
     <WordFetchError
-      v-else-if="error && !hasUserTranslation(word)"
+      v-else-if="error && !hasUserTranslation(word) && !examples.length && !hasUserExamples(word)"
       :word="word"
       @retry="getWordWithRepetition"
     />

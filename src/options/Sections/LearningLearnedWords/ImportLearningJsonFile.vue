@@ -4,6 +4,7 @@ import ActionButton from '@/components/shared/ActionButton.vue'
 import FileSelector from '@/components/shared/FileSelector.vue'
 import Modal from '@/components/shared/Modal.vue'
 import useLearningWords from '@/composables/words/useLearningWords'
+import useUserExamples from '@/composables/words/useUserExamples'
 import useUserTranslations from '@/composables/words/useUserTranslations'
 import { t } from '@/i18n'
 
@@ -18,6 +19,7 @@ const emit = defineEmits<{
 
 const { isLearningWord, reloadLearningWords } = useLearningWords()
 const { getUserTranslation } = useUserTranslations()
+const { getUserExamples } = useUserExamples()
 
 const isModalOpen = ref(false)
 const isFileSelected = ref(false)
@@ -31,6 +33,12 @@ const translationsCount = computed(() => importedWords.value.filter(({ translati
 const replacedCount = computed(() => importedWords.value.filter(({ word, translation }) => {
   const current = getUserTranslation(word)
   return translation && current && current !== translation
+}).length)
+const examplesCount = computed(() => importedWords.value.filter(({ examples }) => examples?.length).length)
+// Words whose own examples will be replaced by different ones from the file.
+const replacedExamplesCount = computed(() => importedWords.value.filter(({ word, examples }) => {
+  const current = getUserExamples(word)
+  return examples?.length && current.length && JSON.stringify(current) !== JSON.stringify(examples)
 }).length)
 
 async function handleFile(file: File) {
@@ -98,6 +106,12 @@ function handleCleanUp() {
             · {{ t('import.json.translations') }} <b>{{ translationsCount }}</b>
             <template v-if="replacedCount">
               · {{ t('import.json.replaced') }} <b>{{ replacedCount }}</b>
+            </template>
+          </p>
+          <p v-if="examplesCount" class="summary__line">
+            {{ t('import.json.examples') }} <b>{{ examplesCount }}</b>
+            <template v-if="replacedExamplesCount">
+              · {{ t('import.json.replacedExamples') }} <b>{{ replacedExamplesCount }}</b>
             </template>
           </p>
           <p v-if="skippedCount" class="summary__line">

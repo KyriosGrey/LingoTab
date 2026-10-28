@@ -4,6 +4,7 @@ import useOnline from '@/composables/useOnline'
 import { decideShowRepetitionNow } from '@/composables/useRepetition'
 import { decideNextIsSentence } from '@/composables/useSmartMix'
 
+import useUserExamples from '@/composables/words/useUserExamples'
 import useWord from '@/composables/words/useWord'
 import * as storage from '@/utils/storage'
 import useGoogleTranslate from '@/composables/useGoogleTranslate'
@@ -31,12 +32,14 @@ const {
   isSearchedWord,
   definitions,
   isLoading,
+  examples,
   wordsPoll,
   getWord,
   error,
   word,
   hasUserTranslation,
 } = useWord()
+const { hasUserExamples } = useUserExamples()
 
 async function onWordMarked() {
   // reuse existing flow: when a word is marked, fetch next word
@@ -158,7 +161,7 @@ onMounted(() => {
       <!-- Same light-card rules as Content.vue -->
       <OfflineState v-else-if="!isOnline && !hasUserTranslation(word)" />
       <Loading v-else-if="isLoading" />
-      <WordFetchError v-else-if="error && !hasUserTranslation(word)" :word="word" @retry="getWord" />
+      <WordFetchError v-else-if="error && !hasUserTranslation(word) && !examples.length && !hasUserExamples(word)" :word="word" @retry="getWord" />
       <LearnedAllWords v-else-if="hasLearnedAllWords && !isSearchedWord" />
       <Word
         v-else

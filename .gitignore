@@ -15,3 +15,5 @@ node_modules
 src/components.d.ts
 .eslintcache
 pack
+firefox-review
+videos
