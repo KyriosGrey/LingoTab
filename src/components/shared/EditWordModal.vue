@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { IWordExample } from '@/composables/words/useWordExamples'
 import Modal from '@/components/shared/Modal.vue'
 import useGoogleTranslate from '@/composables/useGoogleTranslate'
 import useTranslateText from '@/composables/useTranslateText'
@@ -7,6 +8,7 @@ import useEditWordModal from '@/composables/words/useEditWordModal'
 import useIgnoredWords from '@/composables/words/useIgnoredWords'
 import useLearnedWords from '@/composables/words/useLearnedWords'
 import useLearningWords from '@/composables/words/useLearningWords'
+import useUserExamples, { USER_EXAMPLE_MAX_LENGTH, USER_EXAMPLES_MAX_COUNT } from '@/composables/words/useUserExamples'
 import useUserTranslations, { USER_TRANSLATION_MAX_LENGTH } from '@/composables/words/useUserTranslations'
 import { t } from '@/i18n'
 import { guessSourceLanguage, isSingleWord } from '@/utils/string'
@@ -14,6 +16,7 @@ import { computed, ref, watch } from 'vue'
 
 const { isEditWordModalOpen, editedWord, closeEditWordModal, notifySaved } = useEditWordModal()
 const { getUserTranslation, setUserTranslation, removeUserTranslation } = useUserTranslations()
+const { getUserExamples, setUserExamples, removeUserExamples } = useUserExamples()
 const { translate, getCachedTranslation } = useTranslateText()
 const { targetLanguage } = useGoogleTranslate()
 const { isLearningWord, setAsLearning, removeLearningWords, reloadLearningWords } = useLearningWords()
@@ -24,6 +27,8 @@ const isAddMode = computed(() => !editedWord.value)
 
 const word = ref('')
 const translation = ref('')
+// The user's own usage examples; empty ones are dropped on save.
+const examples = ref<IWordExample[]>([])
 // The API translation the field was prefilled with, if any. Saving it back untouched must
 // not turn it into "your" translation.
 let prefilledApiTranslation = ''
@@ -45,6 +50,7 @@ watch(isEditWordModalOpen, (open) => {
     ? ''
     : (getCachedTranslation(editedWord.value, guessSourceLanguage(editedWord.value)) ?? '')
   translation.value = userTranslation ?? prefilledApiTranslation
+  examples.value = getUserExamples(editedWord.value).map(example => ({ ...example }))
   isTranslating.value = false
   translateError.value = false
 })
@@ -108,6 +114,15 @@ async function handleTranslate() {
   translation.value = result.slice(0, USER_TRANSLATION_MAX_LENGTH)
 }
 
+function addExample() {
+  if (examples.value.length < USER_EXAMPLES_MAX_COUNT)
+    examples.value.push({ text: '', translation: '' })
+}
+
+function removeExample(index: number) {
+  examples.value.splice(index, 1)
+}
+
 function handleSubmit() {
   if (!isFormValid.value)
     return
@@ -118,6 +133,7 @@ function handleSubmit() {
   if (oldWord && newWord !== oldWord) {
     removeLearningWords(oldWord)
     removeUserTranslation(oldWord)
+    removeUserExamples(oldWord)
   }
 
   removeLearnedWords(newWord)
@@ -125,6 +141,7 @@ function handleSubmit() {
   setAsLearning(newWord)
   const isUntouchedApiTranslation = prefilledApiTranslation && translation.value.trim() === prefilledApiTranslation
   setUserTranslation(newWord, isUntouchedApiTranslation ? '' : translation.value)
+  setUserExamples(newWord, examples.value)
 
   notifySaved(newWord)
   closeEditWordModal()
@@ -183,6 +200,48 @@ function handleSubmit() {
         <small v-if="translateError" class="form__error text-body-sm-italic">
           {{ t('editWord.translateFailed') }}
         </small>
+      </div>
+
+      <div class="form__label text-body-sm">
+        <span class="form__label-row">
+          <span>{{ t('editWord.examples') }}</span>
+          <span class="form__counter">{{ examples.length }}/{{ USER_EXAMPLES_MAX_COUNT }}</span>
+        </span>
+        <div v-if="examples.length" class="form__examples">
+          <div v-for="(example, index) of examples" :key="index" class="form__example">
+            <div class="form__example-fields">
+              <input
+                v-model="example.text"
+                class="form__example-input text-body"
+                :maxlength="USER_EXAMPLE_MAX_LENGTH"
+                :placeholder="t('editWord.examplePlaceholder')"
+              >
+              <input
+                v-model="example.translation"
+                class="form__example-input text-body"
+                :maxlength="USER_EXAMPLE_MAX_LENGTH"
+                :placeholder="t('editWord.exampleTranslationPlaceholder')"
+              >
+            </div>
+            <button
+              type="button"
+              class="form__remove-example-btn"
+              :title="t('editWord.removeExample')"
+              :aria-label="t('editWord.removeExample')"
+              @click="removeExample(index)"
+            >
+              <i-ic-round-close />
+            </button>
+          </div>
+        </div>
+        <button
+          v-if="examples.length < USER_EXAMPLES_MAX_COUNT"
+          type="button"
+          class="form__add-example-btn text-body-sm"
+          @click="addExample"
+        >
+          <i-ic-round-add /> {{ t('editWord.addExample') }}
+        </button>
       </div>
 
       <div class="form__footer">
@@ -289,6 +348,81 @@ function handleSubmit() {
 /* In the flow (not absolute as in AddShortcutForm) so it can't overlap the next label. */
 .form__error {
   color: var(--error-color);
+}
+
+/* Each example: sentence + translation fields joined in one box, × on the right.
+   The list scrolls on its own, since the popup itself doesn't. */
+.form__examples {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 40vh;
+  overflow-y: auto;
+}
+.form__example {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.form__example-fields {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--overlay-weak);
+  border-radius: 6px;
+  background-color: var(--bg-color);
+  transition: border-color 0.15s ease-in-out;
+}
+.form__example-fields:focus-within {
+  border-color: var(--accent-color-hover);
+}
+.form__example-input {
+  height: 34px;
+  padding: 8px 10px;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--color);
+  font-family: inherit;
+}
+.form__example-input + .form__example-input {
+  border-top: 1px solid var(--overlay-weak);
+}
+.form__remove-example-btn {
+  display: inline-flex;
+  padding: 5px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background-color 0.13s ease-in-out, color 0.13s ease-in-out;
+}
+.form__remove-example-btn :deep(svg) {
+  width: 18px;
+  height: 18px;
+}
+.form__remove-example-btn:hover {
+  background-color: var(--overlay-weak);
+  color: var(--color);
+}
+.form__add-example-btn {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 4px;
+  padding: 4px 6px;
+  margin-left: -6px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--accent-color-hover);
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.13s ease-in-out;
+}
+.form__add-example-btn:hover {
+  background-color: var(--overlay-weak);
 }
 
 .form__footer {

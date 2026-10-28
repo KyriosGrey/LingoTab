@@ -19,6 +19,7 @@ import Theme from './Sections/Theme.vue'
 import Translation from './Sections/Translation.vue'
 
 import VocabularyLists from './Sections/VocabularyLists.vue'
+import WordExamples from './Sections/WordExamples.vue'
 import SettingsTabs from './SettingsTabs.vue'
 </script>
 
@@ -38,6 +39,7 @@ import SettingsTabs from './SettingsTabs.vue'
             <Theme />
             <InterfaceLanguage />
             <DictionarySource />
+            <WordExamples />
           </SettingsGroup>
 
           <SettingsGroup :title="t('group.vocabulary')">

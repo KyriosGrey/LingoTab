@@ -6,6 +6,7 @@ import useLearningWords from './useLearningWords'
 import useRandomWord from './useRandomWord'
 import useUserTranslations from './useUserTranslations'
 import useWordDefinitions from './useWordDefinitions'
+import useWordExamples from './useWordExamples'
 import useWordLists from './useWordLists'
 import wordsHistory from './useWordsHistory'
 
@@ -15,6 +16,9 @@ const word = ref('')
 // (search bar, history, marked words, inventory) instead of the random flow.
 // MixedPractice.vue reads it to leave the sentence screen for the word screen.
 const isSearchedWord = ref(false)
+
+// The word asked for last, so a slower answer for an earlier one doesn't replace it.
+let latestLoadedWord = ''
 
 export default function useWord() {
   const { wordsPoll: listsWordsPoll } = useWordLists()
@@ -43,6 +47,8 @@ export default function useWord() {
 
   const { getRandomWord } = useRandomWord(unIgnoredWords)
   const { isLoading, definitions, error, getDefinitions } = useWordDefinitions()
+  // Examples are slower (2-5s) - the card doesn't wait for them, their tab shows a skeleton.
+  const { examples, getExamples } = useWordExamples()
 
   // Without a network only words with the user's own translation can be shown -
   // on a light card, with no dictionary data.
@@ -62,6 +68,7 @@ export default function useWord() {
     if (!navigator.onLine && offlineWords.value.length) {
       isSearchedWord.value = false
       definitions.value = null
+      examples.value = []
       error.value = null
       handleUpdateWord(getRandomOfflineWord().value)
       return
@@ -82,7 +89,12 @@ export default function useWord() {
 
   async function loadWord(value: string) {
     const lowerCaseWord = value.toLowerCase()
+    latestLoadedWord = lowerCaseWord
+    getExamples(lowerCaseWord)
     await getDefinitions(lowerCaseWord)
+    // Another word was asked for while this one loaded - that one is shown instead.
+    if (lowerCaseWord !== latestLoadedWord)
+      return
     handleUpdateWord(lowerCaseWord)
   }
 
@@ -97,6 +109,7 @@ export default function useWord() {
     hasUserTranslation,
     isSearchedWord,
     definitions,
+    examples,
     searchWord,
     isLoading,
     wordsPoll,

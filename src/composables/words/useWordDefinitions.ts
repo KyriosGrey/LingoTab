@@ -8,19 +8,27 @@ const definitions = ref<IWordDefinition[] | null>(null)
 const isLoading = ref(false)
 const error = ref<unknown>(null)
 
+// The word asked for last: a slower answer for an earlier word must not replace its definitions.
+let latestWord = ''
+
 export default function useWordDefinitions() {
   async function getDefinitions(word: string) {
+    latestWord = word
     try {
       isLoading.value = true
       error.value = null
 
-      definitions.value = await fetchWordEntry(word)
+      const result = await fetchWordEntry(word)
+      if (word === latestWord)
+        definitions.value = result
     }
     catch (e: unknown) {
-      error.value = e
+      if (word === latestWord)
+        error.value = e
     }
     finally {
-      isLoading.value = false
+      if (word === latestWord)
+        isLoading.value = false
     }
   }
 

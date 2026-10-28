@@ -25,6 +25,7 @@ Every time you open a new tab you get a random word with its meaning, translatio
 
 * **🗣 Pronunciation** — hear how the words you are studying are pronounced.
 * **📚 Meanings and examples** — exact definitions and real usage in context.
+* **💬 Usage examples** — the first tab on the word card shows real sentences with the word and translations made by people, not a machine. You can add your own instead — see "Your own translations". Can be turned off in the settings.
 * **📖 Choice of dictionary source** — definitions and pronunciation come from Wiktionary or the Free Dictionary API. In Automatic mode the extension quietly switches to the backup source if the main one does not respond.
 * **🌍 Word translation** — translations right in the new tab, into more than 100 languages. If the translation service is unavailable a backup steps in, and words you have already opened keep showing their saved translations. Any translation can be replaced with your own — see "Your own translations".
 * **🙈 Hidden translation** — a self-check mode: the translation hides behind a "Show" button so you can recall the word yourself first.
@@ -53,8 +54,9 @@ Automatic translation does not always land on the meaning you actually need. Now
 * **➕ Add your own words** — the "Add word" button at the bottom of the Marked Words panel. Write the translation yourself, or fetch it automatically in one click.
 * **📋 Translations in the Learning list** — each translation is visible right next to its word, and a separate sort mode brings words with your own translation to the top.
 * **📴 Works without a connection** — if the translation service is unavailable, or the dictionary does not know the word, it still opens on a simplified card with your translation.
-* **🔁 Import and export translations** — save your words together with their translations as a JSON file, or load a ready one.
-* **🤖 Let AI collect the translations** — the settings, under "Import & export", hold a ready-made prompt. Copy it, paste it into any AI chat, and it will translate the words you need into your language and hand back a finished JSON file — all that is left is to load it in the same place.
+* **💬 Your own examples** — the same pencil lets you add up to five example sentences to a word, with an optional translation. They replace the automatic examples for that word.
+* **🔁 Import and export translations** — save your words together with their translations and examples as a JSON file, or load a ready one.
+* **🤖 Let AI collect the translations** — the settings, under "Import & export", hold a ready-made prompt. Copy it, paste it into any AI chat, and it will translate the words you need into your language, write three example sentences for each, and hand back a finished JSON file — all that is left is to load it in the same place.
 
 ---
 
@@ -83,4 +85,5 @@ If you found this extension useful, please consider supporting me. I plan to con
 ### Credits:
 
 * Word definitions and pronunciation come from [Wiktionary](https://www.wiktionary.org/) (via the Wikimedia and Wiktionary APIs), with [Free Dictionary API](https://github.com/meetDeveloper/freeDictionaryAPI) as a fallback source.
+* Usage examples come from [Tatoeba](https://tatoeba.org/), a collection of sentences translated by volunteers, licensed under [CC BY 2.0 FR](https://creativecommons.org/licenses/by/2.0/fr/).
 * Based on: [new-word-tab](https://github.com/sajadhsm/new-word-tab) by Sajad Hashemian.

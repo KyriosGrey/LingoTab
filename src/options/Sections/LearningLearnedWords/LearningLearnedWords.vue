@@ -4,6 +4,7 @@ import ActionButton from '@/components/shared/ActionButton.vue'
 import useGoogleTranslate from '@/composables/useGoogleTranslate'
 import useLearnedWords from '@/composables/words/useLearnedWords'
 import useLearningWords from '@/composables/words/useLearningWords'
+import useUserExamples from '@/composables/words/useUserExamples'
 import useUserTranslations from '@/composables/words/useUserTranslations'
 import { t } from '@/i18n'
 
@@ -17,6 +18,7 @@ import ImportLearningJsonFile from './ImportLearningJsonFile.vue'
 const { learningWords, setAsLearning } = useLearningWords()
 const { learnedWords, setAsLearned } = useLearnedWords()
 const { getUserTranslation, hasUserTranslation, setUserTranslation } = useUserTranslations()
+const { getUserExamples, hasUserExamples, setUserExamples } = useUserExamples()
 const { targetLanguage } = useGoogleTranslate()
 
 function handleImportLearning(words: string[]) {
@@ -27,12 +29,14 @@ function handleImportLearned(words: string[]) {
   setAsLearned(words)
 }
 
-// Words go to Learning; a translation from the file replaces the user's existing one.
+// Words go to Learning; a translation or examples from the file replace the user's existing ones.
 function handleImportLearningJson(entries: WordsFileEntry[]) {
   setAsLearning(entries.map(({ word }) => word))
-  entries.forEach(({ word, translation }) => {
+  entries.forEach(({ word, translation, examples }) => {
     if (translation)
       setUserTranslation(word, translation)
+    if (examples?.length)
+      setUserExamples(word, examples)
   })
 }
 
@@ -66,30 +70,52 @@ function handleExportLearned() {
   exportWords(learnedWords.value, 'nwt-learned-words.txt')
 }
 
-// Only the user's own translations go into the file - not the service cache.
+// Only the user's own translations and examples go into the file - not the service cache or Tatoeba.
 function handleExportLearningJson() {
   const entries = learningWords.value.map((word) => {
+    const entry: WordsFileEntry = { word }
     const translation = getUserTranslation(word)
-    return translation ? { word, translation } : { word }
+    const examples = getUserExamples(word)
+    if (translation)
+      entry.translation = translation
+    if (examples.length)
+      entry.examples = examples
+    return entry
   })
   downloadFile(JSON.stringify(buildWordsFile(entries), null, 2), 'lingotab-words.json', 'application/json')
 }
 
-// Learning words still without the user's own translation - the ones worth sending to an AI.
+// Learning words worth sending to an AI: without the user's own translation (they get a
+// translation and examples), or translated but without examples (examples only, so the
+// user's translation isn't overwritten). Words that have both are left out.
 const untranslatedWords = computed(() => learningWords.value.filter(word => !hasUserTranslation(word)))
+const wordsWithoutExamples = computed(() => learningWords.value.filter(word => hasUserTranslation(word) && !hasUserExamples(word)))
+const promptWordsCount = computed(() => untranslatedWords.value.length + wordsWithoutExamples.value.length)
+
+const PROMPT_EXAMPLES_COUNT = 3
 
 // In English on purpose: chat models follow an English format spec most reliably.
 // Words may be in any language - the user can add Polish, Japanese, etc. ones.
-const aiPrompt = computed(() => [
-  `Translate each word below into ${targetLanguage.lang}. The words may be in different languages; detect each word's language yourself.`,
-  'Give 1-3 common meanings, comma-separated, max 100 characters per translation.',
-  'Reply with JSON only, in exactly this format:',
-  '',
-  JSON.stringify(buildWordsFile([{ word: 'apple', translation: '<translation>' }]), null, 2),
-  '',
-  'Words:',
-  untranslatedWords.value.length ? untranslatedWords.value.join('\n') : '<paste your words here>',
-].join('\n'))
+const aiPrompt = computed(() => {
+  const exampleEntry = { text: '<sentence with the word>', translation: `<its translation into ${targetLanguage.lang}>` }
+  const examples = Array.from({ length: PROMPT_EXAMPLES_COUNT }, () => exampleEntry)
+  const lines = [
+    `For each word below, write ${PROMPT_EXAMPLES_COUNT} short, natural example sentences showing its most common meanings, each with a translation into ${targetLanguage.lang}. The words may be in different languages; detect each word's language yourself and write the sentences in that language.`,
+    `Words in the first list also need a translation into ${targetLanguage.lang}: 1-3 common meanings, comma-separated, max 100 characters. For words in the second list leave out "translation" - the user already has one.`,
+    'Keep every sentence and its translation under 200 characters.',
+    'Reply with JSON only, in exactly this format:',
+    '',
+    JSON.stringify(buildWordsFile([
+      { word: 'apple', translation: '<translation>', examples },
+      { word: 'bargain', examples },
+    ]), null, 2),
+  ]
+  if (untranslatedWords.value.length || !promptWordsCount.value)
+    lines.push('', 'Words that need a translation and examples:', untranslatedWords.value.join('\n') || '<paste your words here>')
+  if (wordsWithoutExamples.value.length)
+    lines.push('', 'Words that need examples only:', wordsWithoutExamples.value.join('\n'))
+  return lines.join('\n')
+})
 
 const isPromptCopied = ref(false)
 
@@ -156,7 +182,7 @@ async function handleCopyPrompt() {
        Kept in this component so its word count follows imports made just above. -->
   <Section
     :title="t('aiPrompt.title')"
-    :description="`${t('aiPrompt.description')} ${t('aiPrompt.wordsCount')} ${untranslatedWords.length}`"
+    :description="`${t('aiPrompt.description')} ${t('aiPrompt.wordsCount')} ${promptWordsCount}`"
   >
     <template #bar>
       <div class="bar-actions">
